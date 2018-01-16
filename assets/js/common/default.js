@@ -20,11 +20,22 @@ var Component = {
 		right: 0,
 		bottom: 0
 	},
-	get_center_position: function() {
+	getCenterPosition: function() {
 		return {
 			x: this.computed_position.left + (this.computed_size.width / 2),
 			y: this.computed_position.top + (this.computed_size.height / 2)
 		};
+	},
+	setPosition: function(x, y) {
+		this.real_position.left = x;
+		this.real_position.top = y;
+		this.real_position.right = x + this.real_size.width;
+		this.real_position.bottom = y + this.real_size.height;
+		
+		this.computed_position.left = x;
+		this.computed_position.top = y;
+		this.computed_position.right = x + this.computed_size.width;
+		this.computed_position.bottom = y + this.computed_size.height;
 	},
 	rotation: 0,
 	default_size: {
@@ -39,14 +50,14 @@ var Component = {
 		width: 0,
 		height: 0
 	},
-	default_font_family: "Arial",
-	font_family: "Arial",
+	default_font_family: "Verdana",
+	font_family: "Verdana",
 	default_font_size: 16,
 	font_size: 16,
 	default_font_color: "#000000",
 	font_color: "#000000",
     text: "",
-    on_text_changed: function() {
+    onTextChanged: function() {
 
     },
     draw: function() {
@@ -73,7 +84,7 @@ Button1.draw = function(context) {
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "center";
 	context.textBaseline = "middle";
-	var center = this.get_center_position();
+	var center = this.getCenterPosition();
 	context.fillText(this.text, center.x, center.y);
 };
 
@@ -102,6 +113,20 @@ Button3.default_size = {
 Button3.real_size = clone(Button3.default_size);
 Button3.computed_size = clone(Button3.default_size);
 Button3.text = "One, Two, Three";
+Button3.draw = function(context) {
+	var items = this.text.split(",");
+	context.strokeStyle = "#000000";
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	
+	var iLength = items.length;
+	var eachButtonWidth = this.computed_size.width / iLength;
+	context.beginPath();
+	for (var i = 1; i < iLength; i++) {
+		context.moveTo(this.computed_position.left + eachButtonWidth * i, this.computed_position.top);
+		context.lineTo(this.computed_position.left + eachButtonWidth * i, this.computed_position.bottom);
+	}
+	context.stroke();
+};
 
 var ALL_COMPONENTS = {
 	items: [],
@@ -109,7 +134,7 @@ var ALL_COMPONENTS = {
 		var iLength = this.items.length;
 		for (var i = 0; i < iLength; i++) {
 			if (this.items[i].id == id) {
-				return this.items[i];
+				return clone(this.items[i]);
 			}
 		}
 		return null;
@@ -119,20 +144,28 @@ ALL_COMPONENTS.items.push(Button1);
 ALL_COMPONENTS.items.push(Button2);
 ALL_COMPONENTS.items.push(Button3);
 
+
 // ---------------------------------------------------------------------
 /*
 	Sheet Default
 */
 // ---------------------------------------------------------------------
 var Sheet = {
+	width: 700,
+	height: 700,
+	offset: {
+		left: 0,
+		top: 0
+	},
 	components: [],
 	addComponent: function(component) {
 		this.components.push(component);
 	},
 	draw: function(context) {
+		context.clearRect(0, 0, this.width, this.height);
 		var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
-			this.components[i].draw();
+			this.components[i].draw(context);
 		}
 	}
 };

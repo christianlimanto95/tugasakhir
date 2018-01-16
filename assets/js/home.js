@@ -1,14 +1,21 @@
 var sheetCanvas, sheetContext;
-var draggableComponent;
+var draggableComponent, draggableComponentId = "-1";
 var isDragging = false;
 
 $(function() {
 	draggableComponent = $(".draggable-component");
 	sheetCanvas = $(".sheet")[0];
 	sheetContext = sheetCanvas.getContext("2d");
+	Sheet.offset = $(".sheet").offset();
+
+	$(".sheet-container").on("scroll", function() {
+		var scrollTop = $(".sheet").scrollTop();
+		
+	});
 
 	$(document).on("mousedown", ".component-item", function(e) {
 		var componentId = $(this).data("id");
+		draggableComponentId = componentId;
 		var component = ALL_COMPONENTS.getComponentById(componentId);
 		
 		var width = component.default_size.width;
@@ -35,14 +42,21 @@ $(function() {
 		}
 	});
 
-	$(document).on("mouseup", function() {
-		releaseDragging();
+	$(document).on("mouseup", function(e) {
+		releaseDragging(e);
 	});
 });
 
-function releaseDragging() {
+function releaseDragging(e) {
 	draggableComponent.removeClass("dragging");
 	isDragging = false;
-	
-	ALL_COMPONENTS.getComponentById("1").draw(sheetContext);
+
+	var component = ALL_COMPONENTS.getComponentById(draggableComponentId);
+	var x = e.pageX - Sheet.offset.left;
+	var y = e.pageY - Sheet.offset.top;
+	component.setPosition(x, y);
+	Sheet.addComponent(component);
+	Sheet.draw(sheetContext);
+
+	draggableComponentId = "-1";
 }
