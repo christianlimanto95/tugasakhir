@@ -68,13 +68,14 @@
         <div class="header-item-name">Delete</div>
     </div>
 </div>
+<div class="draggable-component"></div>
 <div class="left-pane">
     <div class="search">
         <input type="text" class="input-search" placeholder="search component" />
     </div>
     <div class="component-group">
         <div class="component-group-title">All Components</div>
-        <div class="component-item">
+        <div class="component-item" data-width="200" data-height="200">
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
             <div class="component-item-name">Calendar</div>
         </div>
@@ -103,6 +104,6 @@
 <div class="right-pane"></div>
 <div class="sheet-container">
     <div class="sheet-container-inner">
-        <div class="sheet"></div>
+        <canvas class="sheet"></canvas>
     </div>
 </div>
