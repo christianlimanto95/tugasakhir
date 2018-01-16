@@ -54,6 +54,7 @@
 	display: none;
 	background-size: 100%;
 	background-repeat: no-repeat;
+	opacity: 0.5;
 }
 
 .draggable-component.dragging {
@@ -149,6 +150,7 @@ input[type="text"] {
 	margin: 0 auto 10px;
 	background-size: 100%;
 	background-repeat: no-repeat;
+	background-position: center center;
 }
 
 .component-item-name {

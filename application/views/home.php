@@ -75,27 +75,27 @@
     </div>
     <div class="component-group">
         <div class="component-group-title">All Components</div>
-        <div class="component-item" data-width="200" data-height="200">
+        <div class="component-item" data-id="1">
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button1.png") ?>);" ></div>
+            <div class="component-item-name">Button</div>
+        </div>
+        <div class="component-item" data-id="2">
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button2.png") ?>);" ></div>
+            <div class="component-item-name">Multiline Button</div>
+        </div>
+        <div class="component-item" data-id="3">
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button3.png") ?>);" ></div>
+            <div class="component-item-name">Button Bar</div>
+        </div>
+        <div class="component-item" data-id="4">
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
             <div class="component-item-name">Calendar</div>
         </div>
-        <div class="component-item">
+        <div class="component-item" data-id="5">
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
             <div class="component-item-name">Calendar</div>
         </div>
-        <div class="component-item">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
-        </div>
-        <div class="component-item">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
-        </div>
-        <div class="component-item">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
-        </div>
-        <div class="component-item">
+        <div class="component-item" data-id="6">
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
             <div class="component-item-name">Calendar</div>
         </div>
@@ -107,3 +107,8 @@
         <canvas class="sheet"></canvas>
     </div>
 </div>
+<script>
+var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
+var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";
+var componentImage3 = "<?php echo base_url("assets/images/button3.png"); ?>";
+</script>

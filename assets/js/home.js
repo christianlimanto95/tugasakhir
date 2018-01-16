@@ -1,3 +1,5 @@
+
+
 var draggableComponent;
 var isDragging = false;
 
@@ -5,9 +7,12 @@ $(function() {
 	draggableComponent = $(".draggable-component");
 
 	$(document).on("mousedown", ".component-item", function(e) {
-		var width = $(this).data("width");
-		var height = $(this).data("height");
-		var image = $(this).find(".component-item-image").css("background-image").slice(4, -1).replace(/["|']/g, "");
+		var componentId = $(this).data("id");
+		var component = ALL_COMPONENTS.getComponentById(componentId);
+		
+		var width = component.default_size.width;
+		var height = component.default_size.height;
+		var image = component.image;
 
 		draggableComponent.css({
 			"width": width + "px",
