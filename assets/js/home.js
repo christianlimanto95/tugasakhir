@@ -9,8 +9,7 @@ $(function() {
 	Sheet.offset = $(".sheet").offset();
 
 	$(".sheet-container").on("scroll", function() {
-		var scrollTop = $(".sheet").scrollTop();
-		
+		Sheet.offset = $(".sheet").offset();
 	});
 
 	$(document).on("mousedown", ".component-item", function(e) {

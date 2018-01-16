@@ -118,14 +118,28 @@ Button3.draw = function(context) {
 	context.strokeStyle = "#000000";
 	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 	
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+
 	var iLength = items.length;
 	var eachButtonWidth = this.computed_size.width / iLength;
 	context.beginPath();
-	for (var i = 1; i < iLength; i++) {
-		context.moveTo(this.computed_position.left + eachButtonWidth * i, this.computed_position.top);
-		context.lineTo(this.computed_position.left + eachButtonWidth * i, this.computed_position.bottom);
+	var centerY = this.computed_position.top + this.computed_size.height / 2;
+	for (var i = 0; i < iLength; i++) {
+		var lineOffset = this.computed_position.left + eachButtonWidth * i;
+		var centerX = lineOffset + eachButtonWidth / 2;
+		var text = items[i].trim();
+		context.fillText(text, centerX, centerY);
+
+		if (i > 0) {
+			context.moveTo(lineOffset, this.computed_position.top);
+			context.lineTo(lineOffset, this.computed_position.bottom);
+		}
 	}
 	context.stroke();
+	
 };
 
 var ALL_COMPONENTS = {
