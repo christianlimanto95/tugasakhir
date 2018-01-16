@@ -1,10 +1,11 @@
-
-
+var sheetCanvas, sheetContext;
 var draggableComponent;
 var isDragging = false;
 
 $(function() {
 	draggableComponent = $(".draggable-component");
+	sheetCanvas = $(".sheet")[0];
+	sheetContext = sheetCanvas.getContext("2d");
 
 	$(document).on("mousedown", ".component-item", function(e) {
 		var componentId = $(this).data("id");
@@ -42,4 +43,6 @@ $(function() {
 function releaseDragging() {
 	draggableComponent.removeClass("dragging");
 	isDragging = false;
+	
+	ALL_COMPONENTS.getComponentById("1").draw(sheetContext);
 }

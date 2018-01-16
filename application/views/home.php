@@ -104,7 +104,7 @@
 <div class="right-pane"></div>
 <div class="sheet-container">
     <div class="sheet-container-inner">
-        <canvas class="sheet"></canvas>
+        <canvas class="sheet" width="700" height="700" ></canvas>
     </div>
 </div>
 <script>
