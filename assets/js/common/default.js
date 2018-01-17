@@ -52,8 +52,10 @@ var Component = {
 	},
 	default_font_family: "Verdana",
 	font_family: "Verdana",
-	default_font_size: 16,
-	font_size: 16,
+	default_font_size: 11,
+	font_size: 11,
+	default_font_spacing: 1.2,
+	font_spacing: 1.2,
 	default_font_color: "#000000",
 	font_color: "#000000",
     text: "",
@@ -72,8 +74,8 @@ Button1.real_name = "Button 1";
 Button1.text = "Button";
 Button1.image = componentImage1;
 Button1.default_size = {
-	width: 150,
-	height: 45
+	width: 100,
+	height: 30
 };
 Button1.real_size = clone(Button1.default_size);
 Button1.computed_size = clone(Button1.default_size);
@@ -92,14 +94,44 @@ var Button2 = Object.create(Component);
 Button2.id = "2";
 Button2.name = "Multiline Button 1";
 Button2.real_name = "Multiline Button 1";
+Button2.text = "Multiline\nButton";
 Button2.image = componentImage2;
 Button2.default_size = {
-	width: 150,
-	height: 71
+	width: 63,
+	height: 30
 };
 Button2.real_size = clone(Button2.default_size);
 Button2.computed_size = clone(Button2.default_size);
-Button2.text = "Multiline Button";
+Button2.real_corner_radius = 11;
+Button2.computed_corner_radius = 11;
+Button2.font_size = 9;
+Button2.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.beginPath();
+	context.moveTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.top);
+	context.lineTo(this.computed_position.right - this.computed_corner_radius, this.computed_position.top);
+	context.arcTo(this.computed_position.right, this.computed_position.top, this.computed_position.right, this.computed_position.top + this.computed_corner_radius, this.computed_corner_radius);
+	context.lineTo(this.computed_position.right, this.computed_position.bottom - this.computed_corner_radius);
+	context.arcTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right - this.computed_corner_radius, this.computed_position.bottom, this.computed_corner_radius);
+	context.lineTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.bottom);
+	context.arcTo(this.computed_position.left, this.computed_position.bottom, this.computed_position.left, this.computed_position.bottom - this.computed_corner_radius, this.computed_corner_radius);
+	context.lineTo(this.computed_position.left, this.computed_position.top + this.computed_corner_radius);
+	context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.computed_corner_radius, this.computed_position.top, this.computed_corner_radius);
+	context.stroke();
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	var firstY = (iLength - 1) * this.font_size * this.font_spacing / 2;
+	for (var i = 0; i < lines.length; i++) {
+		context.fillText(lines[i], center.x, center.y - firstY);
+		firstY -= this.font_size * this.font_spacing;
+	}
+};
 
 var Button3 = Object.create(Component);
 Button3.id = "3";
@@ -107,8 +139,8 @@ Button3.name = "Button Bar";
 Button3.real_name = "Button Bar";
 Button3.image = componentImage3;
 Button3.default_size = {
-	width: 446,
-	height: 45
+	width: 298,
+	height: 30
 };
 Button3.real_size = clone(Button3.default_size);
 Button3.computed_size = clone(Button3.default_size);

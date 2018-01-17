@@ -1,6 +1,6 @@
 var sheetCanvas, sheetContext;
 var draggableComponent, draggableComponentId = "-1";
-var isDragging = false;
+var isDraggingFromToolbar = false;
 
 $(function() {
 	draggableComponent = $(".draggable-component");
@@ -29,11 +29,11 @@ $(function() {
 			"left": e.pageX + "px"
 		});
 		draggableComponent.addClass("dragging");
-		isDragging = true;
+		isDraggingFromToolbar = true;
 	});
 
 	$(document).on("mousemove", function(e) {
-		if (isDragging) {
+		if (isDraggingFromToolbar) {
 			draggableComponent.css({
 				"top": e.pageY + "px",
 				"left": e.pageX + "px"
@@ -42,7 +42,7 @@ $(function() {
 	});
 
 	$(document).on("mouseup", function(e) {
-		if (isDragging) {
+		if (isDraggingFromToolbar) {
 			releaseDragging(e);
 		}
 	});
@@ -69,7 +69,7 @@ $(function() {
 
 function releaseDragging(e) {
 	draggableComponent.removeClass("dragging");
-	isDragging = false;
+	isDraggingFromToolbar = false;
 
 	var component = ALL_COMPONENTS.getComponentById(draggableComponentId);
 	var computedPosition = translateMouseCoorToComputedCoor(e);
