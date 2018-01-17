@@ -69,6 +69,7 @@
     </div>
 </div>
 <div class="draggable-component"></div>
+<canvas class="draggable-component-canvas"></canvas>
 <div class="left-pane">
     <div class="search">
         <input type="text" class="input-search" placeholder="search component" />

@@ -1,6 +1,7 @@
 var sheetCanvas, sheetContext;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
+var mouseDown = false;
 
 $(function() {
 	draggableComponent = $(".draggable-component");
@@ -38,13 +39,25 @@ $(function() {
 				"top": e.pageY + "px",
 				"left": e.pageX + "px"
 			});
+		} else {
+			if (mouseDown && Sheet.active_components.length > 0) {
+
+			}
 		}
 	});
 
 	$(document).on("mouseup", function(e) {
 		if (isDraggingFromToolbar) {
 			releaseDragging(e);
-		}
+		} else {
+			var coor = translateMouseCoorToComputedCoor(e);
+			var component = Sheet.isHittingComponent(coor.x, coor.y);
+			if (component == null) {
+				Sheet.removeAllActiveComponents();
+			}
+			Sheet.draw(sheetContext);
+			}
+		mouseDown = false;
 	});
 
 	$(".sheet").on("mousedown", function(e) {
@@ -54,16 +67,9 @@ $(function() {
 			Sheet.removeAllActiveComponents();
 			Sheet.setActiveComponent(component.temp_id);
 		}
+		
 		Sheet.draw(sheetContext);
-	});
-
-	$(".sheet").on("mouseup", function(e) {
-		var coor = translateMouseCoorToComputedCoor(e);
-		var component = Sheet.isHittingComponent(coor.x, coor.y);
-		if (component == null) {
-			Sheet.removeAllActiveComponents();
-		}
-		Sheet.draw(sheetContext);
+		mouseDown = true;
 	});
 });
 
