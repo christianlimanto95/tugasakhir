@@ -220,7 +220,7 @@ var Sheet = {
 		}
 
 		context.strokeStyle = "#0D47A1";
-		context.lineWidth = 2;
+		context.fillStyle = "#FFFFFF";
 		iLength = this.active_components.length;
 		for (var i = 0; i < iLength; i++) {
 			var top = this.active_components[i].computed_position.top;
@@ -229,7 +229,33 @@ var Sheet = {
 			var right = this.active_components[i].computed_position.right;
 			var width = this.active_components[i].computed_size.width;
 			var height = this.active_components[i].computed_size.height;
+
+			var centerX = left + width / 2;
 			context.strokeRect(left, top, width, height);
+			context.beginPath();
+			context.arc(left, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
 		}
 	},
 	isHittingComponent: function(x, y) {

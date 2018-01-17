@@ -47,12 +47,21 @@ $(function() {
 		}
 	});
 
-	$(".sheet").on("click", function(e) {
+	$(".sheet").on("mousedown", function(e) {
 		var coor = translateMouseCoorToComputedCoor(e);
 		var component = Sheet.isHittingComponent(coor.x, coor.y);
-		Sheet.removeAllActiveComponents();
 		if (component != null) {
+			Sheet.removeAllActiveComponents();
 			Sheet.setActiveComponent(component.temp_id);
+		}
+		Sheet.draw(sheetContext);
+	});
+
+	$(".sheet").on("mouseup", function(e) {
+		var coor = translateMouseCoorToComputedCoor(e);
+		var component = Sheet.isHittingComponent(coor.x, coor.y);
+		if (component == null) {
+			Sheet.removeAllActiveComponents();
 		}
 		Sheet.draw(sheetContext);
 	});
