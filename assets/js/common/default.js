@@ -171,16 +171,82 @@ var Sheet = {
 		left: 0,
 		top: 0
 	},
+	temp_id: 1,
 	components: [],
 	addComponent: function(component) {
+		component.temp_id = this.temp_id;
 		this.components.push(component);
+		this.removeAllActiveComponents();
+		this.setActiveComponent(this.temp_id);
+		this.temp_id++;
+	},
+	active_components: [],
+	setActiveComponent: function(temp_id) {
+		var component = this.getComponentByTempId(temp_id);
+		if (component != null) {
+			this.active_components.push(component);
+		}
+	},
+	removeActiveComponent: function(temp_id) {
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.active_components[i].temp_id == temp_id) {
+				this.active_components.splice(i, 1);
+				break;
+			}
+		}
+	},
+	removeAllActiveComponents: function() {
+		this.active_components = [];
+	},
+	getComponentByTempId: function(temp_id) {
+		var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.components[i].temp_id == temp_id) {
+				return this.components[i];
+			}
+		}
+
+		return null;
 	},
 	draw: function(context) {
+		context.strokeStyle = "#000000";
+		context.lineWidth = 1;
 		context.clearRect(0, 0, this.width, this.height);
+
 		var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
 			this.components[i].draw(context);
 		}
+
+		context.strokeStyle = "#0D47A1";
+		context.lineWidth = 2;
+		iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			var top = this.active_components[i].computed_position.top;
+			var left = this.active_components[i].computed_position.left;
+			var bottom = this.active_components[i].computed_position.bottom;
+			var right = this.active_components[i].computed_position.right;
+			var width = this.active_components[i].computed_size.width;
+			var height = this.active_components[i].computed_size.height;
+			context.strokeRect(left, top, width, height);
+		}
+	},
+	isHittingComponent: function(x, y) {
+		var iLength = this.components.length;
+		var top, left, right, bottom;
+		for (var i = 0; i < iLength; i++) {
+			top = this.components[i].computed_position.top;
+			left = this.components[i].computed_position.left;
+			right = this.components[i].computed_position.right;
+			bottom = this.components[i].computed_position.bottom;
+
+			if (x >= left && x <= right && y >= top && y <= bottom) {
+				return this.components[i];
+			}
+		}
+
+		return null;
 	}
 };
 

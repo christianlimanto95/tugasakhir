@@ -42,7 +42,19 @@ $(function() {
 	});
 
 	$(document).on("mouseup", function(e) {
-		releaseDragging(e);
+		if (isDragging) {
+			releaseDragging(e);
+		}
+	});
+
+	$(".sheet").on("click", function(e) {
+		var coor = translateMouseCoorToComputedCoor(e);
+		var component = Sheet.isHittingComponent(coor.x, coor.y);
+		Sheet.removeAllActiveComponents();
+		if (component != null) {
+			Sheet.setActiveComponent(component.temp_id);
+		}
+		Sheet.draw(sheetContext);
 	});
 });
 
@@ -51,11 +63,19 @@ function releaseDragging(e) {
 	isDragging = false;
 
 	var component = ALL_COMPONENTS.getComponentById(draggableComponentId);
-	var x = e.pageX - Sheet.offset.left;
-	var y = e.pageY - Sheet.offset.top;
-	component.setPosition(x, y);
+	var computedPosition = translateMouseCoorToComputedCoor(e);
+	component.setPosition(computedPosition.x, computedPosition.y);
 	Sheet.addComponent(component);
 	Sheet.draw(sheetContext);
 
 	draggableComponentId = "-1";
+}
+
+function translateMouseCoorToComputedCoor(e) {
+	var x = e.pageX - Sheet.offset.left;
+	var y = e.pageY - Sheet.offset.top;
+	return {
+		x: x,
+		y: y
+	};
 }
