@@ -212,12 +212,23 @@ var Sheet = {
 		this.setActiveComponent(this.temp_id);
 		this.temp_id++;
 	},
+	isHittingComponentOnMouseDown: false,
 	active_components: [],
 	setActiveComponent: function(temp_id) {
 		var component = this.getComponentByTempId(temp_id);
 		if (component != null) {
 			this.active_components.push(component);
 		}
+	},
+	isActiveComponent: function(component) {
+		var temp_id = component.temp_id;
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.active_components[i].temp_id == temp_id) {
+				return true;
+			}
+		}
+		return false;
 	},
 	removeActiveComponent: function(temp_id) {
 		var iLength = this.active_components.length;
@@ -240,6 +251,57 @@ var Sheet = {
 		}
 
 		return null;
+	},
+	updateActiveComponentsPosition: function(tempComponents) {
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			this.active_components[i].real_position = {
+				top: tempComponents[i].real_position.top,
+				left: tempComponents[i].real_position.left,
+				right: tempComponents[i].real_position.right,
+				bottom: tempComponents[i].real_position.bottom
+			};
+
+			this.active_components[i].computed_position = {
+				top: tempComponents[i].real_position.top,
+				left: tempComponents[i].real_position.left,
+				right: tempComponents[i].real_position.right,
+				bottom: tempComponents[i].real_position.bottom
+			};
+
+			this.updateComponentPositionFromActiveComponent(this.active_components[i]);
+		}
+	},
+	updateComponentPositionFromActiveComponent: function(active_component) {
+		var component = this.getComponentByTempId(active_component.temp_id);
+		
+		component.real_position = {
+			top: active_component.real_position.top,
+			left: active_component.real_position.left,
+			right: active_component.real_position.right,
+			bottom: active_component.real_position.bottom
+		};
+
+		component.computed_position = {
+			top: active_component.real_position.top,
+			left: active_component.real_position.left,
+			right: active_component.real_position.right,
+			bottom: active_component.real_position.bottom
+		};
+	},
+	deleteComponentsFromActiveComponents: function() {
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			var temp_id = this.active_components[i].temp_id;
+			var jLength = this.components.length;
+			for (var j = 0; j < jLength; j++) {
+				if (this.components[j].temp_id == temp_id) {
+					this.components.splice(j, 1);
+					break;
+				}
+			}
+		}
+		this.active_components = [];
 	},
 	draw: function(context) {
 		context.strokeStyle = "#000000";

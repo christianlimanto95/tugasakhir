@@ -1,7 +1,10 @@
 var sheetCanvas, sheetContext, sheetTempCanvas, sheetTempContext;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
-var mouseDown = false;
+var mouseDown = false, mouseDrag = false;
+var keyPressed = {
+	"ctrl": false
+};
 
 $(function() {
 	draggableComponent = $(".draggable-component");
@@ -53,8 +56,13 @@ $(function() {
 		var coor = translateMouseCoorToComputedCoor(e);
 		var component = Sheet.isHittingComponent(coor.x, coor.y);
 		if (component != null) {
-			Sheet.removeAllActiveComponents();
-			Sheet.setActiveComponent(component.temp_id);
+			Sheet.isHittingComponentOnMouseDown = true;
+			if (!Sheet.isActiveComponent(component)) {
+				if (!keyPressed.ctrl) {
+					Sheet.removeAllActiveComponents();
+				}
+				Sheet.setActiveComponent(component.temp_id);
+			}
 			
 			SheetTemp.mousePosition = {
 				x: e.pageX,
@@ -77,30 +85,61 @@ $(function() {
 				"left": e.pageX + "px"
 			});
 		} else {
-			if (mouseDown && Sheet.active_components.length > 0) {
+			if (Sheet.isHittingComponentOnMouseDown && Sheet.active_components.length > 0) {
 				SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
 				SheetTemp.draw(sheetTempContext);
+				mouseDrag = true;
 			}
 		}
 	});
 
 	$(document).on("mouseup", function(e) {
+		Sheet.isHittingComponentOnMouseDown = false;
 		if (isDraggingFromToolbar) {
 			releaseDragging(e);
 		} else {
 			var coor = translateMouseCoorToComputedCoor(e);
-			if (SheetTemp.components.length == 0) {
-				var component = Sheet.isHittingComponent(coor.x, coor.y);
-				if (component == null) {
-					Sheet.removeAllActiveComponents();
-				}
+			var component = Sheet.isHittingComponent(coor.x, coor.y);
+			
+			if (mouseDrag) {
+				Sheet.updateActiveComponentsPosition(SheetTemp.components);
 			} else {
-				SheetTemp.removeAllComponents();
-				SheetTemp.draw(sheetTempContext);
+				if (!keyPressed.ctrl) {
+					Sheet.removeAllActiveComponents();
+					if (component != null) {
+						Sheet.setActiveComponent(component.temp_id);
+					}
+				}
 			}
+
+			SheetTemp.removeAllComponents();
+			SheetTemp.draw(sheetTempContext);
 			Sheet.draw(sheetContext);
 		}
 		mouseDown = false;
+		mouseDrag = false;
+	});
+
+	$(document).on("keydown", function(e) {
+		switch (e.which) {
+			case 46:
+				if (Sheet.active_components.length > 0) {
+					Sheet.deleteComponentsFromActiveComponents();
+					Sheet.draw(sheetContext);
+				}
+				break;
+			case 17:
+				keyPressed.ctrl = true;
+				break;
+		}
+	});
+
+	$(document).on("keyup", function(e) {
+		switch (e.which) {
+			case 17:
+				keyPressed.ctrl = false;
+				break;
+		}
 	});
 });
 
