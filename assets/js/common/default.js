@@ -80,7 +80,8 @@ Button1.default_size = {
 Button1.real_size = clone(Button1.default_size);
 Button1.computed_size = clone(Button1.default_size);
 Button1.draw = function(context) {
-    context.strokeStyle = "#000000";
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
 	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
@@ -107,6 +108,7 @@ Button2.computed_corner_radius = 11;
 Button2.font_size = 9;
 Button2.draw = function(context) {
 	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
 	context.beginPath();
 	context.moveTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.top);
 	context.lineTo(this.computed_position.right - this.computed_corner_radius, this.computed_position.top);
@@ -148,6 +150,7 @@ Button3.text = "One, Two, Three";
 Button3.draw = function(context) {
 	var items = this.text.split(",");
 	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
 	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 	
 	context.fillStyle = this.font_color;
@@ -171,7 +174,44 @@ Button3.draw = function(context) {
 		}
 	}
 	context.stroke();
-	
+};
+
+var Button4 = Object.create(Component);
+Button4.id = "4";
+Button4.name = "Button 1";
+Button4.real_name = "Button 1";
+Button4.text = "Button";
+Button4.image = componentImage4;
+Button4.default_size = {
+	width: 100,
+	height: 30
+};
+Button4.real_size = clone(Button4.default_size);
+Button4.computed_size = clone(Button4.default_size);
+Button4.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 2;
+	var arrowRightBorder = this.computed_size.width / 9;
+	var arrowTopBorder = this.computed_size.height / 3;
+	var startX = this.computed_position.left + arrowRightBorder * 2;
+	var startY = this.computed_position.top + arrowTopBorder;
+	var middleX = this.computed_position.left + arrowRightBorder * 1.5;
+	var middleY = this.computed_position.top + arrowTopBorder * 1.5;
+	var endX = startX;
+	var endY = this.computed_position.top + arrowTopBorder * 2;
+
+	context.beginPath();
+	context.moveTo(startX, startY);
+	context.lineTo(middleX, middleY);
+	context.lineTo(endX, endY);
+	context.stroke();
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, center.x, center.y);
 };
 
 var ALL_COMPONENTS = {
@@ -189,6 +229,7 @@ var ALL_COMPONENTS = {
 ALL_COMPONENTS.items.push(Button1);
 ALL_COMPONENTS.items.push(Button2);
 ALL_COMPONENTS.items.push(Button3);
+ALL_COMPONENTS.items.push(Button4);
 
 
 // ---------------------------------------------------------------------

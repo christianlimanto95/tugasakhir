@@ -89,8 +89,8 @@
             <div class="component-item-name">Button Bar</div>
         </div>
         <div class="component-item" data-id="4">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button4.png") ?>);" ></div>
+            <div class="component-item-name">Pointy Button</div>
         </div>
         <div class="component-item" data-id="5">
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
@@ -113,4 +113,5 @@
 var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";
 var componentImage3 = "<?php echo base_url("assets/images/button3.png"); ?>";
+var componentImage4 = "<?php echo base_url("assets/images/button4.png"); ?>";
 </script>
