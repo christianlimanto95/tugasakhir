@@ -106,6 +106,7 @@
 <div class="sheet-container">
     <div class="sheet-container-inner">
         <canvas class="sheet" width="700" height="700" ></canvas>
+        <canvas class="sheet-temp"></canvas>
     </div>
 </div>
 <script>

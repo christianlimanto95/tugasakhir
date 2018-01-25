@@ -308,6 +308,68 @@ var Sheet = {
 	}
 };
 
+// ---------------------------------------------------------------------
+/*
+	Sheet Temp Default
+*/
+// ---------------------------------------------------------------------
+var SheetTemp = {
+	width: 0,
+	height: 0,
+	offset: {
+		top: 0,
+		left: 0
+	},
+	selisihOffset: {
+		top: 0,
+		left: 0
+	},
+	mousePosition: {
+		x: 0,
+		y: 0
+	},
+	components: [],
+	addComponent: function(component) {
+		component = clone(component);
+		component.computed_position.top = component.real_position.top + this.selisihOffset.top;
+		component.computed_position.left = component.real_position.left + this.selisihOffset.left;
+		component.computed_position.right = component.real_position.right + this.selisihOffset.left;
+		component.computed_position.bottom = component.real_position.bottom + this.selisihOffset.top;
+		this.components.push(component);
+	},
+	updateComponentsPosition: function(currentMousePosition) {
+		var selisihX = currentMousePosition.x - this.mousePosition.x;
+		var selisihY = currentMousePosition.y - this.mousePosition.y;
+		this.mousePosition = currentMousePosition;
+
+		var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			this.components[i].real_position.top += selisihY;
+			this.components[i].real_position.left += selisihX;
+			this.components[i].real_position.right += selisihX;
+			this.components[i].real_position.bottom += selisihY;
+
+			this.components[i].computed_position.top += selisihY;
+			this.components[i].computed_position.left += selisihX;
+			this.components[i].computed_position.right += selisihX;
+			this.components[i].computed_position.bottom += selisihY;
+		}
+	},
+	removeAllComponents: function() {
+		this.components = [];
+	},
+	draw: function(context) {
+		context.strokeStyle = "#000000";
+		context.lineWidth = 1;
+		context.clearRect(0, 0, this.width, this.height);
+
+		var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			this.components[i].draw(context);
+		}
+	}
+};
+
 function clone(obj){
     if(obj == null || typeof(obj) != 'object')
         return obj;
