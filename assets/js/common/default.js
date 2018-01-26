@@ -214,6 +214,43 @@ Button4.draw = function(context) {
 	context.fillText(this.text, center.x, center.y);
 };
 
+var Checkbox = Object.create(Component);
+Checkbox.id = "5";
+Checkbox.name = "Checkbox 1";
+Checkbox.real_name = "Checkbox 1";
+Checkbox.text = "Checkbox";
+Checkbox.image = componentImage5;
+Checkbox.image_resources = [];
+var checkboxRes1 = new Image();
+checkboxRes1.onload = function() {
+	Checkbox.image_resources.push(this);
+};
+checkboxRes1.src = checkboxResImage1;
+Checkbox.image_resources.push(checkboxRes1.src);
+Checkbox.default_size = {
+	width: 100,
+	height: 30
+};
+Checkbox.real_size = clone(Checkbox.default_size);
+Checkbox.computed_size = clone(Checkbox.default_size);
+Checkbox.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var kotakHeight = this.computed_size.height / 2;
+	var kotakWidth = kotakHeight;
+	var kotakTop = this.computed_position.top + kotakHeight / 2;
+	var kotakLeft = this.computed_position.left + 10;
+	context.drawImage(this.image_resources[0], kotakLeft, kotakTop, kotakWidth, kotakHeight);
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, kotakLeft + kotakWidth + 6, center.y);
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -230,6 +267,7 @@ ALL_COMPONENTS.items.push(Button1);
 ALL_COMPONENTS.items.push(Button2);
 ALL_COMPONENTS.items.push(Button3);
 ALL_COMPONENTS.items.push(Button4);
+ALL_COMPONENTS.items.push(Checkbox);
 
 
 // ---------------------------------------------------------------------

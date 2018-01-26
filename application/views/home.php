@@ -93,12 +93,12 @@
             <div class="component-item-name">Pointy Button</div>
         </div>
         <div class="component-item" data-id="5">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkbox.png") ?>);" ></div>
+            <div class="component-item-name">Checkbox</div>
         </div>
         <div class="component-item" data-id="6">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/calendar.jpg") ?>);" ></div>
-            <div class="component-item-name">Calendar</div>
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkboxgroup.png") ?>);" ></div>
+            <div class="component-item-name">Checkbox Group</div>
         </div>
     </div>
 </div>
@@ -114,4 +114,6 @@ var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";
 var componentImage3 = "<?php echo base_url("assets/images/button3.png"); ?>";
 var componentImage4 = "<?php echo base_url("assets/images/button4.png"); ?>";
+var componentImage5 = "<?php echo base_url("assets/images/checkbox.png"); ?>";
+var checkboxResImage1 = "<?php echo base_url("assets/images/checkbox_unchecked.svg"); ?>";
 </script>
