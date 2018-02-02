@@ -265,7 +265,7 @@ var Checkbox = Object.create(Component);
 Checkbox.id = "5";
 Checkbox.name = "Checkbox 1";
 Checkbox.real_name = "Checkbox 1";
-Checkbox.text = "Checkbox";
+Checkbox.text = "*Checkbox";
 Checkbox.image = componentImage5;
 Checkbox.default_size = {
 	width: 100,
@@ -277,20 +277,97 @@ Checkbox.draw = function(context) {
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 
-	var kotakHeight = this.computed_size.height / 2;
+	var kotakHeight = this.font_size / this.default_font_size * 15;
 	var kotakWidth = kotakHeight;
 	var kotakTop = this.computed_position.top + kotakHeight / 2;
 	var kotakLeft = this.computed_position.left + 10;
-	var image_resource = ImageResources.getImage("1");
+	var image_resource = null;
+	var firstLetter = this.text.substring(0, 1);
+	switch (firstLetter) {
+		case "*":
+			image_resource = ImageResources.getImage("1");
+			break;
+		case "+":
+			image_resource = ImageResources.getImage("2");
+			break;
+		case "-":
+			image_resource = ImageResources.getImage("3");
+			break;
+	}
 
-	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
+	var text_shown = this.text;
+
+	if (image_resource != null) {
+		context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
+		text_shown = this.text.substring(1);
+	}
 
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
 	context.textBaseline = "middle";
 	var center = this.getCenterPosition();
-	context.fillText(this.text, kotakLeft + kotakWidth + 6, center.y);
+	context.fillText(text_shown, kotakLeft + kotakWidth + 6, center.y);
+};
+
+var CheckboxGroup = Object.create(Component);
+CheckboxGroup.id = "6";
+CheckboxGroup.name = "Checkbox Group 1";
+CheckboxGroup.real_name = "Checkbox Group 1";
+CheckboxGroup.text = "*Not selected\n+Selected\n-Indeterminate\n**Disabled\n++Disabled selected\n--Disabled Indeterminate";
+CheckboxGroup.image = componentImage6;
+CheckboxGroup.font_spacing = 2;
+CheckboxGroup.default_size = {
+	width: 174,
+	height: 154
+};
+CheckboxGroup.real_size = clone(CheckboxGroup.default_size);
+CheckboxGroup.computed_size = clone(CheckboxGroup.default_size);
+CheckboxGroup.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var kotakHeight = this.font_size / this.default_font_size * 15;
+	var kotakWidth = kotakHeight;
+	var kotakCenter = kotakHeight / 2;
+	var kotakTop = this.computed_position.top + kotakHeight / 2;
+	var kotakLeft = this.computed_position.left + 10;
+	
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	var firstY = (iLength - 1) * this.font_size * this.font_spacing / 2;
+	for (var i = 0; i < iLength; i++) {
+		var current_line = lines[i];
+		var image_resource = null;
+		var first2Letter = current_line.substring(0, 2).match(/[*]{1,2}|[-]{1,2}|[+]{1,2}/);
+		switch (first2Letter[0]) {
+			case "*":
+				image_resource = ImageResources.getImage("1");
+				break;
+			case "+":
+				image_resource = ImageResources.getImage("2");
+				break;
+			case "-":
+				image_resource = ImageResources.getImage("3");
+				break;
+		}
+
+		var text_shown = current_line;
+
+		if (image_resource != null) {
+			context.drawImage(image_resource, kotakLeft, center.y - firstY - kotakCenter, kotakWidth, kotakHeight);
+			text_shown = current_line.substring(1);
+		}
+
+		context.fillText(text_shown, kotakLeft + kotakWidth + 6, center.y - firstY);
+		firstY -= this.font_size * this.font_spacing;
+	}
 };
 
 var ALL_COMPONENTS = {
@@ -310,6 +387,7 @@ ALL_COMPONENTS.items.push(Button2);
 ALL_COMPONENTS.items.push(Button3);
 ALL_COMPONENTS.items.push(Button4);
 ALL_COMPONENTS.items.push(Checkbox);
+ALL_COMPONENTS.items.push(CheckboxGroup);
 
 
 // ---------------------------------------------------------------------
