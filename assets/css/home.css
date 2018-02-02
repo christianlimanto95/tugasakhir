@@ -117,6 +117,38 @@
 	height: 100%;
 }
 
+.sheet-temp[cursor-resize="top-left"] {
+	cursor: nw-resize;
+}
+
+.sheet-temp[cursor-resize="top-center"] {
+	cursor: n-resize;
+}
+
+.sheet-temp[cursor-resize="top-right"] {
+	cursor: ne-resize;
+}
+
+.sheet-temp[cursor-resize="middle-left"] {
+	cursor: w-resize;
+}
+
+.sheet-temp[cursor-resize="middle-right"] {
+	cursor: e-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-left"] {
+	cursor: sw-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-center"] {
+	cursor: s-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-right"] {
+	cursor: se-resize;
+}
+
 input[type="text"] {
 	border-radius: 3px;
 	border: 1px solid #AAA;

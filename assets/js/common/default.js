@@ -1,5 +1,16 @@
 // ---------------------------------------------------------------------
 /*
+	Image Resources
+*/
+// ---------------------------------------------------------------------
+var ImageResource = {
+	
+};
+
+
+
+// ---------------------------------------------------------------------
+/*
 	Component Defaults
 */
 // ---------------------------------------------------------------------
@@ -393,6 +404,7 @@ var Sheet = {
 		}
 
 		context.strokeStyle = "#0D47A1";
+		context.lineWidth = 1;
 		context.fillStyle = "#FFFFFF";
 		iLength = this.active_components.length;
 		for (var i = 0; i < iLength; i++) {
@@ -404,6 +416,7 @@ var Sheet = {
 			var height = this.active_components[i].computed_size.height;
 
 			var centerX = left + width / 2;
+			var centerY = top + height / 2;
 			context.strokeRect(left, top, width, height);
 			context.beginPath();
 			context.arc(left, top, 5, 0, 2 * Math.PI);
@@ -415,6 +428,14 @@ var Sheet = {
 			context.stroke();
 			context.beginPath();
 			context.arc(right, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, centerY, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, centerY, 5, 0, 2 * Math.PI);
 			context.fill();
 			context.stroke();
 			context.beginPath();

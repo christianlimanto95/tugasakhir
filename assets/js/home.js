@@ -89,6 +89,8 @@ $(function() {
 				SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
 				SheetTemp.draw(sheetTempContext);
 				mouseDrag = true;
+			} else {
+				mousemoveIsHoveringDots(e);
 			}
 		}
 	});
@@ -142,6 +144,60 @@ $(function() {
 		}
 	});
 });
+
+function mousemoveIsHoveringDots(e) {
+	var coor = translateMouseCoorToComputedCoor(e);
+	var iLength = Sheet.active_components.length;
+	var found = false;
+	for (var i = 0; i < iLength; i++) {
+		var component = Sheet.active_components[i];
+
+		var left = component.computed_position.left;
+		var center = left + component.computed_size.width / 2;
+		var right = component.computed_position.right;
+		var top = component.computed_position.top;
+		var middle = top + component.computed_size.height / 2;
+		var bottom = component.computed_position.bottom;
+
+		if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "top-left");
+			found = true;
+			break;
+		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "top-center");
+			found = true;
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "top-right");
+			found = true;
+			break;
+		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "middle-left");
+			found = true;
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "middle-right");
+			found = true;
+			break;
+		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "bottom-left");
+			found = true;
+			break;
+		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "bottom-center");
+			found = true;
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+			$(sheetTempCanvas).attr("cursor-resize", "bottom-right");
+			found = true;
+			break;
+		}
+	}
+
+	if (!found) {
+		$(sheetTempCanvas).attr("cursor-resize", "");
+	}
+}
 
 function releaseDragging(e) {
 	draggableComponent.removeClass("dragging");
