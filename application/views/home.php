@@ -116,4 +116,6 @@ var componentImage3 = "<?php echo base_url("assets/images/button3.png"); ?>";
 var componentImage4 = "<?php echo base_url("assets/images/button4.png"); ?>";
 var componentImage5 = "<?php echo base_url("assets/images/checkbox.png"); ?>";
 var checkboxResImage1 = "<?php echo base_url("assets/images/checkbox_unchecked.svg"); ?>";
+var checkboxResImage2 = "<?php echo base_url("assets/images/checkbox_checked.svg"); ?>";
+var checkboxResImage3 = "<?php echo base_url("assets/images/checkbox_undeterminate.svg"); ?>";
 </script>

@@ -3,9 +3,45 @@
 	Image Resources
 */
 // ---------------------------------------------------------------------
-var ImageResource = {
-	
+var ImageResources = {
+	items: [],
+	getImage: function(id) {
+		var iLength = this.items.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.items[i].id == id) {
+				return this.items[i].image;
+			}
+		}
+		return null;
+	}
 };
+
+var imageResourceItem = {
+	id: "1",
+	image: new Image()
+};
+imageResourceItem.image.onload = function() {
+	ImageResources.items.push(imageResourceItem);
+}
+imageResourceItem.image.src = checkboxResImage1;
+
+var imageResourceItem2 = {
+	id: "2",
+	image: new Image()
+};
+imageResourceItem2.image.onload = function() {
+	ImageResources.items.push(imageResourceItem2);
+}
+imageResourceItem2.image.src = checkboxResImage2;
+
+var imageResourceItem3 = {
+	id: "3",
+	image: new Image()
+};
+imageResourceItem3.image.onload = function() {
+	ImageResources.items.push(imageResourceItem3);
+}
+imageResourceItem3.image.src = checkboxResImage3;
 
 
 
@@ -231,13 +267,6 @@ Checkbox.name = "Checkbox 1";
 Checkbox.real_name = "Checkbox 1";
 Checkbox.text = "Checkbox";
 Checkbox.image = componentImage5;
-Checkbox.image_resources = [];
-var checkboxRes1 = new Image();
-checkboxRes1.onload = function() {
-	Checkbox.image_resources.push(this);
-};
-checkboxRes1.src = checkboxResImage1;
-Checkbox.image_resources.push(checkboxRes1.src);
 Checkbox.default_size = {
 	width: 100,
 	height: 30
@@ -252,7 +281,9 @@ Checkbox.draw = function(context) {
 	var kotakWidth = kotakHeight;
 	var kotakTop = this.computed_position.top + kotakHeight / 2;
 	var kotakLeft = this.computed_position.left + 10;
-	context.drawImage(this.image_resources[0], kotakLeft, kotakTop, kotakWidth, kotakHeight);
+	var image_resource = ImageResources.getImage("1");
+
+	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
 
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
