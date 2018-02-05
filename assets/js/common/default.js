@@ -141,9 +141,14 @@ var Component = {
 	font_spacing: 1.2,
 	default_font_color: "#000000",
 	font_color: "#000000",
-    text: "",
+	text: "",
+	multiline: false,
+	change_text: function(text) {
+		this.text = text;
+		this.onTextChanged();
+	},
     onTextChanged: function() {
-
+		
     },
     draw: function() {
 
@@ -182,6 +187,7 @@ Button2.id = "2";
 Button2.name = "Multiline Button 1";
 Button2.real_name = "Multiline Button 1";
 Button2.text = "Multiline\nButton";
+Button2.multiline = true;
 Button2.image = componentImage2;
 Button2.default_size = {
 	width: 63,
@@ -374,6 +380,7 @@ CheckboxGroup.id = "6";
 CheckboxGroup.name = "Checkbox Group 1";
 CheckboxGroup.real_name = "Checkbox Group 1";
 CheckboxGroup.text = "*Not selected\n+Selected\n-Indeterminate\n**Disabled\n++Disabled selected\n--Disabled Indeterminate";
+CheckboxGroup.multiline = true;
 CheckboxGroup.image = componentImage6;
 CheckboxGroup.font_spacing = 2;
 CheckboxGroup.default_size = {
@@ -558,6 +565,15 @@ var Sheet = {
 		}
 
 		return null;
+	},
+	updateComponentTextByTempId: function(temp_id, text) {
+		var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.components[i].temp_id == temp_id) {
+				this.components[i].change_text(text);
+				break;
+			}
+		}
 	},
 	updateActiveComponentsPosition: function(tempComponents) {
 		var iLength = this.active_components.length;

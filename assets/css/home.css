@@ -211,3 +211,21 @@ input[type="text"] {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.component-edit, .component-edit-textarea {
+	width: 250px;
+	position: absolute;
+	z-index: 10;
+	top: 100px;
+	left: 100px;
+	padding: 5px;
+	display: none;
+}
+
+.component-edit.show, .component-edit-textarea.show {
+	display: block;
+}
+
+.component-edit-textarea {
+	height: 60px;
+}

@@ -113,6 +113,8 @@
         <canvas class="sheet-temp"></canvas>
     </div>
 </div>
+<input type="text" class="component-edit" />
+<textarea class="component-edit-textarea"></textarea>
 <script>
 var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";

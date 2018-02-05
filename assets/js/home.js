@@ -52,6 +52,37 @@ $(function() {
 		isDraggingFromToolbar = true;
 	});
 
+	$(document).on("click", function(e) {
+		if ($(e.target).closest(".component-edit, .component-edit-textarea").length == 0) {
+			hideComponentEdit();
+		}
+	});
+
+	$(".sheet-temp").on("dblclick", function(e) {
+		var coor = translateMouseCoorToComputedCoor(e);
+		var component = Sheet.isHittingComponent(coor.x, coor.y);
+		if (component != null) {
+			var textCoor = translateComputedCoorBack(component.computed_position.left, component.computed_position.top);
+			$(".component-edit, .component-edit-textarea").removeClass("show");
+			$(".component-edit, .component-edit-textarea").val("");
+			var editText;
+			if (component.multiline) {
+				editText = $(".component-edit-textarea");
+			} else {
+				editText = $(".component-edit");
+			}
+
+			editText.attr("data-temp-id", component.temp_id);
+			editText.css({
+				left: textCoor.x + "px",
+				top: textCoor.y + "px"
+			});
+			editText.val(component.text);
+			editText.addClass("show");
+			editText.focus();
+		}
+	});
+
 	$(".sheet-temp").on("mousedown", function(e) {
 		var coor = translateMouseCoorToComputedCoor(e);
 		var component = Sheet.isHittingComponent(coor.x, coor.y);
@@ -145,6 +176,18 @@ $(function() {
 	});
 });
 
+function hideComponentEdit() {
+	var editText = $(".component-edit.show, .component-edit-textarea.show");
+	if (editText.length > 0) {
+		var value = editText.val();
+		var temp_id = editText.attr("data-temp-id");
+		editText.removeClass("show");
+		editText.removeAttr("data-temp-id");
+		Sheet.updateComponentTextByTempId(temp_id, value);
+		Sheet.draw(sheetContext);
+	}
+}
+
 function mousemoveIsHoveringDots(e) {
 	var coor = translateMouseCoorToComputedCoor(e);
 	var iLength = Sheet.active_components.length;
@@ -215,6 +258,15 @@ function releaseDragging(e) {
 function translateMouseCoorToComputedCoor(e) {
 	var x = e.pageX - Sheet.offset.left;
 	var y = e.pageY - Sheet.offset.top;
+	return {
+		x: x,
+		y: y
+	};
+}
+
+function translateComputedCoorBack(currentX, currentY) {
+	var x = currentX + Sheet.offset.left;
+	var y = currentY + Sheet.offset.top;
 	return {
 		x: x,
 		y: y
