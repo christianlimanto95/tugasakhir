@@ -100,6 +100,10 @@
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkboxgroup.png") ?>);" ></div>
             <div class="component-item-name">Checkbox Group</div>
         </div>
+        <div class="component-item" data-id="7">
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/circlebutton.png") ?>);" ></div>
+            <div class="component-item-name">Circle Button</div>
+        </div>
     </div>
 </div>
 <div class="right-pane"></div>
@@ -119,4 +123,9 @@ var componentImage6 = "<?php echo base_url("assets/images/checkboxgroup.png"); ?
 var checkboxResImage1 = "<?php echo base_url("assets/images/checkbox_unchecked.svg"); ?>";
 var checkboxResImage2 = "<?php echo base_url("assets/images/checkbox_checked.svg"); ?>";
 var checkboxResImage3 = "<?php echo base_url("assets/images/checkbox_undeterminate.svg"); ?>";
+var checkboxResImage4 = "<?php echo base_url("assets/images/checkbox_unchecked_disabled.svg"); ?>";
+var checkboxResImage5 = "<?php echo base_url("assets/images/checkbox_checked_disabled.svg"); ?>";
+var checkboxResImage6 = "<?php echo base_url("assets/images/checkbox_undeterminate_disabled.svg"); ?>";
+var componentImage7 = "<?php echo base_url("assets/images/circlebutton.png"); ?>";
+var circleButtonResImage1 = "<?php echo base_url("assets/images/circlebutton_plus.svg"); ?>";
 </script>

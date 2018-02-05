@@ -43,6 +43,42 @@ imageResourceItem3.image.onload = function() {
 }
 imageResourceItem3.image.src = checkboxResImage3;
 
+var imageResourceItem4 = {
+	id: "4",
+	image: new Image()
+};
+imageResourceItem4.image.onload = function() {
+	ImageResources.items.push(imageResourceItem4);
+}
+imageResourceItem4.image.src = checkboxResImage4;
+
+var imageResourceItem5 = {
+	id: "5",
+	image: new Image()
+};
+imageResourceItem5.image.onload = function() {
+	ImageResources.items.push(imageResourceItem5);
+}
+imageResourceItem5.image.src = checkboxResImage5;
+
+var imageResourceItem6 = {
+	id: "6",
+	image: new Image()
+};
+imageResourceItem6.image.onload = function() {
+	ImageResources.items.push(imageResourceItem6);
+}
+imageResourceItem6.image.src = checkboxResImage6;
+
+var imageResourceItem7 = {
+	id: "7",
+	image: new Image()
+};
+imageResourceItem7.image.onload = function() {
+	ImageResources.items.push(imageResourceItem7);
+}
+imageResourceItem7.image.src = circleButtonResImage1;
+
 
 
 // ---------------------------------------------------------------------
@@ -130,6 +166,9 @@ Button1.draw = function(context) {
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "center";
@@ -281,25 +320,45 @@ Checkbox.draw = function(context) {
 	var kotakWidth = kotakHeight;
 	var kotakTop = this.computed_position.top + kotakHeight / 2;
 	var kotakLeft = this.computed_position.left + 10;
+
+	var text_shown = this.text;
 	var image_resource = null;
-	var firstLetter = this.text.substring(0, 1);
-	switch (firstLetter) {
+	var first2Letter = this.text.substring(0, 2).match(/[*]{1,2}|[-]{1,2}|[+]{1,2}/);
+	switch (first2Letter[0]) {
 		case "*":
+			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("1");
+			text_shown = this.text.substring(1);
 			break;
 		case "+":
+			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("2");
+			text_shown = this.text.substring(1);
 			break;
 		case "-":
+			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("3");
+			text_shown = this.text.substring(1);
+			break;
+		case "**":
+			context.fillStyle = "#999";
+			image_resource = ImageResources.getImage("4");
+			text_shown = this.text.substring(2);
+			break;
+		case "++":
+			context.fillStyle = "#999";
+			image_resource = ImageResources.getImage("5");
+			text_shown = this.text.substring(2);
+			break;
+		case "--":
+			context.fillStyle = "#999";
+			image_resource = ImageResources.getImage("6");
+			text_shown = this.text.substring(2);
 			break;
 	}
 
-	var text_shown = this.text;
-
 	if (image_resource != null) {
 		context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
-		text_shown = this.text.substring(1);
 	}
 
 	context.fillStyle = this.font_color;
@@ -333,7 +392,6 @@ CheckboxGroup.draw = function(context) {
 	var kotakTop = this.computed_position.top + kotakHeight / 2;
 	var kotakLeft = this.computed_position.left + 10;
 	
-	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
 	context.textBaseline = "middle";
@@ -344,30 +402,79 @@ CheckboxGroup.draw = function(context) {
 	var firstY = (iLength - 1) * this.font_size * this.font_spacing / 2;
 	for (var i = 0; i < iLength; i++) {
 		var current_line = lines[i];
+		var text_shown = current_line;
 		var image_resource = null;
 		var first2Letter = current_line.substring(0, 2).match(/[*]{1,2}|[-]{1,2}|[+]{1,2}/);
 		switch (first2Letter[0]) {
 			case "*":
+				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("1");
+				text_shown = current_line.substring(1);
 				break;
 			case "+":
+				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("2");
+				text_shown = current_line.substring(1);
 				break;
 			case "-":
+				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("3");
+				text_shown = current_line.substring(1);
+				break;
+			case "**":
+				context.fillStyle = "#999";
+				image_resource = ImageResources.getImage("4");
+				text_shown = current_line.substring(2);
+				break;
+			case "++":
+				context.fillStyle = "#999";
+				image_resource = ImageResources.getImage("5");
+				text_shown = current_line.substring(2);
+				break;
+			case "--":
+				context.fillStyle = "#999";
+				image_resource = ImageResources.getImage("6");
+				text_shown = current_line.substring(2);
 				break;
 		}
-
-		var text_shown = current_line;
 
 		if (image_resource != null) {
 			context.drawImage(image_resource, kotakLeft, center.y - firstY - kotakCenter, kotakWidth, kotakHeight);
-			text_shown = current_line.substring(1);
 		}
-
+		
 		context.fillText(text_shown, kotakLeft + kotakWidth + 6, center.y - firstY);
 		firstY -= this.font_size * this.font_spacing;
 	}
+};
+
+var CircleButton = Object.create(Component);
+CircleButton.id = "7";
+CircleButton.name = "Circle Button";
+CircleButton.real_name = "Circle Button";
+CircleButton.text = "+";
+CircleButton.image = componentImage7;
+CircleButton.default_size = {
+	width: 60,
+	height: 60
+};
+CircleButton.real_size = clone(CircleButton.default_size);
+CircleButton.computed_size = clone(CircleButton.default_size);
+CircleButton.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+	var center = this.getCenterPosition();
+	
+	context.beginPath();
+	context.arc(center.x, center.y, this.computed_size.width / 2, 0, 2 * Math.PI);
+	context.stroke();
+
+	var kotakHeight = this.computed_size.height / 3;
+	var kotakWidth = kotakHeight;
+	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
+	var kotakLeft = this.computed_position.left + (this.computed_size.height - kotakHeight) / 2;
+
+	var image_resource = ImageResources.getImage("7");
+	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
 };
 
 var ALL_COMPONENTS = {
@@ -388,6 +495,7 @@ ALL_COMPONENTS.items.push(Button3);
 ALL_COMPONENTS.items.push(Button4);
 ALL_COMPONENTS.items.push(Checkbox);
 ALL_COMPONENTS.items.push(CheckboxGroup);
+ALL_COMPONENTS.items.push(CircleButton);
 
 
 // ---------------------------------------------------------------------
