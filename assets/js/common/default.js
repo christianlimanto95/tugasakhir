@@ -688,7 +688,7 @@ var Sheet = {
 	isHittingComponent: function(x, y) {
 		var iLength = this.components.length;
 		var top, left, right, bottom;
-		for (var i = 0; i < iLength; i++) {
+		for (var i = iLength - 1; i >= 0; i--) {
 			top = this.components[i].computed_position.top;
 			left = this.components[i].computed_position.left;
 			right = this.components[i].computed_position.right;
@@ -723,6 +723,7 @@ var SheetTemp = {
 		x: 0,
 		y: 0
 	},
+	dotsHit: "",
 	components: [],
 	addComponent: function(component) {
 		component = clone(component);
@@ -750,8 +751,106 @@ var SheetTemp = {
 			this.components[i].computed_position.bottom += selisihY;
 		}
 	},
+	updateComponentsSize: function(currentMousePosition) {
+		var selisihX = currentMousePosition.x - this.mousePosition.x;
+		var selisihY = currentMousePosition.y - this.mousePosition.y;
+		this.mousePosition = currentMousePosition;
+
+		var iLength = this.components.length;
+		switch (this.dotsHit) {
+			case "top-left":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height -= selisihY;
+					this.components[i].computed_size.height -= selisihY;
+					this.components[i].real_position.top += selisihY;
+					this.components[i].computed_position.top += selisihY;
+
+					this.components[i].real_size.width -= selisihX;
+					this.components[i].computed_size.width -= selisihX;
+					this.components[i].real_position.left += selisihX;
+					this.components[i].computed_position.left += selisihX;
+				}
+				break;
+			case "top-center":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height -= selisihY;
+					this.components[i].computed_size.height -= selisihY;
+					this.components[i].real_position.top += selisihY;
+					this.components[i].computed_position.top += selisihY;
+				}
+				break;
+			case "top-right":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height -= selisihY;
+					this.components[i].computed_size.height -= selisihY;
+					this.components[i].real_position.top += selisihY;
+					this.components[i].computed_position.top += selisihY;
+
+					this.components[i].real_size.width += selisihX;
+					this.components[i].computed_size.width += selisihX;
+					this.components[i].real_position.right += selisihX;
+					this.components[i].computed_position.right += selisihX;
+				}
+				break;
+			case "middle-left":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.width -= selisihX;
+					this.components[i].computed_size.width -= selisihX;
+					this.components[i].real_position.left += selisihX;
+					this.components[i].computed_position.left += selisihX;
+				}
+				break;
+			case "middle-right":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.width += selisihX;
+					this.components[i].computed_size.width += selisihX;
+					this.components[i].real_position.right += selisihX;
+					this.components[i].computed_position.right += selisihX;
+				}
+				break;
+			case "bottom-left":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height += selisihY;
+					this.components[i].computed_size.height += selisihY;
+					this.components[i].real_position.bottom += selisihY;
+					this.components[i].computed_position.bottom += selisihY;
+
+					this.components[i].real_size.width -= selisihX;
+					this.components[i].computed_size.width -= selisihX;
+					this.components[i].real_position.left += selisihX;
+					this.components[i].computed_position.left += selisihX;
+				}
+				break;
+			case "bottom-center":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height += selisihY;
+					this.components[i].computed_size.height += selisihY;
+					this.components[i].real_position.bottom += selisihY;
+					this.components[i].computed_position.bottom += selisihY;
+				}
+				break;
+			case "bottom-right":
+				for (var i = 0; i < iLength; i++) {
+					this.components[i].real_size.height += selisihY;
+					this.components[i].computed_size.height += selisihY;
+					this.components[i].real_position.bottom += selisihY;
+					this.components[i].computed_position.bottom += selisihY;
+
+					this.components[i].real_size.width += selisihX;
+					this.components[i].computed_size.width += selisihX;
+					this.components[i].real_position.right += selisihX;
+					this.components[i].computed_position.right += selisihX;
+				}
+				break;
+		}
+	},
 	removeAllComponents: function() {
 		this.components = [];
+		this.dotsHit = "";
+		this.mousePosition = {
+			x: 0,
+			y: 0
+		};
 	},
 	draw: function(context) {
 		context.strokeStyle = "#000000";

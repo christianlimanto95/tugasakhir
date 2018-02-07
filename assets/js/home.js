@@ -133,6 +133,16 @@ function e_mousedown_sheetTemp(e) {
 				SheetTemp.addComponent(Sheet.active_components[i]);
 			}
 		}
+	} else {
+		SheetTemp.mousePosition = {
+			x: e.pageX,
+			y: e.pageY
+		};
+		SheetTemp.dotsHit = dotsHit;
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			SheetTemp.addComponent(Sheet.active_components[i]);
+		}
 	}
 	
 	Sheet.draw(sheetContext);
@@ -147,7 +157,8 @@ function e_mousemove_document(e) {
 		});
 	}
 	else if (dotsHit != "") {
-		
+		SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY});
+		SheetTemp.draw(sheetTempContext);
 	} else {
 		if (Sheet.isHittingComponentOnMouseDown && Sheet.active_components.length > 0) {
 			SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
