@@ -79,6 +79,15 @@ imageResourceItem7.image.onload = function() {
 }
 imageResourceItem7.image.src = circleButtonResImage1;
 
+var imageResourceItem8 = {
+	id: "8",
+	image: new Image()
+};
+imageResourceItem8.image.onload = function() {
+	ImageResources.items.push(imageResourceItem8);
+}
+imageResourceItem8.image.src = comboboxResImage1;
+
 
 
 // ---------------------------------------------------------------------
@@ -472,7 +481,11 @@ CircleButton.draw = function(context) {
 	var center = this.getCenterPosition();
 	
 	context.beginPath();
-	context.arc(center.x, center.y, this.computed_size.width / 2, 0, 2 * Math.PI);
+	context.moveTo(this.computed_position.left, center.y);
+	context.quadraticCurveTo(this.computed_position.left, this.computed_position.bottom, center.x, this.computed_position.bottom);
+	context.quadraticCurveTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right, center.y);
+	context.quadraticCurveTo(this.computed_position.right, this.computed_position.top, center.x, this.computed_position.top);
+	context.quadraticCurveTo(this.computed_position.left, this.computed_position.top, this.computed_position.left, center.y);
 	context.stroke();
 
 	var kotakHeight = this.computed_size.height / 3;
@@ -482,6 +495,49 @@ CircleButton.draw = function(context) {
 
 	var image_resource = ImageResources.getImage("7");
 	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
+};
+
+var Combobox = Object.create(Component);
+Combobox.id = "8";
+Combobox.name = "Combobox";
+Combobox.real_name = "Combobox";
+Combobox.text = "Combobox";
+Combobox.image = componentImage1;
+Combobox.default_size = {
+	width: 130,
+	height: 30
+};
+Combobox.real_size = clone(Combobox.default_size);
+Combobox.computed_size = clone(Combobox.default_size);
+Combobox.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+
+	var kotakWidth = this.computed_size.width - 30;
+	var kotakRight = this.computed_position.left + kotakWidth;
+	var kotakCenterX = this.computed_position.left + kotakWidth / 2;
+	context.beginPath();
+	context.moveTo(kotakRight, this.computed_position.top);
+	context.lineTo(kotakRight, this.computed_position.bottom);
+	context.stroke();
+
+	var segitigaLeft = kotakRight + 7;
+	var segitigaRight = kotakRight + 23;
+	var segitigaWidth = segitigaRight - segitigaLeft;
+	var segitigaHeight = segitigaWidth;
+	var segitigaTop = this.computed_position.top + (this.computed_size.height - segitigaHeight) / 2;
+	var image_resource = ImageResources.getImage("8");
+	context.drawImage(image_resource, segitigaLeft, segitigaTop, segitigaWidth, segitigaHeight);
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, kotakCenterX, center.y);
 };
 
 var ALL_COMPONENTS = {
@@ -503,6 +559,7 @@ ALL_COMPONENTS.items.push(Button4);
 ALL_COMPONENTS.items.push(Checkbox);
 ALL_COMPONENTS.items.push(CheckboxGroup);
 ALL_COMPONENTS.items.push(CircleButton);
+ALL_COMPONENTS.items.push(Combobox);
 
 
 // ---------------------------------------------------------------------
@@ -612,6 +669,63 @@ var Sheet = {
 			bottom: active_component.real_position.bottom
 		};
 	},
+	updateComponentSizeFromActiveComponent: function(active_component) {
+		var component = this.getComponentByTempId(active_component.temp_id);
+		
+		component.real_position = {
+			top: active_component.real_position.top,
+			left: active_component.real_position.left,
+			right: active_component.real_position.right,
+			bottom: active_component.real_position.bottom
+		};
+
+		component.computed_position = {
+			top: active_component.real_position.top,
+			left: active_component.real_position.left,
+			right: active_component.real_position.right,
+			bottom: active_component.real_position.bottom
+		};
+
+		component.real_size = {
+			width: active_component.real_size.width,
+			height: active_component.real_size.height
+		};
+
+		component.computed_size = {
+			width: active_component.computed_size.width,
+			height: active_component.computed_size.height
+		};
+	},
+	updateActiveComponentsSize: function(tempComponents) {
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			this.active_components[i].real_size = {
+				width: tempComponents[i].real_size.width,
+				height: tempComponents[i].real_size.height
+			};
+
+			this.active_components[i].computed_size = {
+				width: tempComponents[i].computed_size.width,
+				height: tempComponents[i].computed_size.height
+			};
+
+			this.active_components[i].real_position = {
+				top: tempComponents[i].real_position.top,
+				left: tempComponents[i].real_position.left,
+				right: tempComponents[i].real_position.right,
+				bottom: tempComponents[i].real_position.bottom
+			};
+
+			this.active_components[i].computed_position = {
+				top: tempComponents[i].real_position.top,
+				left: tempComponents[i].real_position.left,
+				right: tempComponents[i].real_position.right,
+				bottom: tempComponents[i].real_position.bottom
+			};
+
+			this.updateComponentSizeFromActiveComponent(this.active_components[i]);
+		}
+	},
 	deleteComponentsFromActiveComponents: function() {
 		var iLength = this.active_components.length;
 		for (var i = 0; i < iLength; i++) {
@@ -685,6 +799,18 @@ var Sheet = {
 			context.stroke();
 		}
 	},
+	drawWithoutActiveComponent: function(context) {
+		context.strokeStyle = "#000000";
+		context.lineWidth = 1;
+		context.clearRect(0, 0, this.width, this.height);
+
+		var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (!this.isActiveComponent(this.components[i])) {
+				this.components[i].draw(context);
+			}
+		}
+	},
 	isHittingComponent: function(x, y) {
 		var iLength = this.components.length;
 		var top, left, right, bottom;
@@ -751,7 +877,7 @@ var SheetTemp = {
 			this.components[i].computed_position.bottom += selisihY;
 		}
 	},
-	updateComponentsSize: function(currentMousePosition) {
+	updateComponentsSize: function(currentMousePosition, shiftPressed) {
 		var selisihX = currentMousePosition.x - this.mousePosition.x;
 		var selisihY = currentMousePosition.y - this.mousePosition.y;
 		this.mousePosition = currentMousePosition;
@@ -860,6 +986,53 @@ var SheetTemp = {
 		var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
 			this.components[i].draw(context);
+
+			context.strokeStyle = "#0D47A1";
+			context.lineWidth = 1;
+			context.fillStyle = "#FFFFFF";
+
+			var top = this.components[i].computed_position.top;
+			var left = this.components[i].computed_position.left;
+			var bottom = this.components[i].computed_position.bottom;
+			var right = this.components[i].computed_position.right;
+			var width = this.components[i].computed_size.width;
+			var height = this.components[i].computed_size.height;
+
+			var centerX = left + width / 2;
+			var centerY = top + height / 2;
+			context.strokeRect(left, top, width, height);
+			context.beginPath();
+			context.arc(left, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, centerY, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, centerY, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
 		}
 	}
 };

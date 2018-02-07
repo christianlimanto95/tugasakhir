@@ -1,10 +1,11 @@
 var sheetCanvas, sheetContext, sheetTempCanvas, sheetTempContext;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
-var mouseDown = false, mouseDrag = false;
+var mouseDown = false, mouseDrag = false, mouseResize = false;
 var dotsHit = "";
 var keyPressed = {
-	"ctrl": false
+	"ctrl": false,
+	"shift": false
 };
 
 $(function() {
@@ -132,6 +133,9 @@ function e_mousedown_sheetTemp(e) {
 			for (var i = 0; i < iLength; i++) {
 				SheetTemp.addComponent(Sheet.active_components[i]);
 			}
+
+			SheetTemp.draw(sheetTempContext);
+			Sheet.drawWithoutActiveComponent(sheetContext);
 		}
 	} else {
 		SheetTemp.mousePosition = {
@@ -143,9 +147,11 @@ function e_mousedown_sheetTemp(e) {
 		for (var i = 0; i < iLength; i++) {
 			SheetTemp.addComponent(Sheet.active_components[i]);
 		}
+
+		SheetTemp.draw(sheetTempContext);
+		Sheet.drawWithoutActiveComponent(sheetContext);
 	}
 	
-	Sheet.draw(sheetContext);
 	mouseDown = true;
 }
 
@@ -157,8 +163,9 @@ function e_mousemove_document(e) {
 		});
 	}
 	else if (dotsHit != "") {
-		SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY});
+		SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY}, keyPressed.shift);
 		SheetTemp.draw(sheetTempContext);
+		mouseResize = true;
 	} else {
 		if (Sheet.isHittingComponentOnMouseDown && Sheet.active_components.length > 0) {
 			SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
@@ -180,7 +187,8 @@ function e_mouseup_document(e) {
 		
 		if (mouseDrag) {
 			Sheet.updateActiveComponentsPosition(SheetTemp.components);
-			console.log("A");
+		} else if (mouseResize) {
+			Sheet.updateActiveComponentsSize(SheetTemp.components);
 		} else {
 			if (!keyPressed.ctrl) {
 				Sheet.removeAllActiveComponents();
@@ -196,6 +204,7 @@ function e_mouseup_document(e) {
 	}
 	mouseDown = false;
 	mouseDrag = false;
+	mouseResize = false;
 	dotsHit = "";
 }
 
@@ -207,6 +216,9 @@ function e_keydown_document(e) {
 				Sheet.draw(sheetContext);
 			}
 			break;
+		case 16:
+			keyPressed.shift = true;
+			break;
 		case 17:
 			keyPressed.ctrl = true;
 			break;
@@ -215,6 +227,9 @@ function e_keydown_document(e) {
 
 function e_keyup_document(e) {
 	switch (e.which) {
+		case 16:
+			keyPressed.shift = false;
+			break;
 		case 17:
 			keyPressed.ctrl = false;
 			break;

@@ -104,6 +104,10 @@
             <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/circlebutton.png") ?>);" ></div>
             <div class="component-item-name">Circle Button</div>
         </div>
+        <div class="component-item" data-id="8">
+            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/combobox.png") ?>);" ></div>
+            <div class="component-item-name">Combobox</div>
+        </div>
     </div>
 </div>
 <div class="right-pane"></div>
@@ -130,4 +134,6 @@ var checkboxResImage5 = "<?php echo base_url("assets/images/checkbox_checked_dis
 var checkboxResImage6 = "<?php echo base_url("assets/images/checkbox_undeterminate_disabled.svg"); ?>";
 var componentImage7 = "<?php echo base_url("assets/images/circlebutton.png"); ?>";
 var circleButtonResImage1 = "<?php echo base_url("assets/images/circlebutton_plus.svg"); ?>";
+var componentImage8 = "<?php echo base_url("assets/images/combobox.png"); ?>";
+var comboboxResImage1 = "<?php echo base_url("assets/images/combobox_down.svg"); ?>";
 </script>
