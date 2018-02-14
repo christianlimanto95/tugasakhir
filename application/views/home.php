@@ -76,41 +76,73 @@
     </div>
     <div class="component-group">
         <div class="component-group-title">All Components</div>
-        <div class="component-item" data-id="1">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button1.png") ?>);" ></div>
-            <div class="component-item-name">Button</div>
-        </div>
-        <div class="component-item" data-id="2">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button2.png") ?>);" ></div>
-            <div class="component-item-name">Multiline Button</div>
-        </div>
-        <div class="component-item" data-id="3">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button3.png") ?>);" ></div>
-            <div class="component-item-name">Button Bar</div>
-        </div>
-        <div class="component-item" data-id="4">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button4.png") ?>);" ></div>
-            <div class="component-item-name">Pointy Button</div>
-        </div>
-        <div class="component-item" data-id="5">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkbox.png") ?>);" ></div>
-            <div class="component-item-name">Checkbox</div>
-        </div>
-        <div class="component-item" data-id="6">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkboxgroup.png") ?>);" ></div>
-            <div class="component-item-name">Checkbox Group</div>
-        </div>
-        <div class="component-item" data-id="7">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/circlebutton.png") ?>);" ></div>
-            <div class="component-item-name">Circle Button</div>
-        </div>
-        <div class="component-item" data-id="8">
-            <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/combobox.png") ?>);" ></div>
-            <div class="component-item-name">Combobox</div>
+        <div class="component-item-container">
+            <div class="component-item" data-id="1">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button1.png") ?>);" ></div>
+                <div class="component-item-name">Button</div>
+            </div>
+            <div class="component-item" data-id="2">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button2.png") ?>);" ></div>
+                <div class="component-item-name">Multiline Button</div>
+            </div>
+            <div class="component-item" data-id="3">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button3.png") ?>);" ></div>
+                <div class="component-item-name">Button Bar</div>
+            </div>
+            <div class="component-item" data-id="4">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/button4.png") ?>);" ></div>
+                <div class="component-item-name">Pointy Button</div>
+            </div>
+            <div class="component-item" data-id="5">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkbox.png") ?>);" ></div>
+                <div class="component-item-name">Checkbox</div>
+            </div>
+            <div class="component-item" data-id="6">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/checkboxgroup.png") ?>);" ></div>
+                <div class="component-item-name">Checkbox Group</div>
+            </div>
+            <div class="component-item" data-id="7">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/circlebutton.png") ?>);" ></div>
+                <div class="component-item-name">Circle Button</div>
+            </div>
+            <div class="component-item" data-id="8">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/combobox.png") ?>);" ></div>
+                <div class="component-item-name">Combobox</div>
+            </div>
+            <div class="component-item" data-id="9">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/accordion.png") ?>);" ></div>
+                <div class="component-item-name">Accordion</div>
+            </div>
         </div>
     </div>
 </div>
-<div class="right-pane"></div>
+<div class="right-pane">
+    <div class="right-pane-section">
+        <div class="right-pane-section-title">Text</div>
+        <div class="right-pane-section-content">
+            <div class="form-item">
+                <div class="form-label">Value</div>
+                <input class="form-input" type="text" />
+                <textarea class="form-input"></textarea>
+            </div>
+            <div class="form-item">
+                <div class="form-label">Font Family</div>
+                <select class="form-input">
+                    <option value="times new roman">Times New Roman</option>
+                </select>
+            </div>
+            <div class="form-item inline form-item-size">
+                <div class="form-label">Size</div>
+                <input type="text" class="form-input" />
+                <span class="input-right-label">Px</span>
+            </div>
+            <div class="form-item inline form-item-color">
+                <div class="form-label">Color</div>
+                <div class="form-input input-color"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="sheet-container">
     <div class="sheet-container-inner">
         <canvas class="sheet" width="700" height="700" ></canvas>

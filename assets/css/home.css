@@ -82,6 +82,63 @@
 	border-left: 1px solid #CCC;
 }
 
+.right-pane-section-title {
+	padding: 10px;
+	background-color: #EEE;
+}
+
+.right-pane-section-content {
+	padding: 10px;
+}
+
+.form-item {
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.form-item.inline {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.form-label {
+	margin-bottom: 5px;
+}
+
+.form-label.inline {
+	display: inline-block;
+	margin-bottom: 0;
+}
+
+.form-input {
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	padding: 5px;
+}
+
+.input-right-label {
+	display: inline-block;
+	position: absolute;
+	top: 26px;
+	right: 6px;
+}
+
+.form-item-size, .form-item-color {
+	width: 100px;
+}
+
+.form-item-size {
+	margin-right: 20px;
+}
+
+.input-color {
+	background-color: red;
+	width: 100px;
+	height: 27px;
+	border-radius: 3px;
+}
+
 .sheet-container {
 	position: absolute;
 	top: 60px;
@@ -165,7 +222,7 @@ input[type="text"] {
 }
 
 .component-group {
-	display: inline-block;
+	display: block;
 	width: 100%;
 	border-left: 1px solid #CCC;
 	border-top: 1px solid #CCC;
@@ -178,16 +235,21 @@ input[type="text"] {
 	border-bottom: 1px solid #CCC;
 }
 
+.component-item-container {
+	height: calc(100vh - 137px);
+	overflow-y: auto;
+}
+
 .component-item {
 	float: left;
-	width: 124px;
-	height: 124px;
+	width: 115px;
+	height: 115px;
 	border-bottom: 1px solid #DDD;
 	padding-top: 15px;
 	cursor: default;
 }
 
-.component-item:nth-child(even) {
+.component-item:nth-child(odd) {
 	border-right: 1px solid #DDD;
 }
 

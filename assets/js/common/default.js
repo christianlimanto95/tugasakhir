@@ -333,7 +333,7 @@ Checkbox.draw = function(context) {
 
 	var kotakHeight = this.font_size / this.default_font_size * 15;
 	var kotakWidth = kotakHeight;
-	var kotakTop = this.computed_position.top + kotakHeight / 2;
+	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
 	var kotakLeft = this.computed_position.left + 10;
 
 	var text_shown = this.text;
@@ -538,6 +538,40 @@ Combobox.draw = function(context) {
 	context.textBaseline = "middle";
 	var center = this.getCenterPosition();
 	context.fillText(this.text, kotakCenterX, center.y);
+};
+
+var Accordion = Object.create(Component);
+Accordion.id = "9";
+Accordion.name = "Accordion";
+Accordion.real_name = "Accordion";
+Accordion.text = "List Item 1\nList Item 2\nList Item 3\nList Item 4";
+Accordion.image = componentImage1;
+Accordion.default_size = {
+	width: 120,
+	height: 120
+};
+Accordion.real_size = clone(Accordion.default_size);
+Accordion.computed_size = clone(Accordion.default_size);
+Accordion.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	for (var i = 0; i < iLength; i++) {
+		
+	}
+
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, center.x, center.y);
 };
 
 var ALL_COMPONENTS = {
