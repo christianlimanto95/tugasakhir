@@ -88,6 +88,15 @@ imageResourceItem8.image.onload = function() {
 }
 imageResourceItem8.image.src = comboboxResImage1;
 
+var imageResourceItem9 = {
+	id: "9",
+	image: new Image()
+};
+imageResourceItem9.image.onload = function() {
+	ImageResources.items.push(imageResourceItem9);
+}
+imageResourceItem9.image.src = accordionResImage1;
+
 
 
 // ---------------------------------------------------------------------
@@ -199,7 +208,7 @@ Button2.text = "Multiline\nButton";
 Button2.multiline = true;
 Button2.image = componentImage2;
 Button2.default_size = {
-	width: 63,
+	width: 100,
 	height: 30
 };
 Button2.real_size = clone(Button2.default_size);
@@ -544,11 +553,12 @@ var Accordion = Object.create(Component);
 Accordion.id = "9";
 Accordion.name = "Accordion";
 Accordion.real_name = "Accordion";
-Accordion.text = "List Item 1\nList Item 2\nList Item 3\nList Item 4";
-Accordion.image = componentImage1;
+Accordion.multiline = true;
+Accordion.text = "List Item 1\nList Item 2\n*List Item 3   >\nList Item 4";
+Accordion.image = componentImage9;
 Accordion.default_size = {
-	width: 120,
-	height: 120
+	width: 160,
+	height: 140
 };
 Accordion.real_size = clone(Accordion.default_size);
 Accordion.computed_size = clone(Accordion.default_size);
@@ -556,22 +566,55 @@ Accordion.draw = function(context) {
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 
-	var lines = this.text.split("\n");
-	var iLength = lines.length;
-	for (var i = 0; i < iLength; i++) {
-		
-	}
-
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 	context.fillStyle = "#FFFFFF";
-	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+
+	context.beginPath();
+	context.moveTo(this.computed_position.left, this.computed_position.top);
+	context.lineTo(this.computed_position.right, this.computed_position.top);
+	context.stroke();
 
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
-	context.textAlign = "center";
+	context.textAlign = "left";
 	context.textBaseline = "middle";
-	var center = this.getCenterPosition();
-	context.fillText(this.text, center.x, center.y);
+
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	var rowHeight = this.computed_size.height / iLength;
+
+	for (var i = 0; i < iLength; i++) {
+		var rowTop = this.computed_position.top + i * rowHeight;
+		var rowBottom = rowTop + rowHeight;
+
+		var line = lines[i];
+		var selected = line.substring(0, 1);
+		if (selected == "*") {
+			line = line.substring(1);
+			context.fillStyle = "#CCCCCC";
+			context.fillRect(this.computed_position.left + 1, rowTop + 1, this.computed_size.width - 2, rowHeight - 2);
+		}
+
+		context.fillStyle = this.font_color;
+		var rightArrow = line.slice(-1);
+		if (rightArrow == ">") {
+			line = line.substring(0, line.length - 1);
+			var iconLeft = this.computed_position.right - 20;
+			var iconTop = rowTop + (rowHeight - 15) / 2;
+			var image_resource = ImageResources.getImage("9");
+			context.drawImage(image_resource, iconLeft, iconTop, 15, 15);
+		}
+		context.fillText(line, this.computed_position.left + 10, rowTop + rowHeight / 2);
+
+		context.beginPath();
+		context.moveTo(this.computed_position.left, rowTop);
+		context.lineTo(this.computed_position.left, rowBottom);
+		context.moveTo(this.computed_position.right, rowTop);
+		context.lineTo(this.computed_position.right, rowBottom);
+		context.moveTo(this.computed_position.left, rowBottom);
+		context.lineTo(this.computed_position.right, rowBottom);
+		context.stroke();
+	}
 };
 
 var ALL_COMPONENTS = {
@@ -594,6 +637,7 @@ ALL_COMPONENTS.items.push(Checkbox);
 ALL_COMPONENTS.items.push(CheckboxGroup);
 ALL_COMPONENTS.items.push(CircleButton);
 ALL_COMPONENTS.items.push(Combobox);
+ALL_COMPONENTS.items.push(Accordion);
 
 
 // ---------------------------------------------------------------------

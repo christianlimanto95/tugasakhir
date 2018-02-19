@@ -169,4 +169,6 @@ var componentImage7 = "<?php echo base_url("assets/images/circlebutton.png"); ?>
 var circleButtonResImage1 = "<?php echo base_url("assets/images/circlebutton_plus.svg"); ?>";
 var componentImage8 = "<?php echo base_url("assets/images/combobox.png"); ?>";
 var comboboxResImage1 = "<?php echo base_url("assets/images/combobox_down.svg"); ?>";
+var componentImage9 = "<?php echo base_url("assets/images/accordion.png"); ?>";
+var accordionResImage1 = "<?php echo base_url("assets/images/accordion_right.svg"); ?>";
 </script>
