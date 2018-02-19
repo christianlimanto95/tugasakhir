@@ -119,15 +119,15 @@ var Component = {
 		};
 	},
 	setPosition: function(x, y) {
-		this.real_position.left = x;
-		this.real_position.top = y;
-		this.real_position.right = x + this.real_size.width;
-		this.real_position.bottom = y + this.real_size.height;
-		
 		this.computed_position.left = x;
 		this.computed_position.top = y;
 		this.computed_position.right = x + this.computed_size.width;
 		this.computed_position.bottom = y + this.computed_size.height;
+
+		this.real_position.left = x - Sheet.selisihOffset.left;
+		this.real_position.top = y - Sheet.selisihOffset.top;
+		this.real_position.right = x + this.real_size.width - Sheet.selisihOffset.left;
+		this.real_position.bottom = y + this.real_size.height - Sheet.selisihOffset.top;
 	},
 	rotation: 0,
 	default_size: {
@@ -319,7 +319,7 @@ var Checkbox = Object.create(Component);
 Checkbox.id = "5";
 Checkbox.name = "Checkbox 1";
 Checkbox.real_name = "Checkbox 1";
-Checkbox.text = "*Checkbox";
+Checkbox.text = "[]Checkbox";
 Checkbox.image = componentImage5;
 Checkbox.default_size = {
 	width: 100,
@@ -338,37 +338,37 @@ Checkbox.draw = function(context) {
 
 	var text_shown = this.text;
 	var image_resource = null;
-	var first2Letter = this.text.substring(0, 2).match(/[*]{1,2}|[-]{1,2}|[+]{1,2}/);
+	var first2Letter = this.text.substring(0, 4).match(/(\[\][d]{0,1})|(\[v\][d]{0,1})|(\[-\][d]{0,1})/);
 	switch (first2Letter[0]) {
-		case "*":
+		case "[]":
 			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("1");
-			text_shown = this.text.substring(1);
+			text_shown = this.text.substring(2);
 			break;
-		case "+":
+		case "[v]":
 			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("2");
-			text_shown = this.text.substring(1);
+			text_shown = this.text.substring(3);
 			break;
-		case "-":
+		case "[-]":
 			context.fillStyle = this.font_color;
 			image_resource = ImageResources.getImage("3");
-			text_shown = this.text.substring(1);
+			text_shown = this.text.substring(3);
 			break;
-		case "**":
+		case "[]d":
 			context.fillStyle = "#999";
 			image_resource = ImageResources.getImage("4");
-			text_shown = this.text.substring(2);
+			text_shown = this.text.substring(3);
 			break;
-		case "++":
+		case "[v]d":
 			context.fillStyle = "#999";
 			image_resource = ImageResources.getImage("5");
-			text_shown = this.text.substring(2);
+			text_shown = this.text.substring(4);
 			break;
-		case "--":
+		case "[-]d":
 			context.fillStyle = "#999";
 			image_resource = ImageResources.getImage("6");
-			text_shown = this.text.substring(2);
+			text_shown = this.text.substring(4);
 			break;
 	}
 
@@ -388,7 +388,7 @@ var CheckboxGroup = Object.create(Component);
 CheckboxGroup.id = "6";
 CheckboxGroup.name = "Checkbox Group 1";
 CheckboxGroup.real_name = "Checkbox Group 1";
-CheckboxGroup.text = "*Not selected\n+Selected\n-Indeterminate\n**Disabled\n++Disabled selected\n--Disabled Indeterminate";
+CheckboxGroup.text = "[]Not selected\n[v]Selected\n[-]Indeterminate\n[]dDisabled\n[v]dDisabled selected\n[-]dDisabled Indeterminate";
 CheckboxGroup.multiline = true;
 CheckboxGroup.image = componentImage6;
 CheckboxGroup.font_spacing = 2;
@@ -420,37 +420,37 @@ CheckboxGroup.draw = function(context) {
 		var current_line = lines[i];
 		var text_shown = current_line;
 		var image_resource = null;
-		var first2Letter = current_line.substring(0, 2).match(/[*]{1,2}|[-]{1,2}|[+]{1,2}/);
+		var first2Letter = current_line.substring(0, 4).match(/(\[\][d]{0,1})|(\[v\][d]{0,1})|(\[-\][d]{0,1})/);
 		switch (first2Letter[0]) {
-			case "*":
+			case "[]":
 				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("1");
-				text_shown = current_line.substring(1);
+				text_shown = current_line.substring(2);
 				break;
-			case "+":
+			case "[v]":
 				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("2");
-				text_shown = current_line.substring(1);
+				text_shown = current_line.substring(3);
 				break;
-			case "-":
+			case "[-]":
 				context.fillStyle = this.font_color;
 				image_resource = ImageResources.getImage("3");
-				text_shown = current_line.substring(1);
+				text_shown = current_line.substring(3);
 				break;
-			case "**":
+			case "[]d":
 				context.fillStyle = "#999";
 				image_resource = ImageResources.getImage("4");
-				text_shown = current_line.substring(2);
+				text_shown = current_line.substring(3);
 				break;
-			case "++":
+			case "[v]d":
 				context.fillStyle = "#999";
 				image_resource = ImageResources.getImage("5");
-				text_shown = current_line.substring(2);
+				text_shown = current_line.substring(4);
 				break;
-			case "--":
+			case "[-]d":
 				context.fillStyle = "#999";
 				image_resource = ImageResources.getImage("6");
-				text_shown = current_line.substring(2);
+				text_shown = current_line.substring(4);
 				break;
 		}
 
@@ -602,11 +602,15 @@ ALL_COMPONENTS.items.push(Combobox);
 */
 // ---------------------------------------------------------------------
 var Sheet = {
-	width: 700,
-	height: 700,
+	width: 0,
+	height: 0,
 	offset: {
 		left: 0,
 		top: 0
+	},
+	selisihOffset: {
+		top: 0,
+		left: 0
 	},
 	temp_id: 1,
 	components: [],
@@ -677,10 +681,10 @@ var Sheet = {
 			};
 
 			this.active_components[i].computed_position = {
-				top: tempComponents[i].real_position.top,
-				left: tempComponents[i].real_position.left,
-				right: tempComponents[i].real_position.right,
-				bottom: tempComponents[i].real_position.bottom
+				top: tempComponents[i].computed_position.top,
+				left: tempComponents[i].computed_position.left,
+				right: tempComponents[i].computed_position.right,
+				bottom: tempComponents[i].computed_position.bottom
 			};
 
 			this.updateComponentPositionFromActiveComponent(this.active_components[i]);
@@ -697,10 +701,10 @@ var Sheet = {
 		};
 
 		component.computed_position = {
-			top: active_component.real_position.top,
-			left: active_component.real_position.left,
-			right: active_component.real_position.right,
-			bottom: active_component.real_position.bottom
+			top: active_component.computed_position.top,
+			left: active_component.computed_position.left,
+			right: active_component.computed_position.right,
+			bottom: active_component.computed_position.bottom
 		};
 	},
 	updateComponentSizeFromActiveComponent: function(active_component) {
@@ -714,10 +718,10 @@ var Sheet = {
 		};
 
 		component.computed_position = {
-			top: active_component.real_position.top,
-			left: active_component.real_position.left,
-			right: active_component.real_position.right,
-			bottom: active_component.real_position.bottom
+			top: active_component.computed_position.top,
+			left: active_component.computed_position.left,
+			right: active_component.computed_position.right,
+			bottom: active_component.computed_position.bottom
 		};
 
 		component.real_size = {
@@ -751,10 +755,10 @@ var Sheet = {
 			};
 
 			this.active_components[i].computed_position = {
-				top: tempComponents[i].real_position.top,
-				left: tempComponents[i].real_position.left,
-				right: tempComponents[i].real_position.right,
-				bottom: tempComponents[i].real_position.bottom
+				top: tempComponents[i].computed_position.top,
+				left: tempComponents[i].computed_position.left,
+				right: tempComponents[i].computed_position.right,
+				bottom: tempComponents[i].computed_position.bottom
 			};
 
 			this.updateComponentSizeFromActiveComponent(this.active_components[i]);
@@ -887,10 +891,6 @@ var SheetTemp = {
 	components: [],
 	addComponent: function(component) {
 		component = clone(component);
-		component.computed_position.top = component.real_position.top + this.selisihOffset.top;
-		component.computed_position.left = component.real_position.left + this.selisihOffset.left;
-		component.computed_position.right = component.real_position.right + this.selisihOffset.left;
-		component.computed_position.bottom = component.real_position.bottom + this.selisihOffset.top;
 		this.components.push(component);
 	},
 	updateComponentsPosition: function(currentMousePosition) {

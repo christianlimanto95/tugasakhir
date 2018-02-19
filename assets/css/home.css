@@ -166,7 +166,7 @@
 	box-shadow: 0 0 5px #CCC;
 }
 
-.sheet-temp {
+.sheet-canvas, .sheet-temp {
 	position: absolute;
 	top: 0;
 	left: 0;

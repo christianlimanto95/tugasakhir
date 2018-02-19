@@ -145,7 +145,8 @@
 </div>
 <div class="sheet-container">
     <div class="sheet-container-inner">
-        <canvas class="sheet" width="700" height="700" ></canvas>
+        <div class="sheet"></div>
+        <canvas class="sheet-canvas" ></canvas>
         <canvas class="sheet-temp"></canvas>
     </div>
 </div>

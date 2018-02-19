@@ -10,28 +10,15 @@ var keyPressed = {
 
 $(function() {
 	draggableComponent = $(".draggable-component");
-	sheetCanvas = $(".sheet")[0];
+	sheetCanvas = $(".sheet-canvas")[0];
 	sheetContext = sheetCanvas.getContext("2d");
-	Sheet.offset = $(".sheet").offset();
-
 	sheetTempCanvas = $(".sheet-temp")[0];
 	sheetTempContext = sheetTempCanvas.getContext("2d");
-	SheetTemp.offset = $(sheetTempCanvas).offset();
-	var sheetTempCanvasWidth = parseInt($(sheetTempCanvas).css("width"));
-	var sheetTempCanvasHeight = parseInt($(sheetTempCanvas).css("height"));
-	$(sheetTempCanvas).attr({
-		width: sheetTempCanvasWidth,
-		height: sheetTempCanvasHeight
-	});
-	SheetTemp.width = sheetTempCanvasWidth;
-	SheetTemp.height = sheetTempCanvasHeight;
-	SheetTemp.selisihOffset = {
-		top: Sheet.offset.top - SheetTemp.offset.top,
-		left: Sheet.offset.left - SheetTemp.offset.left
-	};
+	
+	initialize();
 
 	$(".sheet-container").on("scroll", function() {
-		Sheet.offset = $(".sheet").offset();
+		Sheet.offset = $(".sheet-canvas").offset();
 	});
 
 	$(document).on("mousedown", ".component-item", e_mousedown_componentItem);
@@ -44,7 +31,44 @@ $(function() {
 	$(document).on("mouseup", e_mouseup_document);
 	$(document).on("keydown", e_keydown_document);
 	$(document).on("keyup", e_keyup_document);
+
+	$(window).on("resize", function() {
+		initialize();
+	});
 });
+
+function initialize() {
+	Sheet.offset = $(".sheet-canvas").offset();
+	SheetTemp.offset = $(sheetTempCanvas).offset();
+
+	var sheetCanvasWidth = parseInt($(sheetCanvas).css("width"));
+	var sheetCanvasHeight = parseInt($(sheetCanvas).css("height"));
+
+	$(sheetCanvas).attr({
+		width: sheetCanvasWidth,
+		height: sheetCanvasHeight
+	});
+	$(sheetTempCanvas).attr({
+		width: sheetCanvasWidth,
+		height: sheetCanvasHeight
+	});
+	Sheet.width = sheetCanvasWidth;
+	Sheet.height = sheetCanvasHeight;
+	SheetTemp.width = sheetCanvasWidth;
+	SheetTemp.height = sheetCanvasHeight;
+
+	var offset = $(".sheet").offset();
+	Sheet.selisihOffset = {
+		top: offset.top - Sheet.offset.top,
+		left: offset.left - Sheet.offset.left
+	};
+	SheetTemp.selisihOffset = {
+		top: offset.top - SheetTemp.offset.top,
+		left: offset.left - SheetTemp.offset.left
+	};
+
+	Sheet.draw(sheetContext);
+}
 
 function e_mousedown_componentItem(e) {
 	var componentId = $(this).data("id");
