@@ -113,6 +113,14 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/accordion.png") ?>);" ></div>
                 <div class="component-item-name">Accordion</div>
             </div>
+            <div class="component-item" data-id="10">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/colorpicker.png") ?>);" ></div>
+                <div class="component-item-name">Color Picker</div>
+            </div>
+            <div class="component-item" data-id="11">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datepicker.png") ?>);" ></div>
+                <div class="component-item-name">Date Picker</div>
+            </div>
         </div>
     </div>
 </div>
@@ -171,4 +179,7 @@ var componentImage8 = "<?php echo base_url("assets/images/combobox.png"); ?>";
 var comboboxResImage1 = "<?php echo base_url("assets/images/combobox_down.svg"); ?>";
 var componentImage9 = "<?php echo base_url("assets/images/accordion.png"); ?>";
 var accordionResImage1 = "<?php echo base_url("assets/images/accordion_right.svg"); ?>";
+var componentImage10 = "<?php echo base_url("assets/images/colorpicker.png"); ?>";
+var componentImage11 = "<?php echo base_url("assets/images/datepicker.png"); ?>";
+var datepickerResImage1 = "<?php echo base_url("assets/images/datepicker_calendar.svg"); ?>";
 </script>

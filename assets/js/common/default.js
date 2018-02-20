@@ -97,6 +97,15 @@ imageResourceItem9.image.onload = function() {
 }
 imageResourceItem9.image.src = accordionResImage1;
 
+var imageResourceItem10 = {
+	id: "10",
+	image: new Image()
+};
+imageResourceItem10.image.onload = function() {
+	ImageResources.items.push(imageResourceItem10);
+}
+imageResourceItem10.image.src = datepickerResImage1;
+
 
 
 // ---------------------------------------------------------------------
@@ -617,6 +626,59 @@ Accordion.draw = function(context) {
 	}
 };
 
+var ColorPicker = Object.create(Component);
+ColorPicker.id = "10";
+ColorPicker.name = "Color Picker";
+ColorPicker.real_name = "Color Picker";
+ColorPicker.image = componentImage10;
+ColorPicker.default_size = {
+	width: 40,
+	height: 40
+};
+ColorPicker.real_size = clone(ColorPicker.default_size);
+ColorPicker.computed_size = clone(ColorPicker.default_size);
+ColorPicker.draw = function(context) {
+	context.fillStyle = "#5555FF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+
+	context.strokeStyle = "#000000";
+	context.lineWidth = 4;
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+};
+
+var DatePicker = Object.create(Component);
+DatePicker.id = "11";
+DatePicker.name = "Datepicker";
+DatePicker.real_name = "Datepicker";
+DatePicker.text = "06/05/1999";
+DatePicker.image = componentImage11;
+DatePicker.default_size = {
+	width: 130,
+	height: 30
+};
+DatePicker.real_size = clone(DatePicker.default_size);
+DatePicker.computed_size = clone(DatePicker.default_size);
+DatePicker.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var textContainerRight = this.computed_position.right - 40;
+	var textContainerWidth = this.computed_size.width - 40;
+	context.strokeRect(this.computed_position.left, this.computed_position.top, textContainerWidth, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, textContainerWidth, this.computed_size.height)
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, (this.computed_position.left + textContainerRight) / 2, center.y);
+
+	var image_resource = ImageResources.getImage("10");
+	context.drawImage(image_resource, textContainerRight + 10, this.computed_position.top + (this.computed_size.height - 30) / 2, 30, 30);
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -638,6 +700,8 @@ ALL_COMPONENTS.items.push(CheckboxGroup);
 ALL_COMPONENTS.items.push(CircleButton);
 ALL_COMPONENTS.items.push(Combobox);
 ALL_COMPONENTS.items.push(Accordion);
+ALL_COMPONENTS.items.push(ColorPicker);
+ALL_COMPONENTS.items.push(DatePicker);
 
 
 // ---------------------------------------------------------------------
