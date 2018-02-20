@@ -646,19 +646,19 @@ ColorPicker.draw = function(context) {
 	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 };
 
-var DatePicker = Object.create(Component);
-DatePicker.id = "11";
-DatePicker.name = "Datepicker";
-DatePicker.real_name = "Datepicker";
-DatePicker.text = "06/05/1999";
-DatePicker.image = componentImage11;
-DatePicker.default_size = {
+var DateChooser = Object.create(Component);
+DateChooser.id = "11";
+DateChooser.name = "DateChooser";
+DateChooser.real_name = "DateChooser";
+DateChooser.text = "06/05/1999";
+DateChooser.image = componentImage11;
+DateChooser.default_size = {
 	width: 130,
 	height: 30
 };
-DatePicker.real_size = clone(DatePicker.default_size);
-DatePicker.computed_size = clone(DatePicker.default_size);
-DatePicker.draw = function(context) {
+DateChooser.real_size = clone(DateChooser.default_size);
+DateChooser.computed_size = clone(DateChooser.default_size);
+DateChooser.draw = function(context) {
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 
@@ -709,6 +709,81 @@ GroupBox.draw = function(context) {
 	context.fillText(this.text, textLeft, this.computed_position.top);
 };
 
+var DatePicker = Object.create(Component);
+DatePicker.id = "13";
+DatePicker.name = "Datepicker";
+DatePicker.real_name = "Datepicker";
+DatePicker.text = "";
+DatePicker.text_year = "2017";
+DatePicker.text_month = "October";
+DatePicker.text_day = "4";
+DatePicker.text_max_date = "31";
+DatePicker.text_first_date = "1";
+DatePicker.date_default = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+DatePicker.image = componentImage13;
+DatePicker.default_size = {
+	width: 230,
+	height: 360
+};
+DatePicker.real_size = clone(DatePicker.default_size);
+DatePicker.computed_size = clone(DatePicker.default_size);
+DatePicker.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+
+	context.fillStyle = "#DDDDDD";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, 70);
+
+	context.textBaseline = "middle";
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.fillText(this.text_year, this.computed_position.left + 10, this.computed_position.top + 20);
+	context.font = this.font_size + 10 + "px " + this.font_family;
+	context.fillText(this.text_month + " " + this.text_day, this.computed_position.left + 10, this.computed_position.top + 40);
+
+	context.font = "bold " +  (this.font_size + 1) + "px " + this.font_family;
+	context.textAlign = "center";
+	var center = this.getCenterPosition();
+	context.fillText(this.text_month + " " + this.text_year, center.x, this.computed_position.top + 90);
+
+	context.font = this.font_size + "px " + this.font_family;
+	var horizontalMargin = (this.computed_size.width - 30) / 6;
+	var firstLeft = this.computed_position.left + 15;
+	var dayNames = ["S", "M", "T", "W", "T", "F", "S"];
+	var iLength = dayNames.length;
+	for (var i = 0; i < iLength; i++) {
+		context.fillText(dayNames[i], firstLeft + i * horizontalMargin, this.computed_position.top + 120);
+	}
+
+	var dates = this.date_default;
+	var first_date = parseInt(this.text_first_date);
+	for (var i = 1; i < first_date; i++) {
+		dates.splice(0, 0, "");
+	}
+
+	var line = 1;
+	var col = 0;
+	var verticalMargin = (this.computed_size.height - 200) / 5;
+	var iLength = dates.length;
+	for (var i = 0; i < iLength; i++) {
+		if (col == 7) {
+			col = 0;
+			line++;
+		}
+
+		context.fillText(dates[i], firstLeft + col * horizontalMargin, this.computed_position.top + 120 + line * verticalMargin);
+
+		col++;
+	}
+
+	context.fillText("CANCEL", this.computed_position.right - 80, this.computed_position.bottom - 20);
+	context.fillText("OK", this.computed_position.right - 30, this.computed_position.bottom - 20);
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -731,8 +806,9 @@ ALL_COMPONENTS.items.push(CircleButton);
 ALL_COMPONENTS.items.push(Combobox);
 ALL_COMPONENTS.items.push(Accordion);
 ALL_COMPONENTS.items.push(ColorPicker);
-ALL_COMPONENTS.items.push(DatePicker);
+ALL_COMPONENTS.items.push(DateChooser);
 ALL_COMPONENTS.items.push(GroupBox);
+ALL_COMPONENTS.items.push(DatePicker);
 
 
 // ---------------------------------------------------------------------

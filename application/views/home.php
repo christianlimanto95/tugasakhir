@@ -118,12 +118,16 @@
                 <div class="component-item-name">Color Picker</div>
             </div>
             <div class="component-item" data-id="11">
-                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datepicker.png") ?>);" ></div>
-                <div class="component-item-name">Date Picker</div>
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datechooser.png") ?>);" ></div>
+                <div class="component-item-name">Date Chooser</div>
             </div>
             <div class="component-item" data-id="12">
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/groupbox.png") ?>);" ></div>
                 <div class="component-item-name">Group Box</div>
+            </div>
+            <div class="component-item" data-id="13">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datepicker.png") ?>);" ></div>
+                <div class="component-item-name">Date Picker</div>
             </div>
         </div>
     </div>
@@ -184,7 +188,8 @@ var comboboxResImage1 = "<?php echo base_url("assets/images/combobox_down.svg");
 var componentImage9 = "<?php echo base_url("assets/images/accordion.png"); ?>";
 var accordionResImage1 = "<?php echo base_url("assets/images/accordion_right.svg"); ?>";
 var componentImage10 = "<?php echo base_url("assets/images/colorpicker.png"); ?>";
-var componentImage11 = "<?php echo base_url("assets/images/datepicker.png"); ?>";
-var datepickerResImage1 = "<?php echo base_url("assets/images/datepicker_calendar.svg"); ?>";
+var componentImage11 = "<?php echo base_url("assets/images/datechooser.png"); ?>";
+var datepickerResImage1 = "<?php echo base_url("assets/images/datechooser_calendar.svg"); ?>";
 var componentImage12 = "<?php echo base_url("assets/images/groupbox.png"); ?>";
+var componentImage13 = "<?php echo base_url("assets/images/datepicker.png"); ?>";
 </script>
