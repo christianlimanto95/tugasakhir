@@ -121,6 +121,10 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datepicker.png") ?>);" ></div>
                 <div class="component-item-name">Date Picker</div>
             </div>
+            <div class="component-item" data-id="12">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/groupbox.png") ?>);" ></div>
+                <div class="component-item-name">Group Box</div>
+            </div>
         </div>
     </div>
 </div>
@@ -182,4 +186,5 @@ var accordionResImage1 = "<?php echo base_url("assets/images/accordion_right.svg
 var componentImage10 = "<?php echo base_url("assets/images/colorpicker.png"); ?>";
 var componentImage11 = "<?php echo base_url("assets/images/datepicker.png"); ?>";
 var datepickerResImage1 = "<?php echo base_url("assets/images/datepicker_calendar.svg"); ?>";
+var componentImage12 = "<?php echo base_url("assets/images/groupbox.png"); ?>";
 </script>

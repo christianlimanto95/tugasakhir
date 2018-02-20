@@ -679,6 +679,36 @@ DatePicker.draw = function(context) {
 	context.drawImage(image_resource, textContainerRight + 10, this.computed_position.top + (this.computed_size.height - 30) / 2, 30, 30);
 };
 
+var GroupBox = Object.create(Component);
+GroupBox.id = "12";
+GroupBox.name = "Group Box";
+GroupBox.real_name = "Group Box";
+GroupBox.text = "Group Box";
+GroupBox.image = componentImage12;
+GroupBox.default_size = {
+	width: 180,
+	height: 120
+};
+GroupBox.real_size = clone(GroupBox.default_size);
+GroupBox.computed_size = clone(GroupBox.default_size);
+GroupBox.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
+
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var textWidth = context.measureText(this.text).width;
+	var textLeft = this.computed_position.left + this.computed_size.width / 6;
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(textLeft - 7, this.computed_position.top - this.font_size / 2, textWidth + 14, this.font_size);
+	context.fillStyle = this.font_color;
+	context.fillText(this.text, textLeft, this.computed_position.top);
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -702,6 +732,7 @@ ALL_COMPONENTS.items.push(Combobox);
 ALL_COMPONENTS.items.push(Accordion);
 ALL_COMPONENTS.items.push(ColorPicker);
 ALL_COMPONENTS.items.push(DatePicker);
+ALL_COMPONENTS.items.push(GroupBox);
 
 
 // ---------------------------------------------------------------------
