@@ -106,6 +106,15 @@ imageResourceItem10.image.onload = function() {
 }
 imageResourceItem10.image.src = datepickerResImage1;
 
+var imageResourceItem11 = {
+	id: "11",
+	image: new Image()
+};
+imageResourceItem11.image.onload = function() {
+	ImageResources.items.push(imageResourceItem11);
+}
+imageResourceItem11.image.src = helpButtonResImage1;
+
 
 
 // ---------------------------------------------------------------------
@@ -509,7 +518,7 @@ CircleButton.draw = function(context) {
 	var kotakHeight = this.computed_size.height / 3;
 	var kotakWidth = kotakHeight;
 	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
-	var kotakLeft = this.computed_position.left + (this.computed_size.height - kotakHeight) / 2;
+	var kotakLeft = this.computed_position.left + (this.computed_size.width - kotakHeight) / 2;
 
 	var image_resource = ImageResources.getImage("7");
 	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
@@ -713,13 +722,14 @@ var DatePicker = Object.create(Component);
 DatePicker.id = "13";
 DatePicker.name = "Datepicker";
 DatePicker.real_name = "Datepicker";
-DatePicker.text = "";
+DatePicker.text = "04/10/2017";
 DatePicker.text_year = "2017";
 DatePicker.text_month = "October";
 DatePicker.text_day = "4";
 DatePicker.text_max_date = "31";
-DatePicker.text_first_date = "1";
+DatePicker.text_first_date = 1;
 DatePicker.date_default = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+DatePicker.month_default = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 DatePicker.image = componentImage13;
 DatePicker.default_size = {
 	width: 230,
@@ -737,13 +747,29 @@ DatePicker.draw = function(context) {
 	context.fillStyle = "#DDDDDD";
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, 70);
 
+	var dateItem = this.text.split("/");
+	var date = parseInt(dateItem[0]);
+	var month = parseInt(dateItem[1]);
+	var year = parseInt(dateItem[2]);
+	
+	var valid = false;
+	if (!isNaN(date) && date < 32 && date > 0 && !isNaN(month) && month < 13 && month > 0 && !isNaN(year) && year > 1900 && year < 2100) {
+		valid = true;
+	}
+
+	if (valid) {
+		this.text_year = year;
+		this.text_day = date;
+		this.text_month = this.month_default[month - 1];
+	}
+
 	context.textBaseline = "middle";
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
 	context.fillText(this.text_year, this.computed_position.left + 10, this.computed_position.top + 20);
 	context.font = this.font_size + 10 + "px " + this.font_family;
-	context.fillText(this.text_month + " " + this.text_day, this.computed_position.left + 10, this.computed_position.top + 40);
+	context.fillText(this.text_month.substr(0, 3) + " " + this.text_day, this.computed_position.left + 10, this.computed_position.top + 40);
 
 	context.font = "bold " +  (this.font_size + 1) + "px " + this.font_family;
 	context.textAlign = "center";
@@ -759,9 +785,15 @@ DatePicker.draw = function(context) {
 		context.fillText(dayNames[i], firstLeft + i * horizontalMargin, this.computed_position.top + 120);
 	}
 
-	var dates = this.date_default;
-	var first_date = parseInt(this.text_first_date);
-	for (var i = 1; i < first_date; i++) {
+	var d = new Date(year, month - 1, 1);
+	var dates = [];
+	var daysInMonth = new Date(year, month, 0).getDate();
+	for (var i = 1; i <= daysInMonth; i++) {
+		dates.push(i + "");
+	}
+
+	var first_date = d.getDay();
+	for (var i = 0; i < first_date; i++) {
 		dates.splice(0, 0, "");
 	}
 
@@ -782,6 +814,40 @@ DatePicker.draw = function(context) {
 
 	context.fillText("CANCEL", this.computed_position.right - 80, this.computed_position.bottom - 20);
 	context.fillText("OK", this.computed_position.right - 30, this.computed_position.bottom - 20);
+};
+
+var HelpButton = Object.create(Component);
+HelpButton.id = "14";
+HelpButton.name = "Help Button";
+HelpButton.real_name = "Help Button";
+HelpButton.text = "";
+HelpButton.image = componentImage14;
+HelpButton.default_size = {
+	width: 60,
+	height: 60
+};
+HelpButton.real_size = clone(HelpButton.default_size);
+HelpButton.computed_size = clone(HelpButton.default_size);
+HelpButton.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+	var center = this.getCenterPosition();
+	
+	context.beginPath();
+	context.moveTo(this.computed_position.left, center.y);
+	context.quadraticCurveTo(this.computed_position.left, this.computed_position.bottom, center.x, this.computed_position.bottom);
+	context.quadraticCurveTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right, center.y);
+	context.quadraticCurveTo(this.computed_position.right, this.computed_position.top, center.x, this.computed_position.top);
+	context.quadraticCurveTo(this.computed_position.left, this.computed_position.top, this.computed_position.left, center.y);
+	context.stroke();
+
+	var kotakHeight = this.computed_size.height / 3;
+	var kotakWidth = kotakHeight;
+	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
+	var kotakLeft = this.computed_position.left + (this.computed_size.width - kotakHeight) / 2;
+
+	var image_resource = ImageResources.getImage("11");
+	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
 };
 
 var ALL_COMPONENTS = {
@@ -809,6 +875,7 @@ ALL_COMPONENTS.items.push(ColorPicker);
 ALL_COMPONENTS.items.push(DateChooser);
 ALL_COMPONENTS.items.push(GroupBox);
 ALL_COMPONENTS.items.push(DatePicker);
+ALL_COMPONENTS.items.push(HelpButton);
 
 
 // ---------------------------------------------------------------------

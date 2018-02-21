@@ -129,6 +129,10 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/datepicker.png") ?>);" ></div>
                 <div class="component-item-name">Date Picker</div>
             </div>
+            <div class="component-item" data-id="14">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/helpbutton.png") ?>);" ></div>
+                <div class="component-item-name">Help Button</div>
+            </div>
         </div>
     </div>
 </div>
@@ -192,4 +196,6 @@ var componentImage11 = "<?php echo base_url("assets/images/datechooser.png"); ?>
 var datepickerResImage1 = "<?php echo base_url("assets/images/datechooser_calendar.svg"); ?>";
 var componentImage12 = "<?php echo base_url("assets/images/groupbox.png"); ?>";
 var componentImage13 = "<?php echo base_url("assets/images/datepicker.png"); ?>";
+var componentImage14 = "<?php echo base_url("assets/images/helpbutton.png"); ?>";
+var helpButtonResImage1 = "<?php echo base_url("assets/images/helpbutton_question.svg"); ?>";
 </script>
