@@ -115,6 +115,42 @@ imageResourceItem11.image.onload = function() {
 }
 imageResourceItem11.image.src = helpButtonResImage1;
 
+var imageResourceItem12 = {
+	id: "12",
+	image: new Image()
+};
+imageResourceItem12.image.onload = function() {
+	ImageResources.items.push(imageResourceItem12);
+}
+imageResourceItem12.image.src = radiobuttonResImage1;
+
+var imageResourceItem13 = {
+	id: "13",
+	image: new Image()
+};
+imageResourceItem13.image.onload = function() {
+	ImageResources.items.push(imageResourceItem13);
+}
+imageResourceItem13.image.src = radiobuttonResImage2;
+
+var imageResourceItem14 = {
+	id: "14",
+	image: new Image()
+};
+imageResourceItem14.image.onload = function() {
+	ImageResources.items.push(imageResourceItem14);
+}
+imageResourceItem14.image.src = radiobuttonResImage3;
+
+var imageResourceItem15 = {
+	id: "15",
+	image: new Image()
+};
+imageResourceItem15.image.onload = function() {
+	ImageResources.items.push(imageResourceItem15);
+}
+imageResourceItem15.image.src = radiobuttonResImage4;
+
 
 
 // ---------------------------------------------------------------------
@@ -403,7 +439,6 @@ Checkbox.draw = function(context) {
 		context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
 	}
 
-	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
 	context.textBaseline = "middle";
@@ -850,6 +885,133 @@ HelpButton.draw = function(context) {
 	context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
 };
 
+var RadioButton = Object.create(Component);
+RadioButton.id = "15";
+RadioButton.name = "Radiobutton";
+RadioButton.real_name = "Radiobutton";
+RadioButton.text = "(*)Radiobutton";
+RadioButton.image = componentImage15;
+RadioButton.default_size = {
+	width: 110,
+	height: 30
+};
+RadioButton.real_size = clone(RadioButton.default_size);
+RadioButton.computed_size = clone(RadioButton.default_size);
+RadioButton.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var kotakHeight = this.font_size / this.default_font_size * 15;
+	var kotakWidth = kotakHeight;
+	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
+	var kotakLeft = this.computed_position.left + 10;
+
+	var text_shown = this.text;
+	var image_resource = null;
+	var first4Letter = this.text.substring(0, 4).match(/(\(\)[d]{0,1})|(\(\*\)[d]{0,1})/);
+	switch (first4Letter[0]) {
+		case "()":
+			context.fillStyle = this.font_color;
+			image_resource = ImageResources.getImage("12");
+			text_shown = this.text.substring(2);
+			break;
+		case "(*)":
+			context.fillStyle = this.font_color;
+			image_resource = ImageResources.getImage("13");
+			text_shown = this.text.substring(3);
+			break;
+		case "()d":
+			context.fillStyle = "#999";
+			image_resource = ImageResources.getImage("14");
+			text_shown = this.text.substring(3);
+			break;
+		case "(*)d":
+			context.fillStyle = "#999";
+			image_resource = ImageResources.getImage("15");
+			text_shown = this.text.substring(4);
+			break;
+	}
+
+	if (image_resource != null) {
+		context.drawImage(image_resource, kotakLeft, kotakTop, kotakWidth, kotakHeight);
+	}
+
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(text_shown, kotakLeft + kotakWidth + 6, center.y);
+};
+
+var RadioButtonGroup = Object.create(Component);
+RadioButtonGroup.id = "16";
+RadioButtonGroup.name = "Radiobutton Group 1";
+RadioButtonGroup.real_name = "Radiobutton Group 1";
+RadioButtonGroup.text = "()Unchecked\n(*)Checked\n()dUnchecked Disabled\n(*)dChecked Disabled";
+RadioButtonGroup.multiline = true;
+RadioButtonGroup.image = componentImage6;
+RadioButtonGroup.font_spacing = 2;
+RadioButtonGroup.default_size = {
+	width: 170,
+	height: 105
+};
+RadioButtonGroup.real_size = clone(RadioButtonGroup.default_size);
+RadioButtonGroup.computed_size = clone(RadioButtonGroup.default_size);
+RadioButtonGroup.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	var kotakHeight = this.font_size / this.default_font_size * 15;
+	var kotakWidth = kotakHeight;
+	var kotakCenter = kotakHeight / 2;
+	var kotakTop = this.computed_position.top + kotakHeight / 2;
+	var kotakLeft = this.computed_position.left + 10;
+	
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	var firstY = (iLength - 1) * this.font_size * this.font_spacing / 2;
+	for (var i = 0; i < iLength; i++) {
+		var current_line = lines[i];
+		var text_shown = current_line;
+		var image_resource = null;
+		var first4Letter = current_line.substring(0, 4).match(/(\(\)[d]{0,1})|(\(\*\)[d]{0,1})/);
+		switch (first4Letter[0]) {
+			case "()":
+				context.fillStyle = this.font_color;
+				image_resource = ImageResources.getImage("12");
+				text_shown = text_shown.substring(2);
+				break;
+			case "(*)":
+				context.fillStyle = this.font_color;
+				image_resource = ImageResources.getImage("13");
+				text_shown = text_shown.substring(3);
+				break;
+			case "()d":
+				context.fillStyle = "#999";
+				image_resource = ImageResources.getImage("14");
+				text_shown = text_shown.substring(3);
+				break;
+			case "(*)d":
+				context.fillStyle = "#999";
+				image_resource = ImageResources.getImage("15");
+				text_shown = text_shown.substring(4);
+				break;
+		}
+
+		if (image_resource != null) {
+			context.drawImage(image_resource, kotakLeft, center.y - firstY - kotakCenter, kotakWidth, kotakHeight);
+		}
+		
+		context.fillText(text_shown, kotakLeft + kotakWidth + 6, center.y - firstY);
+		firstY -= this.font_size * this.font_spacing;
+	}
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -876,6 +1038,8 @@ ALL_COMPONENTS.items.push(DateChooser);
 ALL_COMPONENTS.items.push(GroupBox);
 ALL_COMPONENTS.items.push(DatePicker);
 ALL_COMPONENTS.items.push(HelpButton);
+ALL_COMPONENTS.items.push(RadioButton);
+ALL_COMPONENTS.items.push(RadioButtonGroup);
 
 
 // ---------------------------------------------------------------------
