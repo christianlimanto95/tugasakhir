@@ -949,7 +949,7 @@ RadioButtonGroup.name = "Radiobutton Group 1";
 RadioButtonGroup.real_name = "Radiobutton Group 1";
 RadioButtonGroup.text = "()Unchecked\n(*)Checked\n()dUnchecked Disabled\n(*)dChecked Disabled";
 RadioButtonGroup.multiline = true;
-RadioButtonGroup.image = componentImage6;
+RadioButtonGroup.image = componentImage16;
 RadioButtonGroup.font_spacing = 2;
 RadioButtonGroup.default_size = {
 	width: 170,
@@ -1012,6 +1012,95 @@ RadioButtonGroup.draw = function(context) {
 	}
 };
 
+var Icon = Object.create(Component);
+Icon.id = "17";
+Icon.name = "Icon";
+Icon.real_name = "Icon";
+Icon.image = componentImage17;
+Icon.default_size = {
+	width: 40,
+	height: 40
+};
+Icon.real_size = clone(Icon.default_size);
+Icon.computed_size = clone(Icon.default_size);
+Icon.real_corner_radius = 11;
+Icon.computed_corner_radius = 11;
+Icon.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 2;
+	context.beginPath();
+	context.moveTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.top);
+	context.lineTo(this.computed_position.right - this.computed_corner_radius, this.computed_position.top);
+	context.arcTo(this.computed_position.right, this.computed_position.top, this.computed_position.right, this.computed_position.top + this.computed_corner_radius, this.computed_corner_radius);
+	context.lineTo(this.computed_position.right, this.computed_position.bottom - this.computed_corner_radius);
+	context.arcTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right - this.computed_corner_radius, this.computed_position.bottom, this.computed_corner_radius);
+	context.lineTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.bottom);
+	context.arcTo(this.computed_position.left, this.computed_position.bottom, this.computed_position.left, this.computed_position.bottom - this.computed_corner_radius, this.computed_corner_radius);
+	context.lineTo(this.computed_position.left, this.computed_position.top + this.computed_corner_radius);
+	context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.computed_corner_radius, this.computed_position.top, this.computed_corner_radius);
+	context.stroke();
+};
+
+var SingleLineText = Object.create(Component);
+SingleLineText.id = "18";
+SingleLineText.name = "Single Line Text";
+SingleLineText.real_name = "Single Line Text";
+SingleLineText.text = "This is a single line text.";
+SingleLineText.image = componentImage18;
+SingleLineText.default_size = {
+	width: 160,
+	height: 30
+};
+SingleLineText.real_size = clone(SingleLineText.default_size);
+SingleLineText.computed_size = clone(SingleLineText.default_size);
+SingleLineText.draw = function(context) {
+	
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, this.computed_position.left + 10, center.y);
+};
+
+var MultiLineText = Object.create(Component);
+MultiLineText.id = "19";
+MultiLineText.name = "Multi Line Text";
+MultiLineText.real_name = "Multi Line Text";
+MultiLineText.text = "This is a multi line text. This multi line text consists of lines of text";
+MultiLineText.image = componentImage19;
+MultiLineText.default_size = {
+	width: 180,
+	height: 60
+};
+MultiLineText.real_size = clone(MultiLineText.default_size);
+MultiLineText.computed_size = clone(MultiLineText.default_size);
+MultiLineText.draw = function(context) {
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "top";
+	
+	var x = this.computed_position.left + 10;
+	var y = this.computed_position.top + 10;
+	var maxWidth = this.computed_size.width - 20;
+	var words = this.text.split(" ");
+	var line = "";
+	for (var n = 0; n < words.length; n++) {
+		var testLine = line + words[n] + ' ';
+		var testWidth = context.measureText(testLine).width;
+		if (testWidth > maxWidth && n > 0) {
+			context.fillText(line, x, y);
+			line = words[n] + ' ';
+			y += this.font_size * this.font_spacing;
+		}
+		else {
+			line = testLine;
+		}
+	}
+	context.fillText(line, x, y);
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -1040,6 +1129,9 @@ ALL_COMPONENTS.items.push(DatePicker);
 ALL_COMPONENTS.items.push(HelpButton);
 ALL_COMPONENTS.items.push(RadioButton);
 ALL_COMPONENTS.items.push(RadioButtonGroup);
+ALL_COMPONENTS.items.push(Icon);
+ALL_COMPONENTS.items.push(SingleLineText);
+ALL_COMPONENTS.items.push(MultiLineText);
 
 
 // ---------------------------------------------------------------------

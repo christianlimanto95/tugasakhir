@@ -141,6 +141,18 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/radiobuttongroup.png") ?>);" ></div>
                 <div class="component-item-name">Radiobutton Group</div>
             </div>
+            <div class="component-item" data-id="17">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/icon.png") ?>);" ></div>
+                <div class="component-item-name">Icon</div>
+            </div>
+            <div class="component-item" data-id="18">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/singlelinetext.png") ?>);" ></div>
+                <div class="component-item-name">Single Line Text</div>
+            </div>
+            <div class="component-item" data-id="19">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/multilinetext.png") ?>);" ></div>
+                <div class="component-item-name">Multi Line Text</div>
+            </div>
         </div>
     </div>
 </div>
@@ -212,4 +224,7 @@ var radiobuttonResImage2 = "<?php echo base_url("assets/images/radiobutton_check
 var radiobuttonResImage3 = "<?php echo base_url("assets/images/radiobutton_unchecked_disabled.svg"); ?>";
 var radiobuttonResImage4 = "<?php echo base_url("assets/images/radiobutton_checked_disabled.svg"); ?>";
 var componentImage16 = "<?php echo base_url("assets/images/radiobuttongroup.png"); ?>";
+var componentImage17 = "<?php echo base_url("assets/images/icon.png"); ?>";
+var componentImage18 = "<?php echo base_url("assets/images/singlelinetext.png"); ?>";
+var componentImage19 = "<?php echo base_url("assets/images/multilinetext.png"); ?>";
 </script>
