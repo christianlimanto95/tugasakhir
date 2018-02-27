@@ -82,6 +82,10 @@
 	border-left: 1px solid #CCC;
 }
 
+.right-pane-section.hide {
+	visibility: hidden;
+}
+
 .right-pane-section-title {
 	padding: 10px;
 	background-color: #EEE;
@@ -115,6 +119,15 @@
 	border-radius: 3px;
 	border: 1px solid #AAA;
 	padding: 5px;
+}
+
+.form-input-textarea {
+	resize: vertical;
+	height: 150px;
+}
+
+.form-item.hide, .form-input-text.hide, .form-input-textarea.hide {
+	display: none;
 }
 
 .input-right-label {

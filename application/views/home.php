@@ -157,24 +157,28 @@
     </div>
 </div>
 <div class="right-pane">
-    <div class="right-pane-section">
+    <div class="right-pane-section right-pane-section-text hide">
         <div class="right-pane-section-title">Text</div>
         <div class="right-pane-section-content">
-            <div class="form-item">
+            <div class="form-item form-item-value">
                 <div class="form-label">Value</div>
-                <input class="form-input" type="text" />
-                <textarea class="form-input"></textarea>
+                <input class="form-input form-input-text" type="text" />
+                <textarea class="form-input form-input-textarea"></textarea>
             </div>
             <div class="form-item">
                 <div class="form-label">Font Family</div>
-                <select class="form-input">
-                    <option value="times new roman">Times New Roman</option>
+                <select class="form-input form-input-font-family">
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="serif">serif</option>
+                    <option value="sans-serif">sans-serif</option>
                 </select>
             </div>
             <div class="form-item inline form-item-size">
                 <div class="form-label">Size</div>
-                <input type="text" class="form-input" />
-                <span class="input-right-label">Px</span>
+                <input type="number" class="form-input form-input-font-size" />
             </div>
             <div class="form-item inline form-item-color">
                 <div class="form-label">Color</div>

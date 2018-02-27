@@ -213,19 +213,59 @@ var Component = {
 	font_spacing: 1.2,
 	default_font_color: "#000000",
 	font_color: "#000000",
+	has_text: true,
 	text: "",
 	multiline: false,
+	children: [],
 	change_text: function(text) {
 		this.text = text;
 		this.onTextChanged();
 	},
     onTextChanged: function() {
 		
-    },
+	},
+	change_font_family: function(font_family) {
+		this.font_family = font_family;
+	},
+	change_font_size: function(font_size) {
+		this.font_size = font_size;
+	},
     draw: function() {
 
 	}
 }
+
+
+// ---------------------------------------------------------------------
+/*
+	Group Defaults
+*/
+// ---------------------------------------------------------------------
+var Group = {
+	id: "-1",
+	components: [],
+	real_size: {
+		width: 0,
+		height: 0
+	},
+	computed_size: {
+		width: 0,
+		height: 0
+	},
+	real_position: {
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0
+	},
+	computed_position: {
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0
+	}
+};
+
 
 var Button1 = Object.create(Component);
 Button1.id = "1";
@@ -342,8 +382,8 @@ Button3.draw = function(context) {
 
 var Button4 = Object.create(Component);
 Button4.id = "4";
-Button4.name = "Button 1";
-Button4.real_name = "Button 1";
+Button4.name = "Pointy Button";
+Button4.real_name = "Pointy Button";
 Button4.text = "Button";
 Button4.image = componentImage4;
 Button4.default_size = {
@@ -529,7 +569,7 @@ var CircleButton = Object.create(Component);
 CircleButton.id = "7";
 CircleButton.name = "Circle Button";
 CircleButton.real_name = "Circle Button";
-CircleButton.text = "+";
+CircleButton.has_text = false;
 CircleButton.image = componentImage7;
 CircleButton.default_size = {
 	width: 60,
@@ -675,6 +715,7 @@ ColorPicker.id = "10";
 ColorPicker.name = "Color Picker";
 ColorPicker.real_name = "Color Picker";
 ColorPicker.image = componentImage10;
+ColorPicker.has_text = false;
 ColorPicker.default_size = {
 	width: 40,
 	height: 40
@@ -855,7 +896,7 @@ var HelpButton = Object.create(Component);
 HelpButton.id = "14";
 HelpButton.name = "Help Button";
 HelpButton.real_name = "Help Button";
-HelpButton.text = "";
+HelpButton.has_text = false;
 HelpButton.image = componentImage14;
 HelpButton.default_size = {
 	width: 60,
@@ -1017,6 +1058,7 @@ Icon.id = "17";
 Icon.name = "Icon";
 Icon.real_name = "Icon";
 Icon.image = componentImage17;
+Icon.has_text = false;
 Icon.default_size = {
 	width: 40,
 	height: 40

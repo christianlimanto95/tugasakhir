@@ -35,6 +35,24 @@ $(function() {
 	$(window).on("resize", function() {
 		initialize();
 	});
+
+	$(".form-input-font-family").on("change", function() {
+		var value = $(this).val();
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			Sheet.active_components[i].change_font_family(value);
+		}
+		Sheet.draw(sheetContext);
+	});
+
+	$(".form-input-font-size").on("input", function() {
+		var value = $(this).val();
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			Sheet.active_components[i].change_font_size(value);
+		}
+		Sheet.draw(sheetContext);
+	});
 });
 
 function initialize() {
@@ -147,6 +165,7 @@ function e_mousedown_sheetTemp(e) {
 					Sheet.removeAllActiveComponents();
 				}
 				Sheet.setActiveComponent(component.temp_id);
+				showTextSection();
 			}
 			
 			SheetTemp.mousePosition = {
@@ -205,7 +224,7 @@ function e_mouseup_document(e) {
 	Sheet.isHittingComponentOnMouseDown = false;
 	if (isDraggingFromToolbar) {
 		releaseDragging(e);
-	} else {
+	} else if ($(e.target).closest(".sheet-temp").length == 1) {
 		var coor = translateMouseCoorToComputedCoor(e);
 		var component = Sheet.isHittingComponent(coor.x, coor.y);
 		
@@ -218,6 +237,8 @@ function e_mouseup_document(e) {
 				Sheet.removeAllActiveComponents();
 				if (component != null) {
 					Sheet.setActiveComponent(component.temp_id);
+				} else {
+					hideTextSection();
 				}
 			}
 		}
@@ -226,6 +247,7 @@ function e_mouseup_document(e) {
 		SheetTemp.draw(sheetTempContext);
 		Sheet.draw(sheetContext);
 	}
+	
 	mouseDown = false;
 	mouseDrag = false;
 	mouseResize = false;
@@ -260,6 +282,34 @@ function e_keyup_document(e) {
 	}
 }
 
+function showTextSection() {
+	if (Sheet.active_components.length == 1) {
+		$(".right-pane-section-text").removeClass("hide");
+		var active_component = Sheet.active_components[0];
+		if (active_component.has_text) {
+			$(".form-item-value").removeClass("hide");
+			if (active_component.multiline) {
+				$(".form-input-text").addClass("hide");
+				$(".form-input-textarea").removeClass("hide");
+				$(".form-input-textarea").val(active_component.text);
+			} else {
+				$(".form-input-textarea").addClass("hide");
+				$(".form-input-text").removeClass("hide");
+				$(".form-input-text").val(active_component.text);
+			}
+		} else {
+			$(".form-item-value").addClass("hide");
+		}
+
+		$(".form-input-font-family").val(active_component.font_family);
+		$(".form-input-font-size").val(active_component.font_size);
+	}
+}
+
+function hideTextSection() {
+	$(".right-pane-section-text").addClass("hide");
+}
+
 function hideComponentEdit() {
 	var editText = $(".component-edit.show, .component-edit-textarea.show");
 	if (editText.length > 0) {
@@ -269,6 +319,7 @@ function hideComponentEdit() {
 		editText.removeAttr("data-temp-id");
 		Sheet.updateComponentTextByTempId(temp_id, value);
 		Sheet.draw(sheetContext);
+		showTextSection();
 	}
 }
 
@@ -332,6 +383,7 @@ function releaseDragging(e) {
 	Sheet.draw(sheetContext);
 
 	draggableComponentId = "-1";
+	showTextSection();
 }
 
 function translateMouseCoorToComputedCoor(e) {
