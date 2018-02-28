@@ -36,6 +36,22 @@ $(function() {
 		initialize();
 	});
 
+	$(".form-input-text, .form-input-textarea").on("blur", function() {
+		var value = $(this).val();
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			Sheet.active_components[i].change_text(value);
+		}
+		Sheet.draw(sheetContext);
+	});
+
+	$(".form-input-text").on("keypress", function(e) {
+		if (e.which == 13) {
+			$(this).blur();
+			e.preventDefault();
+		}
+	});
+
 	$(".form-input-font-family").on("change", function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;

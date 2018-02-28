@@ -1143,6 +1143,159 @@ MultiLineText.draw = function(context) {
 	context.fillText(line, x, y);
 };
 
+var Link = Object.create(Component);
+Link.id = "20";
+Link.name = "Link";
+Link.real_name = "Link";
+Link.text = "This is a link";
+Link.font_color = "#0400d3";
+Link.image = componentImage20;
+Link.default_size = {
+	width: 100,
+	height: 30
+};
+Link.real_size = clone(Link.default_size);
+Link.computed_size = clone(Link.default_size);
+Link.draw = function(context) {
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+	context.fillText(this.text, this.computed_position.left + 10, center.y);
+	var textWidth = context.measureText(this.text).width;
+
+	var underlineTop = center.y + this.font_size / 1.4;
+	var underlineRight = this.computed_position.left + 10 + textWidth;
+	context.strokeStyle = this.font_color;
+	context.lineWidth = 1;
+	context.beginPath();
+	context.moveTo(this.computed_position.left + 10, underlineTop);
+	context.lineTo(underlineRight, underlineTop);
+	context.stroke();
+};
+
+var LinkBar = Object.create(Component);
+LinkBar.id = "21";
+LinkBar.name = "Link Bar";
+LinkBar.real_name = "Link Bar";
+LinkBar.text = "Home, Products, Company, Blog";
+LinkBar.font_color = "#0400d3";
+LinkBar.image = componentImage20;
+LinkBar.default_size = {
+	width: 260,
+	height: 30
+};
+LinkBar.real_size = clone(LinkBar.default_size);
+LinkBar.computed_size = clone(LinkBar.default_size);
+LinkBar.draw = function(context) {
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+	var center = this.getCenterPosition();
+
+	var texts = this.text.split(",");
+	var iLength = texts.length;
+	var left = this.computed_position.left + 10;
+	var underlineTop = center.y + this.font_size / 1.4;
+
+	var lineTop = center.y - this.font_size / 1.5;
+	var lineBottom = center.y + this.font_size / 1.5;
+	context.lineWidth = 1;
+	for (var i = 0; i < iLength; i++) {
+		texts[i] = texts[i].trim();
+		context.fillText(texts[i], left, center.y);
+
+		var textWidth = context.measureText(texts[i]).width;
+		var underlineRight = left + textWidth;
+
+		context.strokeStyle = this.font_color;
+		context.beginPath();
+		context.moveTo(left, underlineTop);
+		context.lineTo(underlineRight, underlineTop);
+		context.stroke();
+
+		if (i < iLength - 1) {
+			context.strokeStyle = "#000000";
+			context.beginPath();
+			context.moveTo(left + textWidth + 10, lineTop);
+			context.lineTo(left+ textWidth + 10, lineBottom);
+			context.stroke();
+		}
+
+		left += textWidth + 20;
+	}
+};
+
+var Menu = Object.create(Component);
+Menu.id = "22";
+Menu.name = "Menu";
+Menu.real_name = "Menu";
+Menu.multiline = true;
+Menu.text = "Open, Ctrl + O\nOpen Recent, >\n\n(*)Option One\nOption Two\n\n(v)Toggle Item\ndDisabled Item\nExit, Ctrl + Q";
+Menu.image = componentImage9;
+Menu.default_size = {
+	width: 160,
+	height: 140
+};
+Menu.real_size = clone(Menu.default_size);
+Menu.computed_size = clone(Menu.default_size);
+Menu.draw = function(context) {
+	context.strokeStyle = "#000000";
+	context.lineWidth = 1;
+
+	context.fillStyle = "#FFFFFF";
+	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+
+	context.beginPath();
+	context.moveTo(this.computed_position.left, this.computed_position.top);
+	context.lineTo(this.computed_position.right, this.computed_position.top);
+	context.stroke();
+
+	context.fillStyle = this.font_color;
+	context.font = this.font_size + "px " + this.font_family;
+	context.textAlign = "left";
+	context.textBaseline = "middle";
+
+	var lines = this.text.split("\n");
+	var iLength = lines.length;
+	var rowHeight = this.computed_size.height / iLength;
+
+	for (var i = 0; i < iLength; i++) {
+		var rowTop = this.computed_position.top + i * rowHeight;
+		var rowBottom = rowTop + rowHeight;
+
+		var line = lines[i];
+		var selected = line.substring(0, 1);
+		if (selected == "*") {
+			line = line.substring(1);
+			context.fillStyle = "#CCCCCC";
+			context.fillRect(this.computed_position.left + 1, rowTop + 1, this.computed_size.width - 2, rowHeight - 2);
+		}
+
+		context.fillStyle = this.font_color;
+		var rightArrow = line.slice(-1);
+		if (rightArrow == ">") {
+			line = line.substring(0, line.length - 1);
+			var iconLeft = this.computed_position.right - 20;
+			var iconTop = rowTop + (rowHeight - 15) / 2;
+			var image_resource = ImageResources.getImage("9");
+			context.drawImage(image_resource, iconLeft, iconTop, 15, 15);
+		}
+		context.fillText(line, this.computed_position.left + 10, rowTop + rowHeight / 2);
+
+		context.beginPath();
+		context.moveTo(this.computed_position.left, rowTop);
+		context.lineTo(this.computed_position.left, rowBottom);
+		context.moveTo(this.computed_position.right, rowTop);
+		context.lineTo(this.computed_position.right, rowBottom);
+		context.moveTo(this.computed_position.left, rowBottom);
+		context.lineTo(this.computed_position.right, rowBottom);
+		context.stroke();
+	}
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -1174,6 +1327,9 @@ ALL_COMPONENTS.items.push(RadioButtonGroup);
 ALL_COMPONENTS.items.push(Icon);
 ALL_COMPONENTS.items.push(SingleLineText);
 ALL_COMPONENTS.items.push(MultiLineText);
+ALL_COMPONENTS.items.push(Link);
+ALL_COMPONENTS.items.push(LinkBar);
+ALL_COMPONENTS.items.push(Menu);
 
 
 // ---------------------------------------------------------------------

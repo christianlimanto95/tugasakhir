@@ -153,6 +153,18 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/multilinetext.png") ?>);" ></div>
                 <div class="component-item-name">Multi Line Text</div>
             </div>
+            <div class="component-item" data-id="20">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/link.png") ?>);" ></div>
+                <div class="component-item-name">Link</div>
+            </div>
+            <div class="component-item" data-id="21">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/linkbar.png") ?>);" ></div>
+                <div class="component-item-name">Link Bar</div>
+            </div>
+            <div class="component-item" data-id="22">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/menu.png") ?>);" ></div>
+                <div class="component-item-name">Menu</div>
+            </div>
         </div>
     </div>
 </div>
@@ -231,4 +243,7 @@ var componentImage16 = "<?php echo base_url("assets/images/radiobuttongroup.png"
 var componentImage17 = "<?php echo base_url("assets/images/icon.png"); ?>";
 var componentImage18 = "<?php echo base_url("assets/images/singlelinetext.png"); ?>";
 var componentImage19 = "<?php echo base_url("assets/images/multilinetext.png"); ?>";
+var componentImage20 = "<?php echo base_url("assets/images/link.png"); ?>";
+var componentImage21 = "<?php echo base_url("assets/images/linkbar.png"); ?>";
+var componentImage22 = "<?php echo base_url("assets/images/menu.png"); ?>";
 </script>
