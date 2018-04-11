@@ -1237,7 +1237,7 @@ Menu.text = "Open, Ctrl + O\nOpen Recent, >\n\n(*)Option One\nOption Two\n\n(v)T
 Menu.image = componentImage9;
 Menu.default_size = {
 	width: 160,
-	height: 140
+	height: 250
 };
 Menu.real_size = clone(Menu.default_size);
 Menu.computed_size = clone(Menu.default_size);
@@ -1267,9 +1267,13 @@ Menu.draw = function(context) {
 		var rowBottom = rowTop + rowHeight;
 
 		var line = lines[i];
-		var selected = line.substring(0, 1);
-		if (selected == "*") {
-			line = line.substring(1);
+		var selected = line.substring(0, 3);
+		if (selected == "(*)") {
+			line = line.substring(3);
+			context.fillStyle = "#CCCCCC";
+			context.fillRect(this.computed_position.left + 1, rowTop + 1, this.computed_size.width - 2, rowHeight - 2);
+		} else if (selected == "(v)") {
+			line = line.substring(3);
 			context.fillStyle = "#CCCCCC";
 			context.fillRect(this.computed_position.left + 1, rowTop + 1, this.computed_size.width - 2, rowHeight - 2);
 		}
@@ -1284,15 +1288,6 @@ Menu.draw = function(context) {
 			context.drawImage(image_resource, iconLeft, iconTop, 15, 15);
 		}
 		context.fillText(line, this.computed_position.left + 10, rowTop + rowHeight / 2);
-
-		context.beginPath();
-		context.moveTo(this.computed_position.left, rowTop);
-		context.lineTo(this.computed_position.left, rowBottom);
-		context.moveTo(this.computed_position.right, rowTop);
-		context.lineTo(this.computed_position.right, rowBottom);
-		context.moveTo(this.computed_position.left, rowBottom);
-		context.lineTo(this.computed_position.right, rowBottom);
-		context.stroke();
 	}
 };
 

@@ -208,6 +208,19 @@
 </div>
 <input type="text" class="component-edit" />
 <textarea class="component-edit-textarea"></textarea>
+<div class="contextmenu-container">
+    <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="edit_value">Edit Value</div>
+    <div class="contextmenu" data-target="component" data-contextmenu="cut">Cut</div>
+    <div class="contextmenu" data-target="component" data-contextmenu="copy">Copy</div>
+    <div class="contextmenu" data-target="canvas" data-contextmenu="paste">Paste</div>
+    <div class="contextmenu" data-target="component" data-contextmenu="delete">Delete</div>
+    <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="group">Group</div>
+    <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="ungroup">Ungroup</div>
+    <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="move_forward">Move Forward</div>
+    <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="bring_to_front">Bring to Front</div>
+    <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="move_backward">Move Backward</div>
+    <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="send_to_back">Send to Back</div>
+</div>
 <script>
 var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";

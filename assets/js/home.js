@@ -1,4 +1,5 @@
 var sheetCanvas, sheetContext, sheetTempCanvas, sheetTempContext;
+var contextMenuContainer;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
 var mouseDown = false, mouseDrag = false, mouseResize = false;
@@ -13,7 +14,8 @@ $(function() {
 	sheetCanvas = $(".sheet-canvas")[0];
 	sheetContext = sheetCanvas.getContext("2d");
 	sheetTempCanvas = $(".sheet-temp")[0];
-	sheetTempContext = sheetTempCanvas.getContext("2d");
+    sheetTempContext = sheetTempCanvas.getContext("2d");
+    contextMenuContainer = $(".contextmenu-container");
 	
 	initialize();
 
@@ -28,13 +30,25 @@ $(function() {
 	$(".component-edit-textarea").on("keydown", e_keydown_componentEditTextarea);
 	$(".sheet-temp").on("mousedown", e_mousedown_sheetTemp);
 	$(document).on("mousemove", e_mousemove_document);
-	$(document).on("mouseup", e_mouseup_document);
+    $(document).on("mouseup", e_mouseup_document);
+    $(".sheet-temp").on("contextmenu", e_contextmenu_sheetTemp);
 	$(document).on("keydown", e_keydown_document);
 	$(document).on("keyup", e_keyup_document);
 
 	$(window).on("resize", function() {
 		initialize();
-	});
+    });
+    
+    $(".contextmenu").on("click", function() {
+        var contextmenu = $(this).attr("data-contextmenu");
+        switch (contextmenu) {
+            case "delete":
+                Sheet.deleteComponentsFromActiveComponents();
+                Sheet.draw(sheetContext);
+                break;
+        }
+        contextMenuContainer.removeClass("show");
+    });
 
 	$(".form-input-text, .form-input-textarea").on("blur", function() {
 		var value = $(this).val();
@@ -68,7 +82,11 @@ $(function() {
 			Sheet.active_components[i].change_font_size(value);
 		}
 		Sheet.draw(sheetContext);
-	});
+    });
+    
+    $(".sheet-temp").on("contextmenu", function(e) {
+        
+    });
 });
 
 function initialize() {
@@ -170,48 +188,52 @@ function e_keydown_componentEditTextarea(e) {
 }
 
 function e_mousedown_sheetTemp(e) {
-	var coor = translateMouseCoorToComputedCoor(e);
-	dotsHit = isHittingDots(coor);
-	if (dotsHit == "") {
-		var component = Sheet.isHittingComponent(coor.x, coor.y);
-		if (component != null) {
-			Sheet.isHittingComponentOnMouseDown = true;
-			if (!Sheet.isActiveComponent(component)) {
-				if (!keyPressed.ctrl) {
-					Sheet.removeAllActiveComponents();
-				}
-				Sheet.setActiveComponent(component.temp_id);
-				showTextSection();
-			}
-			
-			SheetTemp.mousePosition = {
-				x: e.pageX,
-				y: e.pageY
-			};
-			var iLength = Sheet.active_components.length;
-			for (var i = 0; i < iLength; i++) {
-				SheetTemp.addComponent(Sheet.active_components[i]);
-			}
+    if (e.which == 1) {
+        var coor = translateMouseCoorToComputedCoor(e);
+        dotsHit = isHittingDots(coor);
+        if (dotsHit == "") {
+            var component = Sheet.isHittingComponent(coor.x, coor.y);
+            if (component != null) {
+                Sheet.isHittingComponentOnMouseDown = true;
+                if (!Sheet.isActiveComponent(component)) {
+                    if (!keyPressed.ctrl) {
+                        Sheet.removeAllActiveComponents();
+                    }
+                    Sheet.setActiveComponent(component.temp_id);
+                    showTextSection();
+                }
+                
+                SheetTemp.mousePosition = {
+                    x: e.pageX,
+                    y: e.pageY
+                };
+                var iLength = Sheet.active_components.length;
+                for (var i = 0; i < iLength; i++) {
+                    SheetTemp.addComponent(Sheet.active_components[i]);
+                }
 
-			SheetTemp.draw(sheetTempContext);
-			Sheet.drawWithoutActiveComponent(sheetContext);
-		}
-	} else {
-		SheetTemp.mousePosition = {
-			x: e.pageX,
-			y: e.pageY
-		};
-		SheetTemp.dotsHit = dotsHit;
-		var iLength = Sheet.active_components.length;
-		for (var i = 0; i < iLength; i++) {
-			SheetTemp.addComponent(Sheet.active_components[i]);
-		}
+                SheetTemp.draw(sheetTempContext);
+                Sheet.drawWithoutActiveComponent(sheetContext);
+            }
+        } else {
+            SheetTemp.mousePosition = {
+                x: e.pageX,
+                y: e.pageY
+            };
+            SheetTemp.dotsHit = dotsHit;
+            var iLength = Sheet.active_components.length;
+            for (var i = 0; i < iLength; i++) {
+                SheetTemp.addComponent(Sheet.active_components[i]);
+            }
 
-		SheetTemp.draw(sheetTempContext);
-		Sheet.drawWithoutActiveComponent(sheetContext);
-	}
-	
-	mouseDown = true;
+            SheetTemp.draw(sheetTempContext);
+            Sheet.drawWithoutActiveComponent(sheetContext);
+        }
+        
+        mouseDown = true;
+    }
+
+    contextMenuContainer.removeClass("show");
 }
 
 function e_mousemove_document(e) {
@@ -237,37 +259,73 @@ function e_mousemove_document(e) {
 }
 
 function e_mouseup_document(e) {
-	Sheet.isHittingComponentOnMouseDown = false;
-	if (isDraggingFromToolbar) {
-		releaseDragging(e);
-	} else if ($(e.target).closest(".sheet-temp").length == 1) {
-		var coor = translateMouseCoorToComputedCoor(e);
-		var component = Sheet.isHittingComponent(coor.x, coor.y);
-		
-		if (mouseDrag) {
-			Sheet.updateActiveComponentsPosition(SheetTemp.components);
-		} else if (mouseResize) {
-			Sheet.updateActiveComponentsSize(SheetTemp.components);
-		} else {
-			if (!keyPressed.ctrl) {
-				Sheet.removeAllActiveComponents();
-				if (component != null) {
-					Sheet.setActiveComponent(component.temp_id);
-				} else {
-					hideTextSection();
-				}
-			}
-		}
+    if (e.which == 1) {
+        Sheet.isHittingComponentOnMouseDown = false;
+        if (isDraggingFromToolbar) {
+            releaseDragging(e);
+        } else if ($(e.target).closest(".sheet-temp").length == 1) {
+            var coor = translateMouseCoorToComputedCoor(e);
+            var component = Sheet.isHittingComponent(coor.x, coor.y);
+            
+            if (mouseDrag) {
+                Sheet.updateActiveComponentsPosition(SheetTemp.components);
+            } else if (mouseResize) {
+                Sheet.updateActiveComponentsSize(SheetTemp.components);
+            } else {
+                if (!keyPressed.ctrl) {
+                    Sheet.removeAllActiveComponents();
+                    if (component != null) {
+                        Sheet.setActiveComponent(component.temp_id);
+                    } else {
+                        hideTextSection();
+                    }
+                }
+            }
 
-		SheetTemp.removeAllComponents();
-		SheetTemp.draw(sheetTempContext);
-		Sheet.draw(sheetContext);
-	}
-	
-	mouseDown = false;
-	mouseDrag = false;
-	mouseResize = false;
-	dotsHit = "";
+            SheetTemp.removeAllComponents();
+            SheetTemp.draw(sheetTempContext);
+            Sheet.draw(sheetContext);
+        }
+        
+        mouseDown = false;
+        mouseDrag = false;
+        mouseResize = false;
+        dotsHit = "";
+    }
+}
+
+function e_contextmenu_sheetTemp(e) {
+    e.preventDefault();
+    contextMenuContainer.css({
+        top: e.pageY,
+        left: e.pageX
+    });
+    
+    var coor = translateMouseCoorToComputedCoor(e);
+    var component = Sheet.isHittingComponent(coor.x, coor.y);
+    if (component != null) {
+        if (!Sheet.isActiveComponent(component)) {
+            Sheet.removeAllActiveComponents();
+            Sheet.setActiveComponent(component.temp_id);
+        }
+        
+        contextMenuContainer.find(".contextmenu[data-target='canvas']").addClass("hide");
+        contextMenuContainer.find(".contextmenu[data-target='component']").removeClass("hide");
+        if (Sheet.active_components.length > 1) {
+            contextMenuContainer.find(".contextmenu[data-type='single-selection']").addClass("hide");
+            contextMenuContainer.find(".contextmenu[data-type='multiple-selection']").removeClass("hide");
+        } else {
+            contextMenuContainer.find(".contextmenu[data-type='single-selection']").removeClass("hide");
+            contextMenuContainer.find(".contextmenu[data-type='multiple-selection']").addClass("hide");
+        }
+
+        Sheet.draw(sheetContext);
+    } else {
+        contextMenuContainer.find(".contextmenu[data-target='component']").addClass("hide");
+        contextMenuContainer.find(".contextmenu[data-target='canvas']").removeClass("hide");
+    }
+
+    contextMenuContainer.addClass("show");
 }
 
 function e_keydown_document(e) {
