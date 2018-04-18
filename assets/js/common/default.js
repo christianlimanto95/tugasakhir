@@ -1418,7 +1418,7 @@ var Sheet = {
 			}
 		}
 	},
-	updateActiveComponentsPosition: function(tempComponents) {
+	updateActiveComponentsPosition: function(tempComponents, tempGroups) {
 		var iLength = this.active_components.length;
 		for (var i = 0; i < iLength; i++) {
 			this.active_components[i].real_position = {
@@ -1436,6 +1436,42 @@ var Sheet = {
 			};
 
 			this.updateComponentPositionFromActiveComponent(this.active_components[i]);
+        }
+        
+        iLength = this.active_groups.length;
+		for (var i = 0; i < iLength; i++) {
+            var jLength = tempGroups[i].components.length;
+            for (var j = 0; j < jLength; j++) {
+                this.active_groups[i].components[j].real_position = {
+                    top: tempGroups[i].components[j].real_position.top,
+                    left: tempGroups[i].components[j].real_position.left,
+                    right: tempGroups[i].components[j].real_position.right,
+                    bottom: tempGroups[i].components[j].real_position.bottom
+                };
+
+                this.active_groups[i].components[j].computed_position = {
+                    top: tempGroups[i].components[j].computed_position.top,
+                    left: tempGroups[i].components[j].computed_position.left,
+                    right: tempGroups[i].components[j].computed_position.right,
+                    bottom: tempGroups[i].components[j].computed_position.bottom
+                };
+            }
+
+			this.active_groups[i].real_position = {
+				top: tempGroups[i].real_position.top,
+				left: tempGroups[i].real_position.left,
+				right: tempGroups[i].real_position.right,
+				bottom: tempGroups[i].real_position.bottom
+			};
+
+			this.active_groups[i].computed_position = {
+				top: tempGroups[i].computed_position.top,
+				left: tempGroups[i].computed_position.left,
+				right: tempGroups[i].computed_position.right,
+				bottom: tempGroups[i].computed_position.bottom
+            };
+            
+            this.updateGroupPositionFromActiveGroup(this.active_groups[i]);
 		}
 	},
 	updateComponentPositionFromActiveComponent: function(active_component) {
@@ -1454,7 +1490,40 @@ var Sheet = {
 			right: active_component.computed_position.right,
 			bottom: active_component.computed_position.bottom
 		};
-	},
+    },
+    updateGroupPositionFromActiveGroup: function(active_group) {
+        var group = this.getGroupByTempId(active_group.temp_id);
+        group.real_position = {
+			top: active_group.real_position.top,
+			left: active_group.real_position.left,
+			right: active_group.real_position.right,
+			bottom: active_group.real_position.bottom
+		};
+
+		group.computed_position = {
+			top: active_group.computed_position.top,
+			left: active_group.computed_position.left,
+			right: active_group.computed_position.right,
+			bottom: active_group.computed_position.bottom
+        };
+        
+        var iLength = group.components.length;
+        for (var i = 0; i < iLength; i++) {
+            group.components[i].real_position = {
+                top: active_group.components[i].real_position.top,
+                left: active_group.components[i].real_position.left,
+                right: active_group.components[i].real_position.right,
+                bottom: active_group.components[i].real_position.bottom
+            };
+    
+            group.components[i].computed_position = {
+                top: active_group.components[i].computed_position.top,
+                left: active_group.components[i].computed_position.left,
+                right: active_group.components[i].computed_position.right,
+                bottom: active_group.components[i].computed_position.bottom
+            };
+        }
+    },
 	updateComponentSizeFromActiveComponent: function(active_component) {
 		var component = this.getComponentByTempId(active_component.temp_id);
 		
@@ -1607,6 +1676,15 @@ var Sheet = {
         this.removeAllActiveComponents();
         this.setActiveGroup(group);
     },
+    getGroupByTempId: function(temp_id) {
+        var iLength = this.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            if (this.groups[i].temp_id == temp_id) {
+                return this.groups[i];
+            }
+        }
+        return null;
+    },
     ungroupActiveGroup: function() {
         var iLength = this.active_groups.length;
         var components = [];
@@ -1635,6 +1713,20 @@ var Sheet = {
         var iLength = this.groups.length;
         for (var i = 0; i < iLength; i++) {
             var group = this.groups[i];
+            var jLength = group.components.length;
+            for (var j = 0; j < jLength; j++) {
+                if (group.components[j].temp_id == temp_id) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    },
+    isInActiveGroup: function(temp_id) {
+        var iLength = this.active_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = this.active_groups[i];
             var jLength = group.components.length;
             for (var j = 0; j < jLength; j++) {
                 if (group.components[j].temp_id == temp_id) {
@@ -1687,32 +1779,29 @@ var Sheet = {
         }
 	},
 	drawWithoutActiveComponent: function(context) {
+        var componentExceptions = [];
+        var iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            componentExceptions.push(this.active_components[i].temp_id);
+        }
+
+        iLength = this.active_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var jLength = this.active_groups[i].components.length;
+            for (var j = 0; j < jLength; j++) {
+                componentExceptions.push(this.active_groups[i].components[j].temp_id);
+            }
+        }
+
 		context.strokeStyle = "#000000";
 		context.lineWidth = 1;
 		context.clearRect(0, 0, this.width, this.height);
 
 		var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
-			if (!this.isActiveComponent(this.components[i])) {
+			if (componentExceptions.indexOf(this.components[i].temp_id) == -1) {
 				this.components[i].draw(context);
 			}
-        }
-        
-        context.strokeStyle = "#0D47A1";
-		context.lineWidth = 1;
-		context.fillStyle = "#FFFFFF";
-        iLength = this.active_groups.length;
-        for (var i = 0; i < iLength; i++) {
-            var top = this.active_groups[i].computed_position.top;
-			var left = this.active_groups[i].computed_position.left;
-			var bottom = this.active_groups[i].computed_position.bottom;
-			var right = this.active_groups[i].computed_position.right;
-			var width = this.active_groups[i].computed_size.width;
-            var height = this.active_groups[i].computed_size.height;
-            
-            var centerX = left + width / 2;
-			var centerY = top + height / 2;
-			this.drawSelection(top, left, bottom, right, width, height, centerX, centerY, context);
         }
     },
     drawSelection: function(top, left, bottom, right, width, height, centerX, centerY, context) {
@@ -1810,7 +1899,33 @@ var SheetTemp = {
 			this.components[i].computed_position.left += selisihX;
 			this.components[i].computed_position.right += selisihX;
 			this.components[i].computed_position.bottom += selisihY;
-		}
+        }
+        
+        iLength = this.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            this.groups[i].real_position.top += selisihY;
+			this.groups[i].real_position.left += selisihX;
+			this.groups[i].real_position.right += selisihX;
+			this.groups[i].real_position.bottom += selisihY;
+
+			this.groups[i].computed_position.top += selisihY;
+			this.groups[i].computed_position.left += selisihX;
+			this.groups[i].computed_position.right += selisihX;
+            this.groups[i].computed_position.bottom += selisihY;
+            
+            var jLength = this.groups[i].components.length;
+            for (var j = 0; j < jLength; j++) {
+                this.groups[i].components[j].real_position.top += selisihY;
+                this.groups[i].components[j].real_position.left += selisihX;
+                this.groups[i].components[j].real_position.right += selisihX;
+                this.groups[i].components[j].real_position.bottom += selisihY;
+
+                this.groups[i].components[j].computed_position.top += selisihY;
+                this.groups[i].components[j].computed_position.left += selisihX;
+                this.groups[i].components[j].computed_position.right += selisihX;
+                this.groups[i].components[j].computed_position.bottom += selisihY;
+            }
+        }
 	},
 	updateComponentsSize: function(currentMousePosition, shiftPressed) {
 		var selisihX = currentMousePosition.x - this.mousePosition.x;
@@ -1906,13 +2021,19 @@ var SheetTemp = {
 		}
 	},
 	removeAllComponents: function() {
-		this.components = [];
+        this.components = [];
+        this.groups = [];
 		this.dotsHit = "";
 		this.mousePosition = {
 			x: 0,
 			y: 0
 		};
-	},
+    },
+    groups: [],
+    addGroup: function(group) {
+        group = clone(group);
+		this.groups.push(group);
+    },
 	draw: function(context) {
 		context.strokeStyle = "#000000";
 		context.lineWidth = 1;
@@ -1932,6 +2053,61 @@ var SheetTemp = {
 			var right = this.components[i].computed_position.right;
 			var width = this.components[i].computed_size.width;
 			var height = this.components[i].computed_size.height;
+
+			var centerX = left + width / 2;
+			var centerY = top + height / 2;
+			context.strokeRect(left, top, width, height);
+			context.beginPath();
+			context.arc(left, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, top, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, centerY, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, centerY, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(left, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(centerX, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.arc(right, bottom, 5, 0, 2 * Math.PI);
+			context.fill();
+			context.stroke();
+        }
+        
+        iLength = this.groups.length;
+		for (var i = 0; i < iLength; i++) {
+            var jLength = this.groups[i].components.length;
+            for (var j = 0; j < jLength; j++) {
+                this.groups[i].components[j].draw(context);
+            }
+
+            context.strokeStyle = "#0D47A1";
+			context.lineWidth = 1;
+			context.fillStyle = "#FFFFFF";
+
+			var top = this.groups[i].computed_position.top;
+			var left = this.groups[i].computed_position.left;
+			var bottom = this.groups[i].computed_position.bottom;
+			var right = this.groups[i].computed_position.right;
+			var width = this.groups[i].computed_size.width;
+			var height = this.groups[i].computed_size.height;
 
 			var centerX = left + width / 2;
 			var centerY = top + height / 2;

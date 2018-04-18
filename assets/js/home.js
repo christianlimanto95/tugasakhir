@@ -205,7 +205,7 @@ function e_mousedown_sheetTemp(e) {
             var component = Sheet.isHittingComponent(coor.x, coor.y);
             if (component != null) {
                 Sheet.isHittingComponentOnMouseDown = true;
-                if (!Sheet.isActiveComponent(component)) {
+                if (!Sheet.isActiveComponent(component) && !Sheet.isInActiveGroup(component.temp_id)) {
                     if (!keyPressed.ctrl) {
                         Sheet.removeAllActiveComponents();
                     }
@@ -220,6 +220,11 @@ function e_mousedown_sheetTemp(e) {
                 var iLength = Sheet.active_components.length;
                 for (var i = 0; i < iLength; i++) {
                     SheetTemp.addComponent(Sheet.active_components[i]);
+                }
+
+                iLength = Sheet.active_groups.length;
+                for (var i = 0; i < iLength; i++) {
+                    SheetTemp.addGroup(Sheet.active_groups[i]);
                 }
 
                 SheetTemp.draw(sheetTempContext);
@@ -258,7 +263,7 @@ function e_mousemove_document(e) {
 		SheetTemp.draw(sheetTempContext);
 		mouseResize = true;
 	} else {
-		if (Sheet.isHittingComponentOnMouseDown && Sheet.active_components.length > 0) {
+		if (Sheet.isHittingComponentOnMouseDown) {
 			SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
 			SheetTemp.draw(sheetTempContext);
 			mouseDrag = true;
@@ -278,7 +283,7 @@ function e_mouseup_document(e) {
             var component = Sheet.isHittingComponent(coor.x, coor.y);
             
             if (mouseDrag) {
-                Sheet.updateActiveComponentsPosition(SheetTemp.components);
+                Sheet.updateActiveComponentsPosition(SheetTemp.components, SheetTemp.groups);
             } else if (mouseResize) {
                 Sheet.updateActiveComponentsSize(SheetTemp.components);
             } else {
