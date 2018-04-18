@@ -40,14 +40,24 @@ $(function() {
     });
     
     $(".contextmenu").on("click", function() {
-        var contextmenu = $(this).attr("data-contextmenu");
-        switch (contextmenu) {
-            case "delete":
-                Sheet.deleteComponentsFromActiveComponents();
-                Sheet.draw(sheetContext);
-                break;
+        if (!$(this).hasClass("disabled")) {
+            var contextmenu = $(this).attr("data-contextmenu");
+            switch (contextmenu) {
+                case "delete":
+                    Sheet.deleteComponentsFromActiveComponents();
+                    Sheet.draw(sheetContext);
+                    break;
+                case "group":
+                    Sheet.createGroupFromActiveComponents();
+                    Sheet.draw(sheetContext);
+                    break;
+                case "ungroup":
+                    Sheet.ungroupActiveGroup();
+                    Sheet.draw(sheetContext);
+                    break;
+            }
+            contextMenuContainer.removeClass("show");
         }
-        contextMenuContainer.removeClass("show");
     });
 
 	$(".form-input-text, .form-input-textarea").on("blur", function() {
@@ -311,7 +321,18 @@ function e_contextmenu_sheetTemp(e) {
         
         contextMenuContainer.find(".contextmenu[data-target='canvas']").addClass("hide");
         contextMenuContainer.find(".contextmenu[data-target='component']").removeClass("hide");
-        if (Sheet.active_components.length > 1) {
+
+        var activeComponentsLength = Sheet.active_components.length;
+        var activeGroupsLength = Sheet.active_groups.length;
+        if (activeComponentsLength > 1 || activeGroupsLength > 0) {
+            if ((activeComponentsLength > 0 && activeGroupsLength > 0) || activeComponentsLength > 1) {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='ungroup']").addClass("disabled");
+                contextMenuContainer.find(".contextmenu[data-contextmenu='group']").removeClass("disabled");
+            } else {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='ungroup']").removeClass("disabled");
+                contextMenuContainer.find(".contextmenu[data-contextmenu='group']").addClass("disabled");
+            }
+
             contextMenuContainer.find(".contextmenu[data-type='single-selection']").addClass("hide");
             contextMenuContainer.find(".contextmenu[data-type='multiple-selection']").removeClass("hide");
         } else {

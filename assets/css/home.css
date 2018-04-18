@@ -328,6 +328,12 @@ input[type="text"] {
     background-color: #DDD;
 }
 
+.contextmenu.disabled {
+    background-color: white;
+    color: #AAA;
+    cursor: default;
+}
+
 .contextmenu.hide {
     display: none;
 }

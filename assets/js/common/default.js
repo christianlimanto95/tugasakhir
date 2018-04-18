@@ -1343,7 +1343,8 @@ var Sheet = {
 		top: 0,
 		left: 0
 	},
-	temp_id: 1,
+    temp_id: 1,
+    group_temp_id: 1,
 	components: [],
 	addComponent: function(component) {
 		component.temp_id = this.temp_id;
@@ -1357,7 +1358,22 @@ var Sheet = {
 	setActiveComponent: function(temp_id) {
 		var component = this.getComponentByTempId(temp_id);
 		if (component != null) {
-			this.active_components.push(component);
+            var isInGroup = false;
+            var iLength = this.groups.length;
+            for (var i = 0; i < iLength; i++) {
+                var group = this.groups[i];
+                var jLength = group.components.length;
+                for (var j = 0; j < jLength; j++) {
+                    if (group.components[j].temp_id == temp_id) {
+                        this.setActiveGroup(group);
+                        isInGroup = true;
+                    }
+                }
+            }
+
+            if (!isInGroup) {
+                this.active_components.push(component);
+            }
 		}
 	},
 	isActiveComponent: function(component) {
@@ -1380,7 +1396,8 @@ var Sheet = {
 		}
 	},
 	removeAllActiveComponents: function() {
-		this.active_components = [];
+        this.active_components = [];
+        this.active_groups = [];
 	},
 	getComponentByTempId: function(temp_id) {
 		var iLength = this.components.length;
@@ -1508,7 +1525,126 @@ var Sheet = {
 			}
 		}
 		this.active_components = [];
-	},
+    },
+    groups: [],
+    active_groups: [],
+    createGroupFromActiveComponents: function() {
+        var temp_computed_position = {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+        };
+
+        var temp_real_position = {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        };
+
+        var temp_computed_size = {
+            width: 0,
+            height: 0
+        };
+
+        var temp_real_size = {
+            width: 0,
+            height: 0
+        };
+
+        var groupComponents = [];
+
+        var iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            var temp_id = this.active_components[i].temp_id;
+            var component = this.getComponentByTempId(temp_id);
+            if (i == 0) {
+                temp_computed_position.left = component.computed_position.left;
+                temp_computed_position.right = component.computed_position.right;
+                temp_computed_position.top = component.computed_position.top;
+                temp_computed_position.bottom = component.computed_position.bottom;
+
+                temp_real_position.left = component.real_position.left;
+                temp_real_position.right = component.real_position.right;
+                temp_real_position.top = component.real_position.top;
+                temp_real_position.bottom = component.real_position.bottom;
+            }
+
+            if (component.computed_position.left < temp_computed_position.left) {
+                temp_computed_position.left = component.computed_position.left;
+            }
+            if (component.computed_position.top < temp_computed_position.top) {
+                temp_computed_position.top = component.computed_position.top;
+            }
+            if (component.computed_position.right > temp_computed_position.right) {
+                temp_computed_position.right = component.computed_position.right;
+            }
+            if (component.computed_position.bottom > temp_computed_position.bottom) {
+                temp_computed_position.bottom = component.computed_position.bottom;
+            }
+
+            groupComponents.push(component);
+        }
+
+        temp_computed_size.width = temp_computed_position.right - temp_computed_position.left;
+        temp_computed_size.height = temp_computed_position.bottom - temp_computed_position.top;
+        temp_real_size.width = temp_real_size.right - temp_real_size.left;
+        temp_real_size.height = temp_real_size.bottom - temp_real_size.top;
+
+        var group = {
+            temp_id: this.group_temp_id,
+            components: groupComponents,
+            computed_position: temp_computed_position,
+            real_position: temp_real_position,
+            computed_size: temp_computed_size,
+            real_size: temp_real_size
+        };
+        
+        this.groups.push(group);
+        this.group_temp_id++;
+
+        this.removeAllActiveComponents();
+        this.setActiveGroup(group);
+    },
+    ungroupActiveGroup: function() {
+        var iLength = this.active_groups.length;
+        var components = [];
+        for (var i = 0; i < iLength; i++) {
+            var temp_id = this.active_groups[i].temp_id;
+            var jLength = this.groups.length;
+            for (var j = 0; j < jLength; j++) {
+                if (this.groups[j].temp_id == temp_id) {
+                    components = this.groups[j].components;
+                    this.groups.splice(j, 1);
+                    break;
+                }
+            }
+        }
+        this.active_groups = [];
+
+        iLength = components.length;
+        for (var i = 0; i < iLength; i++) {
+            this.setActiveComponent(components[i].temp_id);
+        }
+    },
+    setActiveGroup: function(group) {
+        this.active_groups.push(group);
+    },
+    isInGroup: function(temp_id) {
+        var iLength = this.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = this.groups[i];
+            var jLength = group.components.length;
+            for (var j = 0; j < jLength; j++) {
+                if (group.components[j].temp_id == temp_id) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    },
 	draw: function(context) {
 		context.strokeStyle = "#000000";
 		context.lineWidth = 1;
@@ -1533,40 +1669,22 @@ var Sheet = {
 
 			var centerX = left + width / 2;
 			var centerY = top + height / 2;
-			context.strokeRect(left, top, width, height);
-			context.beginPath();
-			context.arc(left, top, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(centerX, top, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(right, top, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(left, centerY, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(right, centerY, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(left, bottom, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(centerX, bottom, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-			context.beginPath();
-			context.arc(right, bottom, 5, 0, 2 * Math.PI);
-			context.fill();
-			context.stroke();
-		}
+			this.drawSelection(top, left, bottom, right, width, height, centerX, centerY, context);
+        }
+        
+        iLength = this.active_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var top = this.active_groups[i].computed_position.top;
+			var left = this.active_groups[i].computed_position.left;
+			var bottom = this.active_groups[i].computed_position.bottom;
+			var right = this.active_groups[i].computed_position.right;
+			var width = this.active_groups[i].computed_size.width;
+            var height = this.active_groups[i].computed_size.height;
+            
+            var centerX = left + width / 2;
+			var centerY = top + height / 2;
+			this.drawSelection(top, left, bottom, right, width, height, centerX, centerY, context);
+        }
 	},
 	drawWithoutActiveComponent: function(context) {
 		context.strokeStyle = "#000000";
@@ -1578,8 +1696,60 @@ var Sheet = {
 			if (!this.isActiveComponent(this.components[i])) {
 				this.components[i].draw(context);
 			}
-		}
-	},
+        }
+        
+        context.strokeStyle = "#0D47A1";
+		context.lineWidth = 1;
+		context.fillStyle = "#FFFFFF";
+        iLength = this.active_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var top = this.active_groups[i].computed_position.top;
+			var left = this.active_groups[i].computed_position.left;
+			var bottom = this.active_groups[i].computed_position.bottom;
+			var right = this.active_groups[i].computed_position.right;
+			var width = this.active_groups[i].computed_size.width;
+            var height = this.active_groups[i].computed_size.height;
+            
+            var centerX = left + width / 2;
+			var centerY = top + height / 2;
+			this.drawSelection(top, left, bottom, right, width, height, centerX, centerY, context);
+        }
+    },
+    drawSelection: function(top, left, bottom, right, width, height, centerX, centerY, context) {
+        context.strokeRect(left, top, width, height);
+        context.beginPath();
+        context.arc(left, top, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(centerX, top, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(right, top, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(left, centerY, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(right, centerY, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(left, bottom, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(centerX, bottom, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+        context.beginPath();
+        context.arc(right, bottom, 5, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+    },
 	isHittingComponent: function(x, y) {
 		var iLength = this.components.length;
 		var top, left, right, bottom;
