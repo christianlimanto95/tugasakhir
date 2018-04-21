@@ -43,6 +43,9 @@ $(function() {
         if (!$(this).hasClass("disabled")) {
             var contextmenu = $(this).attr("data-contextmenu");
             switch (contextmenu) {
+                case "copy":
+
+                    break;
                 case "delete":
                     Sheet.deleteComponentsFromActiveComponents();
                     Sheet.draw(sheetContext);
@@ -311,15 +314,11 @@ function e_mouseup_document(e) {
 
 function e_contextmenu_sheetTemp(e) {
     e.preventDefault();
-    contextMenuContainer.css({
-        top: e.pageY,
-        left: e.pageX
-    });
     
     var coor = translateMouseCoorToComputedCoor(e);
     var component = Sheet.isHittingComponent(coor.x, coor.y);
     if (component != null) {
-        if (!Sheet.isActiveComponent(component)) {
+        if (!Sheet.isActiveComponent(component) && !Sheet.isInActiveGroup(component.temp_id)) {
             Sheet.removeAllActiveComponents();
             Sheet.setActiveComponent(component.temp_id);
         }
@@ -330,7 +329,7 @@ function e_contextmenu_sheetTemp(e) {
         var activeComponentsLength = Sheet.active_components.length;
         var activeGroupsLength = Sheet.active_groups.length;
         if (activeComponentsLength > 1 || activeGroupsLength > 0) {
-            if ((activeComponentsLength > 0 && activeGroupsLength > 0) || activeComponentsLength > 1) {
+            if ((activeComponentsLength > 0 && activeGroupsLength > 0) || activeComponentsLength > 1 || activeGroupsLength > 1) {
                 contextMenuContainer.find(".contextmenu[data-contextmenu='ungroup']").addClass("disabled");
                 contextMenuContainer.find(".contextmenu[data-contextmenu='group']").removeClass("disabled");
             } else {
@@ -350,6 +349,19 @@ function e_contextmenu_sheetTemp(e) {
         contextMenuContainer.find(".contextmenu[data-target='component']").addClass("hide");
         contextMenuContainer.find(".contextmenu[data-target='canvas']").removeClass("hide");
     }
+
+    var top = e.pageY;
+    var left = e.pageX;
+    var height = parseInt(contextMenuContainer.css("height"));
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    if (top + height > windowHeight) {
+        top = top - height;
+    }
+
+    contextMenuContainer.css({
+        top: top,
+        left: left
+    });
 
     contextMenuContainer.addClass("show");
 }
