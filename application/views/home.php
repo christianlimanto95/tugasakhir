@@ -213,6 +213,8 @@
     <div class="contextmenu" data-target="component" data-contextmenu="cut">Cut</div>
     <div class="contextmenu" data-target="component" data-contextmenu="copy">Copy</div>
     <div class="contextmenu" data-target="canvas" data-contextmenu="paste">Paste</div>
+    <div class="contextmenu" data-target="canvas" data-contextmenu="undo">Undo</div>
+    <div class="contextmenu" data-target="canvas" data-contextmenu="redo">Redo</div>
     <div class="contextmenu" data-target="component" data-contextmenu="delete">Delete</div>
     <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="group">Group</div>
     <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="ungroup">Ungroup</div>

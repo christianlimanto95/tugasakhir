@@ -33,7 +33,25 @@ $(function() {
     $(document).on("mouseup", e_mouseup_document);
     $(".sheet-temp").on("contextmenu", e_contextmenu_sheetTemp);
 	$(document).on("keydown", e_keydown_document);
-	$(document).on("keyup", e_keyup_document);
+    $(document).on("keyup", e_keyup_document);
+    
+    History.onStackValueChanged = function() {
+        if (History.pointer >= 0) {
+            contextMenuContainer.find(".contextmenu[data-contextmenu='undo']").removeClass("disabled");
+            if (History.pointer < History.stack.length - 1) {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").removeClass("disabled");
+            } else {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").addClass("disabled");
+            }
+        } else {
+            contextMenuContainer.find(".contextmenu[data-contextmenu='undo']").addClass("disabled");
+            if (History.stack.length == 0) {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").addClass("disabled");
+            } else {
+                contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").removeClass("disabled");
+            }
+        }
+    };
 
 	$(window).on("resize", function() {
 		initialize();
@@ -43,10 +61,17 @@ $(function() {
         if (!$(this).hasClass("disabled")) {
             var contextmenu = $(this).attr("data-contextmenu");
             switch (contextmenu) {
+                case "undo":
+                    History.do_undo(sheetContext);
+                    break;
+                case "redo":
+                    
+                    break;
                 case "copy":
 
                     break;
                 case "delete":
+                    hideTextSection();
                     Sheet.deleteComponentsFromActiveComponents();
                     Sheet.draw(sheetContext);
                     break;
@@ -213,8 +238,9 @@ function e_mousedown_sheetTemp(e) {
                         Sheet.removeAllActiveComponents();
                     }
                     Sheet.setActiveComponent(component.temp_id);
-                    showTextSection();
                 }
+
+                showTextSection();
                 
                 SheetTemp.mousePosition = {
                     x: e.pageX,
@@ -294,6 +320,7 @@ function e_mouseup_document(e) {
                     Sheet.removeAllActiveComponents();
                     if (component != null) {
                         Sheet.setActiveComponent(component.temp_id);
+                        showTextSection();
                     } else {
                         hideTextSection();
                     }
@@ -370,6 +397,7 @@ function e_keydown_document(e) {
 	switch (e.which) {
 		case 46:
 			if (Sheet.active_components.length > 0) {
+                hideTextSection();
 				Sheet.deleteComponentsFromActiveComponents();
 				Sheet.draw(sheetContext);
 			}
@@ -415,7 +443,9 @@ function showTextSection() {
 
 		$(".form-input-font-family").val(active_component.font_family);
 		$(".form-input-font-size").val(active_component.font_size);
-	}
+	} else {
+        hideTextSection();
+    }
 }
 
 function hideTextSection() {

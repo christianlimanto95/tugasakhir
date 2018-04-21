@@ -1351,7 +1351,12 @@ var Sheet = {
 		this.components.push(component);
 		this.removeAllActiveComponents();
 		this.setActiveComponent(this.temp_id);
-		this.temp_id++;
+        this.temp_id++;
+        
+        History.addToStack({
+            type: "add_component",
+            component: component
+        });
 	},
 	isHittingComponentOnMouseDown: false,
 	active_components: [],
@@ -1594,6 +1599,16 @@ var Sheet = {
 			}
 		}
 		this.active_components = [];
+    },
+    deleteComponent: function(temp_id) {
+        var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+            if (this.components[i].temp_id == temp_id) {
+                this.components.splice(i, 1);
+                break;
+            }
+        }
+        this.removeAllActiveComponents();
     },
     groups: [],
     active_groups: [],
@@ -2213,8 +2228,40 @@ var SheetTemp = {
 var History = {
     pointer: -1,
     stack: [],
-    addToStack: function() {
-        
+    addToStack: function(data) {
+        this.stack.push(data);
+        this.pointer++;
+        this.stackValueChanged();
+    },
+    onStackValueChanged: null,
+    stackValueChanged: function() {
+        if (this.onStackValueChanged != null) {
+            this.onStackValueChanged();
+        }
+    },
+    do_undo: function(context) {
+        if (this.pointer > -1) {
+            var currentState = this.stack[this.pointer];
+            switch (currentState.type) {
+                case "add_component":
+                    Sheet.deleteComponent(currentState.component.temp_id);
+                    break;
+            }
+
+            Sheet.draw(context);
+            this.pointer--;
+        }
+    },
+    do_redo: function(context) {
+        if (this.pointer + 1 < this.stack.length) {
+            this.pointer++;
+            var currentState = this.stack[this.pointer];
+            switch (currentState.type) {
+                case "add_component":
+                    
+                    break;
+            }
+        }
     }
 };
 
