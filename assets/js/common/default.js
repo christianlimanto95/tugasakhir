@@ -1355,13 +1355,20 @@ var Sheet = {
 
         History.addToStack({
             type: "add_component",
-            component: component
+            components: [{
+                componentIndex: this.components.length - 1,
+                component: component
+            }],
         });
     },
-    addComponentFromHistory: function(component) {
-        this.components.push(component);
+    addComponentsFromHistory: function(currentState) {
+        var components = currentState.components;
+        var iLength = components.length;
         this.removeAllActiveComponents();
-		this.setActiveComponent(component.temp_id);
+        for (var i = 0; i < iLength; i++) {
+            this.components.splice(components[i].componentIndex, 0, components[i].component);
+            this.setActiveComponent(components[i].component.temp_id);
+        }
     },
 	isHittingComponentOnMouseDown: false,
     active_components: [],
@@ -1374,6 +1381,8 @@ var Sheet = {
 	setActiveComponent: function(temp_id) {
 		var component = this.getComponentByTempId(temp_id);
 		if (component != null) {
+            component = clone(component);
+
             var isInGroup = false;
             var iLength = this.groups.length;
             for (var i = 0; i < iLength; i++) {
@@ -1393,7 +1402,10 @@ var Sheet = {
 
             this.activeComponentChanged();
 		}
-	},
+    },
+    setActiveComponents: function() {
+
+    },
 	isActiveComponent: function(component) {
 		var temp_id = component.temp_id;
 		var iLength = this.active_components.length;
@@ -1403,7 +1415,16 @@ var Sheet = {
 			}
 		}
 		return false;
-	},
+    },
+    indexOfActiveComponent: function(temp_id) {
+		var iLength = this.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.active_components[i].temp_id == temp_id) {
+				return i;
+			}
+		}
+		return -1;
+    },
 	removeAllActiveComponents: function() {
         this.active_components = [];
         this.active_groups = [];
@@ -1485,7 +1506,33 @@ var Sheet = {
 		}
 	},
 	updateComponentPositionFromActiveComponent: function(active_component) {
-		var component = this.getComponentByTempId(active_component.temp_id);
+        var component = this.getComponentByTempId(active_component.temp_id);
+
+        var old_real_position = {
+            top: component.real_position.top,
+            left: component.real_position.left,
+            right: component.real_position.right,
+            bottom: component.real_position.bottom
+        };
+        var old_computed_position = {
+            top: component.computed_position.top,
+            left: component.computed_position.left,
+            right: component.computed_position.right,
+            bottom: component.computed_position.bottom
+        };
+        
+        var real_position = {
+            top: active_component.real_position.top,
+			left: active_component.real_position.left,
+			right: active_component.real_position.right,
+			bottom: active_component.real_position.bottom
+        };
+        var computed_position = {
+            top: active_component.computed_position.top,
+			left: active_component.computed_position.left,
+			right: active_component.computed_position.right,
+			bottom: active_component.computed_position.bottom
+        };
 		
 		component.real_position = {
 			top: active_component.real_position.top,
@@ -1499,7 +1546,80 @@ var Sheet = {
 			left: active_component.computed_position.left,
 			right: active_component.computed_position.right,
 			bottom: active_component.computed_position.bottom
-		};
+        };
+        
+        History.addToStack({
+            type: "move_component",
+            component_temp_id: component.temp_id,
+            old_real_position: old_real_position,
+            old_computed_position: old_computed_position,
+            real_position: real_position,
+            computed_position: computed_position
+        });
+    },
+    moveComponentFromHistoryUndo: function(currentState) {
+        var component = this.getComponentByTempId(currentState.component_temp_id);
+        component.real_position = {
+			top: currentState.old_real_position.top,
+			left: currentState.old_real_position.left,
+			right: currentState.old_real_position.right,
+			bottom: currentState.old_real_position.bottom
+        };
+        component.computed_position = {
+			top: currentState.old_computed_position.top,
+			left: currentState.old_computed_position.left,
+			right: currentState.old_computed_position.right,
+			bottom: currentState.old_computed_position.bottom
+        };
+
+        var index = this.indexOfActiveComponent(component.temp_id);
+        if (index != -1) {
+            this.active_components[index].real_position = {
+                top: currentState.old_real_position.top,
+                left: currentState.old_real_position.left,
+                right: currentState.old_real_position.right,
+                bottom: currentState.old_real_position.bottom
+            };
+
+            this.active_components[index].computed_position = {
+                top: currentState.old_computed_position.top,
+                left: currentState.old_computed_position.left,
+                right: currentState.old_computed_position.right,
+                bottom: currentState.old_computed_position.bottom
+            };
+        }
+    },
+    moveComponentFromHistoryRedo: function(currentState) {
+        var component = this.getComponentByTempId(currentState.component_temp_id);
+        component.real_position = {
+			top: currentState.real_position.top,
+			left: currentState.real_position.left,
+			right: currentState.real_position.right,
+			bottom: currentState.real_position.bottom
+        };
+        component.computed_position = {
+			top: currentState.computed_position.top,
+			left: currentState.computed_position.left,
+			right: currentState.computed_position.right,
+			bottom: currentState.computed_position.bottom
+        };
+
+        var index = this.indexOfActiveComponent(component.temp_id);
+        if (index != -1) {
+            this.active_components[index].real_position = {
+                top: currentState.real_position.top,
+                left: currentState.real_position.left,
+                right: currentState.real_position.right,
+                bottom: currentState.real_position.bottom
+            };
+
+            this.active_components[index].computed_position = {
+                top: currentState.computed_position.top,
+                left: currentState.computed_position.left,
+                right: currentState.computed_position.right,
+                bottom: currentState.computed_position.bottom
+            };
+        }
     },
     updateGroupPositionFromActiveGroup: function(active_group) {
         var group = this.getGroupByTempId(active_group.temp_id);
@@ -1592,26 +1712,39 @@ var Sheet = {
 		}
 	},
 	deleteComponentsFromActiveComponents: function() {
-		var iLength = this.active_components.length;
+        var iLength = this.active_components.length;
+        var components_arr = [];
 		for (var i = 0; i < iLength; i++) {
 			var temp_id = this.active_components[i].temp_id;
 			var jLength = this.components.length;
 			for (var j = 0; j < jLength; j++) {
 				if (this.components[j].temp_id == temp_id) {
+                    components_arr.push({
+                        componentIndex: j,
+                        component: this.components[j]
+                    });
 					this.components.splice(j, 1);
 					break;
 				}
 			}
 		}
-		this.active_components = [];
+        this.removeAllActiveComponents();
+        History.addToStack({
+            type: "delete_component",
+            components: components_arr
+        });
     },
-    deleteComponentFromHistory: function(component) {
-        var temp_id = component.temp_id;
-        var iLength = this.components.length;
+    deleteComponentsFromHistory: function(currentState) {
+        var components = currentState.components;
+        var iLength = components.length;
 		for (var i = 0; i < iLength; i++) {
-            if (this.components[i].temp_id == temp_id) {
-                this.components.splice(i, 1);
-                break;
+            var temp_id = components[i].component.temp_id;
+            var jLength = this.components.length;
+            for (var j = 0; j < jLength; j++) {
+                if (this.components[j].temp_id == temp_id) {
+                    this.components.splice(j, 1);
+                    break;
+                }
             }
         }
         this.removeAllActiveComponents();
@@ -2235,6 +2368,10 @@ var History = {
     pointer: -1,
     stack: [],
     addToStack: function(data) {
+        if (this.pointer + 1 < this.stack.length) {
+            this.stack = [];
+            this.pointer = -1;
+        }
         this.stack.push(data);
         this.pointer++;
         this.stackValueChanged();
@@ -2245,12 +2382,18 @@ var History = {
             this.onStackValueChanged();
         }
     },
-    do_undo: function(context) {
+    do_undo: function(context, tempContext) {
         if (this.pointer > -1) {
             var currentState = this.stack[this.pointer];
             switch (currentState.type) {
                 case "add_component":
-                    Sheet.deleteComponentFromHistory(currentState.component);
+                    Sheet.deleteComponentsFromHistory(currentState);
+                    break;
+                case "move_component":
+                    Sheet.moveComponentFromHistoryUndo(currentState);
+                    break;
+                case "delete_component":
+                    Sheet.addComponentsFromHistory(currentState);
                     break;
             }
 
@@ -2259,13 +2402,19 @@ var History = {
             Sheet.draw(context);
         }
     },
-    do_redo: function(context) {
+    do_redo: function(context, tempContext) {
         if (this.pointer + 1 < this.stack.length) {
             this.pointer++;
             var currentState = this.stack[this.pointer];
             switch (currentState.type) {
                 case "add_component":
-                    Sheet.addComponentFromHistory(currentState.component);
+                    Sheet.addComponentsFromHistory(currentState);
+                    break;
+                case "move_component":
+                    Sheet.moveComponentFromHistoryRedo(currentState);
+                    break;
+                case "delete_component":
+                    Sheet.deleteComponentsFromHistory(currentState);
                     break;
             }
 

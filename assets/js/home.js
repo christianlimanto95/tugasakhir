@@ -336,10 +336,10 @@ function e_mouseup_document(e) {
 function menuClick(menu) {
     switch (menu) {
         case "undo":
-            History.do_undo(sheetContext);
+            History.do_undo(sheetContext, sheetTempContext);
             break;
         case "redo":
-            History.do_redo(sheetContext);
+            History.do_redo(sheetContext, sheetTempContext);
             break;
         case "copy":
 
@@ -430,12 +430,12 @@ function e_keydown_document(e) {
             break;
         case 90: // Ctrl + Z
             if (keyPressed.ctrl) {
-                History.do_undo(sheetContext);
+                History.do_undo(sheetContext, sheetTempContext);
             }
             break;
         case 89: // Ctrl + Y
             if (keyPressed.ctrl) {
-                History.do_redo(sheetContext);
+                History.do_redo(sheetContext, sheetTempContext);
             }
             break;
 	}
