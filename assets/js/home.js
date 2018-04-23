@@ -427,7 +427,17 @@ function e_keydown_document(e) {
 			break;
 		case 17:
 			keyPressed.ctrl = true;
-			break;
+            break;
+        case 90: // Ctrl + Z
+            if (keyPressed.ctrl) {
+                History.do_undo(sheetContext);
+            }
+            break;
+        case 89: // Ctrl + Y
+            if (keyPressed.ctrl) {
+                History.do_redo(sheetContext);
+            }
+            break;
 	}
 }
 
