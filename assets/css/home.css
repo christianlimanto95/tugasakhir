@@ -1,3 +1,11 @@
+.left-pane, .component-item-name, .header-item, .contextmenu {
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
 .header {
 	width: 100vw;
 	height: 60px;
@@ -23,6 +31,11 @@
 
 .header-item:hover {
 	background-color: #DDD;
+}
+
+.header-item.disabled, .header-item.disabled:hover {
+    opacity: 0.3;
+    background-color: transparent;
 }
 
 .header-item-image {
@@ -69,11 +82,6 @@
 	left: 0;
 	width: 250px;
 	border-right: 1px solid #CCC;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
 }
 
 .right-pane {
@@ -281,10 +289,6 @@ input[type="text"] {
 
 .component-item-name {
 	text-align: center;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
 .component-edit, .component-edit-textarea {

@@ -1,6 +1,6 @@
 <div class="header">
     <div class="header-left"></div>
-    <div class="header-item" data-header-item-name="undo">
+    <div class="header-item disabled" data-header-item-name="undo">
         <div class="header-item-image">
         <svg fill="#000000" height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0h24v24H0z" fill="none"/>
@@ -9,7 +9,7 @@
         </div>
         <div class="header-item-name">Undo</div>
     </div>
-    <div class="header-item" data-header-item-name="redo">
+    <div class="header-item disabled" data-header-item-name="redo">
         <div class="header-item-image">
         <svg fill="#000000" height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0h24v24H0z" fill="none"/>
@@ -213,8 +213,8 @@
     <div class="contextmenu" data-target="component" data-contextmenu="cut">Cut</div>
     <div class="contextmenu" data-target="component" data-contextmenu="copy">Copy</div>
     <div class="contextmenu" data-target="canvas" data-contextmenu="paste">Paste</div>
-    <div class="contextmenu" data-target="canvas" data-contextmenu="undo">Undo</div>
-    <div class="contextmenu" data-target="canvas" data-contextmenu="redo">Redo</div>
+    <div class="contextmenu disabled" data-target="canvas" data-contextmenu="undo">Undo</div>
+    <div class="contextmenu disabled" data-target="canvas" data-contextmenu="redo">Redo</div>
     <div class="contextmenu" data-target="component" data-contextmenu="delete">Delete</div>
     <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="group">Group</div>
     <div class="contextmenu" data-target="component" data-type="multiple-selection" data-contextmenu="ungroup">Ungroup</div>

@@ -1,5 +1,5 @@
 var sheetCanvas, sheetContext, sheetTempCanvas, sheetTempContext;
-var contextMenuContainer;
+var contextMenuContainer, header;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
 var mouseDown = false, mouseDrag = false, mouseResize = false;
@@ -16,6 +16,7 @@ $(function() {
 	sheetTempCanvas = $(".sheet-temp")[0];
     sheetTempContext = sheetTempCanvas.getContext("2d");
     contextMenuContainer = $(".contextmenu-container");
+    header = $(".header");
 	
 	initialize();
 
@@ -34,20 +35,34 @@ $(function() {
     $(".sheet-temp").on("contextmenu", e_contextmenu_sheetTemp);
 	$(document).on("keydown", e_keydown_document);
     $(document).on("keyup", e_keyup_document);
+
+    Sheet.onActiveComponentChanged = function() {
+        if (Sheet.active_components.length == 1 && Sheet.active_groups.length == 0) {
+            showTextSection();
+        } else {
+            hideTextSection();
+        }
+    };
     
     History.onStackValueChanged = function() {
         if (History.pointer >= 0) {
+            header.find(".header-item[data-header-item-name='undo']").removeClass("disabled");
             contextMenuContainer.find(".contextmenu[data-contextmenu='undo']").removeClass("disabled");
             if (History.pointer < History.stack.length - 1) {
+                header.find(".header-item[data-header-item-name='redo']").removeClass("disabled");
                 contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").removeClass("disabled");
             } else {
+                header.find(".header-item[data-header-item-name='redo']").addClass("disabled");
                 contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").addClass("disabled");
             }
         } else {
+            header.find(".header-item[data-header-item-name='undo']").addClass("disabled");
             contextMenuContainer.find(".contextmenu[data-contextmenu='undo']").addClass("disabled");
             if (History.stack.length == 0) {
+                header.find(".header-item[data-header-item-name='redo']").addClass("disabled");
                 contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").addClass("disabled");
             } else {
+                header.find(".header-item[data-header-item-name='redo']").removeClass("disabled");
                 contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").removeClass("disabled");
             }
         }
@@ -56,34 +71,18 @@ $(function() {
 	$(window).on("resize", function() {
 		initialize();
     });
+
+    $(".header-item").on("click", function() {
+        if (!$(this).hasClass("disabled")) {
+            var menu = $(this).attr("data-header-item-name");
+            menuClick(menu);
+        }
+    });
     
     $(".contextmenu").on("click", function() {
         if (!$(this).hasClass("disabled")) {
             var contextmenu = $(this).attr("data-contextmenu");
-            switch (contextmenu) {
-                case "undo":
-                    History.do_undo(sheetContext);
-                    break;
-                case "redo":
-                    
-                    break;
-                case "copy":
-
-                    break;
-                case "delete":
-                    hideTextSection();
-                    Sheet.deleteComponentsFromActiveComponents();
-                    Sheet.draw(sheetContext);
-                    break;
-                case "group":
-                    Sheet.createGroupFromActiveComponents();
-                    Sheet.draw(sheetContext);
-                    break;
-                case "ungroup":
-                    Sheet.ungroupActiveGroup();
-                    Sheet.draw(sheetContext);
-                    break;
-            }
+            menuClick(contextmenu);
             contextMenuContainer.removeClass("show");
         }
     });
@@ -239,8 +238,6 @@ function e_mousedown_sheetTemp(e) {
                     }
                     Sheet.setActiveComponent(component.temp_id);
                 }
-
-                showTextSection();
                 
                 SheetTemp.mousePosition = {
                     x: e.pageX,
@@ -320,9 +317,6 @@ function e_mouseup_document(e) {
                     Sheet.removeAllActiveComponents();
                     if (component != null) {
                         Sheet.setActiveComponent(component.temp_id);
-                        showTextSection();
-                    } else {
-                        hideTextSection();
                     }
                 }
             }
@@ -336,6 +330,33 @@ function e_mouseup_document(e) {
         mouseDrag = false;
         mouseResize = false;
         dotsHit = "";
+    }
+}
+
+function menuClick(menu) {
+    switch (menu) {
+        case "undo":
+            History.do_undo(sheetContext);
+            break;
+        case "redo":
+            History.do_redo(sheetContext);
+            break;
+        case "copy":
+
+            break;
+        case "delete":
+            //hideTextSection();
+            Sheet.deleteComponentsFromActiveComponents();
+            Sheet.draw(sheetContext);
+            break;
+        case "group":
+            Sheet.createGroupFromActiveComponents();
+            Sheet.draw(sheetContext);
+            break;
+        case "ungroup":
+            Sheet.ungroupActiveGroup();
+            Sheet.draw(sheetContext);
+            break;
     }
 }
 
@@ -397,7 +418,6 @@ function e_keydown_document(e) {
 	switch (e.which) {
 		case 46:
 			if (Sheet.active_components.length > 0) {
-                hideTextSection();
 				Sheet.deleteComponentsFromActiveComponents();
 				Sheet.draw(sheetContext);
 			}
@@ -423,29 +443,25 @@ function e_keyup_document(e) {
 }
 
 function showTextSection() {
-	if (Sheet.active_components.length == 1) {
-		$(".right-pane-section-text").removeClass("hide");
-		var active_component = Sheet.active_components[0];
-		if (active_component.has_text) {
-			$(".form-item-value").removeClass("hide");
-			if (active_component.multiline) {
-				$(".form-input-text").addClass("hide");
-				$(".form-input-textarea").removeClass("hide");
-				$(".form-input-textarea").val(active_component.text);
-			} else {
-				$(".form-input-textarea").addClass("hide");
-				$(".form-input-text").removeClass("hide");
-				$(".form-input-text").val(active_component.text);
-			}
-		} else {
-			$(".form-item-value").addClass("hide");
-		}
-
-		$(".form-input-font-family").val(active_component.font_family);
-		$(".form-input-font-size").val(active_component.font_size);
-	} else {
-        hideTextSection();
+    $(".right-pane-section-text").removeClass("hide");
+    var active_component = Sheet.active_components[0];
+    if (active_component.has_text) {
+        $(".form-item-value").removeClass("hide");
+        if (active_component.multiline) {
+            $(".form-input-text").addClass("hide");
+            $(".form-input-textarea").removeClass("hide");
+            $(".form-input-textarea").val(active_component.text);
+        } else {
+            $(".form-input-textarea").addClass("hide");
+            $(".form-input-text").removeClass("hide");
+            $(".form-input-text").val(active_component.text);
+        }
+    } else {
+        $(".form-item-value").addClass("hide");
     }
+
+    $(".form-input-font-family").val(active_component.font_family);
+    $(".form-input-font-size").val(active_component.font_size);
 }
 
 function hideTextSection() {
@@ -525,7 +541,6 @@ function releaseDragging(e) {
 	Sheet.draw(sheetContext);
 
 	draggableComponentId = "-1";
-	showTextSection();
 }
 
 function translateMouseCoorToComputedCoor(e) {

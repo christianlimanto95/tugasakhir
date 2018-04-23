@@ -1352,14 +1352,25 @@ var Sheet = {
 		this.removeAllActiveComponents();
 		this.setActiveComponent(this.temp_id);
         this.temp_id++;
-        
+
         History.addToStack({
             type: "add_component",
             component: component
         });
-	},
+    },
+    addComponentFromHistory: function(component) {
+        this.components.push(component);
+        this.removeAllActiveComponents();
+		this.setActiveComponent(component.temp_id);
+    },
 	isHittingComponentOnMouseDown: false,
-	active_components: [],
+    active_components: [],
+    onActiveComponentChanged: null,
+    activeComponentChanged: function() {
+        if (this.onActiveComponentChanged != null) {
+            this.onActiveComponentChanged();
+        }
+    },
 	setActiveComponent: function(temp_id) {
 		var component = this.getComponentByTempId(temp_id);
 		if (component != null) {
@@ -1379,6 +1390,8 @@ var Sheet = {
             if (!isInGroup) {
                 this.active_components.push(component);
             }
+
+            this.activeComponentChanged();
 		}
 	},
 	isActiveComponent: function(component) {
@@ -1391,18 +1404,10 @@ var Sheet = {
 		}
 		return false;
 	},
-	removeActiveComponent: function(temp_id) {
-		var iLength = this.active_components.length;
-		for (var i = 0; i < iLength; i++) {
-			if (this.active_components[i].temp_id == temp_id) {
-				this.active_components.splice(i, 1);
-				break;
-			}
-		}
-	},
 	removeAllActiveComponents: function() {
         this.active_components = [];
         this.active_groups = [];
+        this.activeComponentChanged();
 	},
 	getComponentByTempId: function(temp_id) {
 		var iLength = this.components.length;
@@ -1600,7 +1605,8 @@ var Sheet = {
 		}
 		this.active_components = [];
     },
-    deleteComponent: function(temp_id) {
+    deleteComponentFromHistory: function(component) {
+        var temp_id = component.temp_id;
         var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
             if (this.components[i].temp_id == temp_id) {
@@ -2244,12 +2250,13 @@ var History = {
             var currentState = this.stack[this.pointer];
             switch (currentState.type) {
                 case "add_component":
-                    Sheet.deleteComponent(currentState.component.temp_id);
+                    Sheet.deleteComponentFromHistory(currentState.component);
                     break;
             }
 
-            Sheet.draw(context);
             this.pointer--;
+            this.stackValueChanged();
+            Sheet.draw(context);
         }
     },
     do_redo: function(context) {
@@ -2258,9 +2265,12 @@ var History = {
             var currentState = this.stack[this.pointer];
             switch (currentState.type) {
                 case "add_component":
-                    
+                    Sheet.addComponentFromHistory(currentState.component);
                     break;
             }
+
+            this.stackValueChanged();
+            Sheet.draw(context);
         }
     }
 };
