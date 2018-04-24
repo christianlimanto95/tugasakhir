@@ -37,7 +37,15 @@ $(function() {
     $(document).on("keyup", e_keyup_document);
 
     Sheet.onActiveComponentChanged = function() {
-        if (Sheet.active_components.length == 1 && Sheet.active_groups.length == 0) {
+        var activeComponentsLength = Sheet.active_components.length;
+        var activeGroupsLength = Sheet.active_groups.length;
+        if (activeComponentsLength > 0 || activeGroupsLength > 0) {
+            header.find(".header-item[data-header-item-name='delete']").removeClass("disabled");
+        } else {
+            header.find(".header-item[data-header-item-name='delete']").addClass("disabled");
+        }
+
+        if (activeComponentsLength == 1 && activeGroupsLength == 0) {
             showTextSection();
         } else {
             hideTextSection();
@@ -486,8 +494,10 @@ function hideComponentEdit() {
 		editText.removeClass("show");
 		editText.removeAttr("data-temp-id");
 		Sheet.updateComponentTextByTempId(temp_id, value);
-		Sheet.draw(sheetContext);
-		showTextSection();
+        Sheet.draw(sheetContext);
+        if (Sheet.active_components.length == 1 && Sheet.active_groups.length == 0) {
+            showTextSection();
+        }
 	}
 }
 
