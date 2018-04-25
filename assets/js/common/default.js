@@ -1430,6 +1430,24 @@ var Sheet = {
         }
         this.activeComponentChanged();
     },
+    setActiveComponentsAndGroups: function(temp_id_arr, group_temp_id_arr) {
+        var iLength = temp_id_arr.length;
+        for (var i = 0; i < iLength; i++) {
+            var component = this.getComponentByTempId(temp_id_arr[i]);
+            if (component != null) {
+                component = clone(component);
+                this.active_components.push(component);
+            }
+        }
+
+        iLength = group_temp_id_arr.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = this.getGroupByTempId(group_temp_id_arr[i]);
+            this.setActiveGroup(group);
+        }
+
+        this.activeComponentChanged();
+    },
 	isActiveComponent: function(component) {
 		var temp_id = component.temp_id;
 		var iLength = this.active_components.length;
@@ -1939,9 +1957,13 @@ var Sheet = {
 
         var groupComponents = [];
 
+        var old_components_arr = [];
+        var new_group_components = [];
         var iLength = this.active_components.length;
         for (var i = 0; i < iLength; i++) {
             var temp_id = this.active_components[i].temp_id;
+            old_components_arr.push(temp_id);
+            new_group_components.push(temp_id);
             var component = this.getComponentByTempId(temp_id);
             if (i == 0) {
                 temp_computed_position.left = component.computed_position.left;
@@ -1987,14 +2009,47 @@ var Sheet = {
             temp_real_position.bottom = this.active_groups[0].real_position.bottom;
         }
 
+        var old_groups_arr = [];
+        
         iLength = this.active_groups.length;
         for (var i = 0; i < iLength; i++) {
             var currentGroup = this.active_groups[i];
+            var old_group = {
+                temp_id: currentGroup.temp_id,
+                real_position: null,
+                computed_position: null,
+                real_size: null,
+                computed_size: null,
+                components: []
+            };
+            old_group.real_position = {
+                top: currentGroup.real_position.top,
+                left: currentGroup.real_position.left,
+                right: currentGroup.real_position.right,
+                bottom: currentGroup.real_position.bottom
+            };
+            old_group.computed_position = {
+                top: currentGroup.computed_position.top,
+                left: currentGroup.computed_position.left,
+                right: currentGroup.computed_position.right,
+                bottom: currentGroup.computed_position.bottom
+            };
+            old_group.real_size = {
+                width: currentGroup.real_size.width,
+                height: currentGroup.real_size.height
+            };
+            old_group.computed_size = {
+                width: currentGroup.computed_size.width,
+                height: currentGroup.computed_size.height
+            };
+
             var jLength = currentGroup.components.length;
             for (var j = 0; j < jLength; j++) {
                 var temp_id = currentGroup.components[j].temp_id;
                 var component = this.getComponentByTempId(temp_id);
                 groupComponents.push(component);
+                old_group.components.push(temp_id);
+                new_group_components.push(temp_id);
             }
 
             if (currentGroup.computed_position.left < temp_computed_position.left) {
@@ -2015,6 +2070,7 @@ var Sheet = {
             }
 
             this.deleteGroup(currentGroup.temp_id);
+            old_groups_arr.push(old_group);
         }
 
         temp_computed_size.width = temp_computed_position.right - temp_computed_position.left;
@@ -2036,6 +2092,16 @@ var Sheet = {
 
         this.removeAllActiveComponents();
         this.setActiveGroup(group);
+
+        History.addToStack({
+            type: "create_group",
+            old_groups: old_groups_arr,
+            old_components: old_components_arr,
+            new_group: {
+                temp_id: group.temp_id,
+                components: new_group_components
+            }
+        });
     },
     getGroupByTempId: function(temp_id) {
         var iLength = this.groups.length;
@@ -2054,6 +2120,64 @@ var Sheet = {
                 break;
             }
         }
+    },
+    ungroupFromHistoryUndo: function(currentState) {
+        var group_temp_id = currentState.new_group.temp_id;
+        var iLength = this.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            if (this.groups[i].temp_id == group_temp_id) {
+                this.groups.splice(i, 1);
+                break;
+            }
+        }
+
+        var group_temp_id_arr = [];
+        var iLength = currentState.old_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var old_group = currentState.old_groups[i];
+            group_temp_id_arr.push(old_group.temp_id);
+            var group = {
+                temp_id: old_group.temp_id,
+                real_size: null,
+                computed_size: null,
+                real_position: null,
+                computed_position: null,
+                components: []
+            };
+            group.real_position = {
+                top: old_group.real_position.top,
+                left: old_group.real_position.left,
+                right: old_group.real_position.right,
+                bottom: old_group.real_position.bottom
+            };
+            group.computed_position = {
+                top: old_group.computed_position.top,
+                left: old_group.computed_position.left,
+                right: old_group.computed_position.right,
+                bottom: old_group.computed_position.bottom
+            };
+            group.real_size = {
+                width: old_group.real_size.width,
+                height: old_group.real_size.height
+            };
+            group.computed_size = {
+                width: old_group.computed_size.width,
+                height: old_group.computed_size.height
+            };
+
+            var group_components = [];
+            var jLength = old_group.components.length;
+            for (var j = 0; j < jLength; j++) {
+                var component = this.getComponentByTempId(old_group.components[j]);
+                group_components.push(component);
+            }
+            group.components = group_components;
+
+            this.groups.push(group);
+        }
+
+        this.removeAllActiveComponents();
+        this.setActiveComponentsAndGroups(currentState.old_components, group_temp_id_arr);
     },
     ungroupActiveGroup: function() {
         var iLength = this.active_groups.length;
@@ -2077,6 +2201,7 @@ var Sheet = {
         }
     },
     setActiveGroup: function(group) {
+        group = clone(group);
         this.active_groups.push(group);
     },
     isInGroup: function(temp_id) {
@@ -2559,6 +2684,9 @@ var History = {
                 case "delete_component":
                     Sheet.addComponentsFromHistory(currentState);
                     break;
+                case "create_group":
+                    Sheet.ungroupFromHistoryUndo(currentState);
+                    break;
             }
 
             this.pointer--;
@@ -2582,6 +2710,9 @@ var History = {
                     break;
                 case "delete_component":
                     Sheet.deleteComponentsFromHistory(currentState);
+                    break;
+                case "create_group":
+
                     break;
             }
 
