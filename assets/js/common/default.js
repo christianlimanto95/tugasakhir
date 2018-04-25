@@ -2093,15 +2093,93 @@ var Sheet = {
         this.removeAllActiveComponents();
         this.setActiveGroup(group);
 
-        History.addToStack({
+        var stackItem = {
             type: "create_group",
             old_groups: old_groups_arr,
             old_components: old_components_arr,
             new_group: {
                 temp_id: group.temp_id,
-                components: new_group_components
+                components: new_group_components,
+                real_position: null,
+                computed_position: null,
+                real_size: null,
+                computed_size: null
             }
-        });
+        };
+        stackItem.new_group.real_position = {
+            top: group.real_position.top,
+            left: group.real_position.left,
+            right: group.real_position.right,
+            bottom: group.real_position.bottom
+        };
+        stackItem.new_group.computed_position = {
+            top: group.computed_position.top,
+            left: group.computed_position.left,
+            right: group.computed_position.right,
+            bottom: group.computed_position.bottom
+        };
+        stackItem.new_group.real_size = {
+            width: group.real_size.width,
+            height: group.real_size.height
+        };
+        stackItem.new_group.computed_size = {
+            width: group.computed_size.width,
+            height: group.computed_size.height
+        };
+
+        History.addToStack(stackItem);
+    },
+    createGroupFromHistoryRedo: function(currentState) {
+        var group_components = [];
+        var iLength = currentState.old_components.length;
+        for (var i = 0; i < iLength; i++) {
+            var component = this.getComponentByTempId(currentState.old_components[i]);
+            group_components.push(component);
+        }
+
+        iLength = currentState.old_groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = currentState.old_groups[i];
+            var jLength = group.components.length;
+            for (var j = 0; j < jLength; j++) {
+                var component = this.getComponentByTempId(group.components[j]);
+                group_components.push(component);
+            }
+            this.deleteGroup(group.temp_id);
+        }
+
+        var new_group = {
+            temp_id: currentState.new_group.temp_id,
+            components: group_components,
+            real_position: null,
+            computed_position: null,
+            real_size: null,
+            computed_size: null
+        };
+        new_group.real_position = {
+            top: currentState.new_group.real_position.top,
+            left: currentState.new_group.real_position.left,
+            right: currentState.new_group.real_position.right,
+            bottom: currentState.new_group.real_position.bottom
+        };
+        new_group.computed_position = {
+            top: currentState.new_group.computed_position.top,
+            left: currentState.new_group.computed_position.left,
+            right: currentState.new_group.computed_position.right,
+            bottom: currentState.new_group.computed_position.bottom
+        };
+        new_group.real_size = {
+            width: currentState.new_group.real_size.width,
+            height: currentState.new_group.real_size.height
+        };
+        new_group.computed_size = {
+            width: currentState.new_group.computed_size.width,
+            height: currentState.new_group.computed_size.height
+        };
+        
+        this.groups.push(new_group);
+        this.removeAllActiveComponents();
+        this.setActiveGroup(new_group);
     },
     getGroupByTempId: function(temp_id) {
         var iLength = this.groups.length;
@@ -2712,7 +2790,7 @@ var History = {
                     Sheet.deleteComponentsFromHistory(currentState);
                     break;
                 case "create_group":
-
+                    Sheet.createGroupFromHistoryRedo(currentState);
                     break;
             }
 
