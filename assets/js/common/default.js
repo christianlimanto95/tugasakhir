@@ -1492,8 +1492,11 @@ var Sheet = {
 		}
 	},
 	updateActiveComponentsPosition: function(tempComponents, tempGroups) {
+		var components_arr = [];
 		var iLength = this.active_components.length;
 		for (var i = 0; i < iLength; i++) {
+			var component = this.getComponentByTempId(this.active_components[i].temp_id);
+
 			this.active_components[i].real_position = {
 				top: tempComponents[i].real_position.top,
 				left: tempComponents[i].real_position.left,
@@ -1507,11 +1510,47 @@ var Sheet = {
 				right: tempComponents[i].computed_position.right,
 				bottom: tempComponents[i].computed_position.bottom
 			};
+
+			var old_real_position = {
+                top: component.real_position.top,
+                left: component.real_position.left,
+                right: component.real_position.right,
+                bottom: component.real_position.bottom
+            };
+            var old_computed_position = {
+                top: component.computed_position.top,
+                left: component.computed_position.left,
+                right: component.computed_position.right,
+                bottom: component.computed_position.bottom
+			};
+			
+			var real_position = {
+                top: this.active_components[i].real_position.top,
+                left: this.active_components[i].real_position.left,
+                right: this.active_components[i].real_position.right,
+                bottom: this.active_components[i].real_position.bottom
+            };
+            var computed_position = {
+                top: this.active_components[i].computed_position.top,
+                left: this.active_components[i].computed_position.left,
+                right: this.active_components[i].computed_position.right,
+                bottom: this.active_components[i].computed_position.bottom
+			};
+			
+			components_arr.push({
+                temp_id: component.temp_id,
+                old_real_position: old_real_position,
+                old_computed_position: old_computed_position,
+                real_position: real_position,
+                computed_position: computed_position
+            });
         }
         this.updateComponentPositionFromActiveComponent();
-        
+		
+		var groups_arr = [];
         iLength = this.active_groups.length;
 		for (var i = 0; i < iLength; i++) {
+			var group_components_arr = [];
             var jLength = tempGroups[i].components.length;
             for (var j = 0; j < jLength; j++) {
                 this.active_groups[i].components[j].real_position = {
@@ -1526,7 +1565,43 @@ var Sheet = {
                     left: tempGroups[i].components[j].computed_position.left,
                     right: tempGroups[i].components[j].computed_position.right,
                     bottom: tempGroups[i].components[j].computed_position.bottom
-                };
+				};
+
+				var component = this.getComponentByTempId(this.active_groups[i].components[j].temp_id);
+				
+				var old_real_position = {
+					top: component.real_position.top,
+					left: component.real_position.left,
+					right: component.real_position.right,
+					bottom: component.real_position.bottom
+				};
+				var old_computed_position = {
+					top: component.computed_position.top,
+					left: component.computed_position.left,
+					right: component.computed_position.right,
+					bottom: component.computed_position.bottom
+				};
+
+				var real_position = {
+					top: this.active_groups[i].components[j].real_position.top,
+					left: this.active_groups[i].components[j].real_position.left,
+					right: this.active_groups[i].components[j].real_position.right,
+					bottom: this.active_groups[i].components[j].real_position.bottom
+				};
+				var computed_position = {
+					top: this.active_groups[i].components[j].computed_position.top,
+					left: this.active_groups[i].components[j].computed_position.left,
+					right: this.active_groups[i].components[j].computed_position.right,
+					bottom: this.active_groups[i].components[j].computed_position.bottom
+				};
+
+				group_components_arr.push({
+					temp_id: component.temp_id,
+					old_real_position: old_real_position,
+					old_computed_position: old_computed_position,
+					real_position: real_position,
+					computed_position: computed_position
+				});
             }
 
 			this.active_groups[i].real_position = {
@@ -1541,10 +1616,52 @@ var Sheet = {
 				left: tempGroups[i].computed_position.left,
 				right: tempGroups[i].computed_position.right,
 				bottom: tempGroups[i].computed_position.bottom
-            };
+			};
+			
+			var group = this.getGroupByTempId(this.active_groups[i].temp_id);
+			var old_real_position = {
+				top: group.real_position.top,
+				left: group.real_position.left,
+				right: group.real_position.right,
+				bottom: group.real_position.bottom
+			};
+			var old_computed_position = {
+				top: group.computed_position.top,
+				left: group.computed_position.left,
+				right: group.computed_position.right,
+				bottom: group.computed_position.bottom
+			};
+
+			var real_position = {
+				top: this.active_groups[i].real_position.top,
+				left: this.active_groups[i].real_position.left,
+				right: this.active_groups[i].real_position.right,
+				bottom: this.active_groups[i].real_position.bottom
+			};
+			var computed_position = {
+				top: this.active_groups[i].computed_position.top,
+				left: this.active_groups[i].computed_position.left,
+				right: this.active_groups[i].computed_position.right,
+				bottom: this.active_groups[i].computed_position.bottom
+			};
+
+			groups_arr.push({
+				temp_id: group.temp_id,
+				old_real_position: old_real_position,
+				old_computed_position: old_computed_position,
+				real_position: real_position,
+				computed_position: computed_position,
+				components: group_components_arr
+			});
             
             this.updateGroupPositionFromActiveGroup(this.active_groups[i]);
 		}
+
+		History.addToStack({
+            type: "move_component_or_group",
+			components: components_arr,
+			groups: groups_arr
+        });
 	},
 	updateComponentPositionFromActiveComponent: function() {
         var components_arr = [];
@@ -1552,32 +1669,6 @@ var Sheet = {
         for (var i = 0; i < iLength; i++) {
             var active_component = this.active_components[i];
             var component = this.getComponentByTempId(active_component.temp_id);
-
-            var old_real_position = {
-                top: component.real_position.top,
-                left: component.real_position.left,
-                right: component.real_position.right,
-                bottom: component.real_position.bottom
-            };
-            var old_computed_position = {
-                top: component.computed_position.top,
-                left: component.computed_position.left,
-                right: component.computed_position.right,
-                bottom: component.computed_position.bottom
-            };
-            
-            var real_position = {
-                top: active_component.real_position.top,
-                left: active_component.real_position.left,
-                right: active_component.real_position.right,
-                bottom: active_component.real_position.bottom
-            };
-            var computed_position = {
-                top: active_component.computed_position.top,
-                left: active_component.computed_position.left,
-                right: active_component.computed_position.right,
-                bottom: active_component.computed_position.bottom
-            };
             
             component.real_position = {
                 top: active_component.real_position.top,
@@ -1592,27 +1683,14 @@ var Sheet = {
                 right: active_component.computed_position.right,
                 bottom: active_component.computed_position.bottom
             };
-            
-            components_arr.push({
-                component_temp_id: component.temp_id,
-                old_real_position: old_real_position,
-                old_computed_position: old_computed_position,
-                real_position: real_position,
-                computed_position: computed_position
-            });
         }
-
-        History.addToStack({
-            type: "move_component",
-            components: components_arr
-        });
     },
     moveComponentFromHistoryUndo: function(currentState) {
         this.removeAllActiveComponents();
         var iLength = currentState.components.length;
         var temp_id_arr = [];
         for (var i = 0; i < iLength; i++) {
-            var component = this.getComponentByTempId(currentState.components[i].component_temp_id);
+            var component = this.getComponentByTempId(currentState.components[i].temp_id);
             var old_real_position = currentState.components[i].old_real_position;
             var old_computed_position = currentState.components[i].old_computed_position;
 
@@ -1631,14 +1709,58 @@ var Sheet = {
 
             temp_id_arr.push(component.temp_id);
         }
-        this.setActiveComponents(temp_id_arr);
+		
+		iLength = currentState.groups.length;
+		var group_temp_id_arr = [];
+		for (var i = 0; i < iLength; i++) {
+			var group = this.getGroupByTempId(currentState.groups[i].temp_id);
+			var old_real_position = currentState.groups[i].old_real_position;
+			var old_computed_position = currentState.groups[i].old_computed_position;
+
+			group.real_position = {
+				top: old_real_position.top,
+				left: old_real_position.left,
+                right: old_real_position.right,
+                bottom: old_real_position.bottom
+			};
+			group.computed_position = {
+				top: old_computed_position.top,
+                left: old_computed_position.left,
+                right: old_computed_position.right,
+                bottom: old_computed_position.bottom
+			};
+
+			var jLength = currentState.groups[i].components.length;
+			for (var j = 0; j < jLength; j++) {
+				var component = this.getComponentByTempId(currentState.groups[i].components[j].temp_id);
+				var old_real_position = currentState.groups[i].components[j].old_real_position;
+				var old_computed_position = currentState.groups[i].components[j].old_computed_position;
+
+				component.real_position = {
+					top: old_real_position.top,
+					left: old_real_position.left,
+					right: old_real_position.right,
+					bottom: old_real_position.bottom
+				};
+				component.computed_position = {
+					top: old_computed_position.top,
+					left: old_computed_position.left,
+					right: old_computed_position.right,
+					bottom: old_computed_position.bottom
+				};
+			}
+
+			group_temp_id_arr.push(group.temp_id);
+		}
+
+		this.setActiveComponentsAndGroups(temp_id_arr, group_temp_id_arr);
     },
     moveComponentFromHistoryRedo: function(currentState) {
         this.removeAllActiveComponents();
         var iLength = currentState.components.length;
         var temp_id_arr = [];
         for (var i = 0; i < iLength; i++) {
-            var component = this.getComponentByTempId(currentState.components[i].component_temp_id);
+            var component = this.getComponentByTempId(currentState.components[i].temp_id);
             var real_position = currentState.components[i].real_position;
             var computed_position = currentState.components[i].computed_position;
 
@@ -1656,8 +1778,52 @@ var Sheet = {
             };
 
             temp_id_arr.push(component.temp_id);
-        }
-        this.setActiveComponents(temp_id_arr);
+		}
+		
+		iLength = currentState.groups.length;
+		var group_temp_id_arr = [];
+		for (var i = 0; i < iLength; i++) {
+			var group = this.getGroupByTempId(currentState.groups[i].temp_id);
+			var real_position = currentState.groups[i].real_position;
+			var computed_position = currentState.groups[i].computed_position;
+
+			group.real_position = {
+				top: real_position.top,
+				left: real_position.left,
+                right: real_position.right,
+                bottom: real_position.bottom
+			};
+			group.computed_position = {
+				top: computed_position.top,
+                left: computed_position.left,
+                right: computed_position.right,
+                bottom: computed_position.bottom
+			};
+
+			var jLength = currentState.groups[i].components.length;
+			for (var j = 0; j < jLength; j++) {
+				var component = this.getComponentByTempId(currentState.groups[i].components[j].temp_id);
+				var real_position = currentState.groups[i].components[j].real_position;
+				var computed_position = currentState.groups[i].components[j].computed_position;
+
+				component.real_position = {
+					top: real_position.top,
+					left: real_position.left,
+					right: real_position.right,
+					bottom: real_position.bottom
+				};
+				component.computed_position = {
+					top: computed_position.top,
+					left: computed_position.left,
+					right: computed_position.right,
+					bottom: computed_position.bottom
+				};
+			}
+
+			group_temp_id_arr.push(group.temp_id);
+		}
+
+        this.setActiveComponentsAndGroups(temp_id_arr, group_temp_id_arr);
     },
     updateGroupPositionFromActiveGroup: function(active_group) {
         var group = this.getGroupByTempId(active_group.temp_id);
@@ -2753,7 +2919,7 @@ var History = {
                 case "add_component":
                     Sheet.deleteComponentsFromHistory(currentState);
                     break;
-                case "move_component":
+                case "move_component_or_group":
                     Sheet.moveComponentFromHistoryUndo(currentState);
                     break;
                 case "resize_component":
@@ -2780,7 +2946,7 @@ var History = {
                 case "add_component":
                     Sheet.addComponentsFromHistory(currentState);
                     break;
-                case "move_component":
+                case "move_component_or_group":
                     Sheet.moveComponentFromHistoryRedo(currentState);
                     break;
                 case "resize_component":
