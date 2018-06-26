@@ -1,0 +1,343 @@
+.left-pane, .component-item-name, .header-item, .contextmenu {
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+.header {
+	width: 100vw;
+	height: 60px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	border-bottom: 1px solid #AAA;
+}
+
+.header-left {
+	width: 200px;
+	display: inline-block;
+}
+
+.header-item {
+	display: inline-block;
+	padding: 0 10px;
+	height: 50px;
+	margin-top: 5px;
+	cursor: default;
+}
+
+.header-item:hover {
+	background-color: #DDD;
+}
+
+.header-item.disabled, .header-item.disabled:hover {
+    opacity: 0.3;
+    background-color: transparent;
+}
+
+.header-item-image {
+	height: 30px;
+	text-align: center;
+}
+
+.header-item-image svg {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.header-item-name {
+	font-size: 10pt;
+	text-align: center;
+}
+
+.left-pane, .right-pane {
+	position: absolute;
+	top: 60px;
+	height: calc(100vh - 60px);
+}
+
+.draggable-component {
+	position: absolute;
+	z-index: 500;
+	width: 200px;
+	height: 200px;
+	display: none;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	opacity: 0.5;
+}
+
+.draggable-component-canvas {
+	display: none;
+}
+
+.draggable-component.dragging {
+	display: block;
+}
+
+.left-pane {
+	left: 0;
+	width: 250px;
+	border-right: 1px solid #CCC;
+}
+
+.right-pane {
+	right: 0;
+	width: 250px;
+	border-left: 1px solid #CCC;
+}
+
+.right-pane-section.hide {
+	visibility: hidden;
+}
+
+.right-pane-section-title {
+	padding: 10px;
+	background-color: #EEE;
+}
+
+.right-pane-section-content {
+	padding: 10px;
+}
+
+.form-item {
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.form-item.inline {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.form-label {
+	margin-bottom: 5px;
+}
+
+.form-label.inline {
+	display: inline-block;
+	margin-bottom: 0;
+}
+
+.form-input {
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	padding: 5px;
+}
+
+.form-input-textarea {
+	resize: vertical;
+	height: 150px;
+}
+
+.form-item.hide, .form-input-text.hide, .form-input-textarea.hide {
+	display: none;
+}
+
+.input-right-label {
+	display: inline-block;
+	position: absolute;
+	top: 26px;
+	right: 6px;
+}
+
+.form-item-size, .form-item-color {
+	width: 100px;
+}
+
+.form-item-size {
+	margin-right: 20px;
+}
+
+.input-color {
+	background-color: red;
+	width: 100px;
+	height: 27px;
+	border-radius: 3px;
+}
+
+.sheet-container {
+	position: absolute;
+	top: 60px;
+	left: 250px;
+	width: calc(100vw - 500px);
+	height: calc(100vh - 60px);
+	background-color: #EEE;
+	overflow: auto;
+	text-align: center;
+}
+
+.sheet-container-inner {
+	width: 100%;
+	height: auto;
+	position: relative;
+	overflow: auto;
+	padding: 100px 50px;
+}
+
+.sheet {
+	display: inline-block;
+	width: 700px;
+	height: 700px;
+	background-color: white;
+	box-shadow: 0 0 5px #CCC;
+}
+
+.sheet-canvas, .sheet-temp {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.sheet-temp[cursor-resize="top-left"] {
+	cursor: nw-resize;
+}
+
+.sheet-temp[cursor-resize="top-center"] {
+	cursor: n-resize;
+}
+
+.sheet-temp[cursor-resize="top-right"] {
+	cursor: ne-resize;
+}
+
+.sheet-temp[cursor-resize="middle-left"] {
+	cursor: w-resize;
+}
+
+.sheet-temp[cursor-resize="middle-right"] {
+	cursor: e-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-left"] {
+	cursor: sw-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-center"] {
+	cursor: s-resize;
+}
+
+.sheet-temp[cursor-resize="bottom-right"] {
+	cursor: se-resize;
+}
+
+input[type="text"] {
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	padding: 5px;
+}
+
+.search {
+	padding: 10px;
+}
+
+.input-search {
+	display: block;
+	width: 100%;
+}
+
+.component-group {
+	display: block;
+	width: 100%;
+	border-left: 1px solid #CCC;
+	border-top: 1px solid #CCC;
+}
+
+.component-group-title {
+	width: 100%;
+	padding: 5px 10px;
+	background-color: #EEE;
+	border-bottom: 1px solid #CCC;
+}
+
+.component-item-container {
+	height: calc(100vh - 137px);
+	overflow-y: auto;
+}
+
+.component-item {
+	float: left;
+	width: 115px;
+	height: 115px;
+	border-bottom: 1px solid #DDD;
+	padding-top: 15px;
+	cursor: default;
+}
+
+.component-item:nth-child(odd) {
+	border-right: 1px solid #DDD;
+}
+
+.component-item:hover {
+	background-color: #EEE;
+}
+
+.component-item-image {
+	width: 70px;
+	height: 70px;
+	margin: 0 auto 10px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.component-item-name {
+	text-align: center;
+}
+
+.component-edit, .component-edit-textarea {
+	width: 250px;
+	position: absolute;
+	z-index: 10;
+	top: 100px;
+	left: 100px;
+	padding: 5px;
+	display: none;
+}
+
+.component-edit.show, .component-edit-textarea.show {
+	display: block;
+}
+
+.component-edit-textarea {
+	height: 80px;
+}
+
+.contextmenu-container {
+    position: fixed;
+    z-index: 100;
+    width: 200px;
+    background-color: white;
+    padding: 10px 0;
+    box-shadow: 0 0 5px #777;
+    display: none;
+}
+
+.contextmenu-container.show {
+    display: block;
+}
+
+.contextmenu {
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+.contextmenu:hover {
+    background-color: #DDD;
+}
+
+.contextmenu.disabled {
+    background-color: white;
+    color: #AAA;
+    cursor: default;
+}
+
+.contextmenu.hide {
+    display: none;
+}
