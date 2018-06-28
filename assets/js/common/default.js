@@ -1369,6 +1369,28 @@ var Sheet = {
             this.components.splice(components[i].componentIndex, 0, components[i].component);
             this.setActiveComponent(components[i].component.temp_id);
         }
+	},
+	addComponentsAndGroupsFromHistory: function(currentState) {
+        var components = currentState.components;
+        var iLength = components.length;
+		this.removeAllActiveComponents();
+		
+        for (var i = 0; i < iLength; i++) {
+            this.components.splice(components[i].componentIndex, 0, components[i].component);
+            this.setActiveComponent(components[i].component.temp_id);
+		}
+		
+		var groups = currentState.groups;
+		iLength = groups.length;
+		for (var i = 0; i < iLength; i++) {
+			var jLength = groups[i].group.components.length;
+			for (var j = 0; j < jLength; j++) {
+				this.components.push(groups[i].group.components[j]);
+			}
+
+			this.groups.splice(groups[i].groupIndex, 0, groups[i].group);
+			this.setActiveGroup(groups[i].group);
+		}
     },
 	isHittingComponentOnMouseDown: false,
     active_components: [],
@@ -2073,10 +2095,42 @@ var Sheet = {
 				}
 			}
 		}
-        this.removeAllActiveComponents();
+		
+		iLength = this.active_groups.length;
+		var groups_arr = [];
+		for (var i = 0; i < iLength; i++) {
+			var temp_id = this.active_groups[i].temp_id;
+			var jLength = this.groups.length;
+			for (var j = 0; j < jLength; j++) {
+				if (this.groups[j].temp_id == temp_id) {
+					var kLength = this.groups[j].components.length;
+					for (var k = 0; k < kLength; k++) {
+						var component_temp_id = this.groups[j].components[k].temp_id;
+						var lLength = this.components.length;
+						for (var l = 0; l < lLength; l++) {
+							if (this.components[l].temp_id == component_temp_id) {
+								this.components.splice(l, 1);
+								break;
+							}
+						}
+					}
+
+					groups_arr.push({
+						groupIndex: j,
+						group: this.groups[j]
+					});
+					this.groups.splice(j, 1);
+					break;
+				}
+			}
+		}
+
+		this.removeAllActiveComponents();
+
         History.addToStack({
-            type: "delete_component",
-            components: components_arr
+            type: "delete_component_or_group",
+			components: components_arr,
+			groups: groups_arr
         });
     },
     deleteComponentsFromHistory: function(currentState) {
@@ -2093,6 +2147,46 @@ var Sheet = {
             }
         }
         this.removeAllActiveComponents();
+	},
+	deleteComponentsAndGroupsFromHistory: function(currentState) {
+        var components = currentState.components;
+        var iLength = components.length;
+		for (var i = 0; i < iLength; i++) {
+            var temp_id = components[i].component.temp_id;
+            var jLength = this.components.length;
+            for (var j = 0; j < jLength; j++) {
+                if (this.components[j].temp_id == temp_id) {
+                    this.components.splice(j, 1);
+                    break;
+                }
+            }
+        }
+		
+		iLength = this.active_groups.length;
+		for (var i = 0; i < iLength; i++) {
+			var temp_id = this.active_groups[i].temp_id;
+			var jLength = this.groups.length;
+			for (var j = 0; j < jLength; j++) {
+				if (this.groups[j].temp_id == temp_id) {
+					var kLength = this.groups[j].components.length;
+					for (var k = 0; k < kLength; k++) {
+						var component_temp_id = this.groups[j].components[k].temp_id;
+						var lLength = this.components.length;
+						for (var l = 0; l < lLength; l++) {
+							if (this.components[l].temp_id == component_temp_id) {
+								this.components.splice(l, 1);
+								break;
+							}
+						}
+					}
+
+					this.groups.splice(j, 1);
+					break;
+				}
+			}
+		}
+
+		this.removeAllActiveComponents();
     },
     groups: [],
     active_groups: [],
@@ -2235,7 +2329,7 @@ var Sheet = {
                 temp_real_position.bottom = currentGroup.real_position.bottom;
             }
 
-            this.deleteGroup(currentGroup.temp_id);
+            this.ungroup(currentGroup.temp_id);
             old_groups_arr.push(old_group);
         }
 
@@ -2311,7 +2405,7 @@ var Sheet = {
                 var component = this.getComponentByTempId(group.components[j]);
                 group_components.push(component);
             }
-            this.deleteGroup(group.temp_id);
+            this.ungroup(group.temp_id);
         }
 
         var new_group = {
@@ -2356,7 +2450,7 @@ var Sheet = {
         }
         return null;
     },
-    deleteGroup: function(temp_id) {
+    ungroup: function(temp_id) {
         var iLength = this.groups.length;
         for (var i = 0; i < iLength; i++) {
             if (this.groups[i].temp_id == temp_id) {
@@ -2364,7 +2458,10 @@ var Sheet = {
                 break;
             }
         }
-    },
+	},
+	deleteGroup: function() {
+
+	},
     ungroupFromHistoryUndo: function(currentState) {
         var group_temp_id = currentState.new_group.temp_id;
         var iLength = this.groups.length;
@@ -2925,8 +3022,8 @@ var History = {
                 case "resize_component":
                     Sheet.resizeComponentFromHistoryUndo(currentState);
                     break;
-                case "delete_component":
-                    Sheet.addComponentsFromHistory(currentState);
+                case "delete_component_or_group":
+                    Sheet.addComponentsAndGroupsFromHistory(currentState);
                     break;
                 case "create_group":
                     Sheet.ungroupFromHistoryUndo(currentState);
@@ -2952,8 +3049,8 @@ var History = {
                 case "resize_component":
                     Sheet.resizeComponentFromHistoryRedo(currentState);
                     break;
-                case "delete_component":
-                    Sheet.deleteComponentsFromHistory(currentState);
+                case "delete_component_or_group":
+                    Sheet.deleteComponentsAndGroupsFromHistory(currentState);
                     break;
                 case "create_group":
                     Sheet.createGroupFromHistoryRedo(currentState);
