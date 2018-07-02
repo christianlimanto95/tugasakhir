@@ -353,9 +353,10 @@ function menuClick(menu) {
 
             break;
         case "delete":
-            //hideTextSection();
-            Sheet.deleteComponentsFromActiveComponents();
-            Sheet.draw(sheetContext);
+            if (Sheet.active_components.length > 0 || Sheet.active_groups.length > 0) {
+                Sheet.deleteComponentsFromActiveComponents();
+                Sheet.draw(sheetContext);
+            }
             break;
         case "group":
             Sheet.createGroupFromActiveComponents();
@@ -425,7 +426,7 @@ function e_contextmenu_sheetTemp(e) {
 function e_keydown_document(e) {
 	switch (e.which) {
 		case 46:
-			if (Sheet.active_components.length > 0) {
+			if (Sheet.active_components.length > 0 || Sheet.active_groups.length > 0) {
 				Sheet.deleteComponentsFromActiveComponents();
 				Sheet.draw(sheetContext);
 			}

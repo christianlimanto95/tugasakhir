@@ -1367,7 +1367,8 @@ var Sheet = {
         this.removeAllActiveComponents();
         for (var i = 0; i < iLength; i++) {
             this.components.splice(components[i].componentIndex, 0, components[i].component);
-            this.setActiveComponent(components[i].component.temp_id);
+			this.setActiveComponent(components[i].component.temp_id);
+			console.log(components[i].component.temp_id + " : " + components[i].component.computed_position.left + ", " + components[i].component.computed_position.top);
         }
 	},
 	addComponentsAndGroupsFromHistory: function(currentState) {
@@ -2365,27 +2366,11 @@ var Sheet = {
                 real_size: null,
                 computed_size: null
             }
-        };
-        stackItem.new_group.real_position = {
-            top: group.real_position.top,
-            left: group.real_position.left,
-            right: group.real_position.right,
-            bottom: group.real_position.bottom
-        };
-        stackItem.new_group.computed_position = {
-            top: group.computed_position.top,
-            left: group.computed_position.left,
-            right: group.computed_position.right,
-            bottom: group.computed_position.bottom
-        };
-        stackItem.new_group.real_size = {
-            width: group.real_size.width,
-            height: group.real_size.height
-        };
-        stackItem.new_group.computed_size = {
-            width: group.computed_size.width,
-            height: group.computed_size.height
-        };
+		};
+		stackItem.new_group.real_position = clone(group.real_position);
+        stackItem.new_group.computed_position = clone(group.computed_position);
+        stackItem.new_group.real_size = clone(group.real_size);
+        stackItem.new_group.computed_size = clone(group.computed_size);
 
         History.addToStack(stackItem);
     },
@@ -2415,27 +2400,11 @@ var Sheet = {
             computed_position: null,
             real_size: null,
             computed_size: null
-        };
-        new_group.real_position = {
-            top: currentState.new_group.real_position.top,
-            left: currentState.new_group.real_position.left,
-            right: currentState.new_group.real_position.right,
-            bottom: currentState.new_group.real_position.bottom
-        };
-        new_group.computed_position = {
-            top: currentState.new_group.computed_position.top,
-            left: currentState.new_group.computed_position.left,
-            right: currentState.new_group.computed_position.right,
-            bottom: currentState.new_group.computed_position.bottom
-        };
-        new_group.real_size = {
-            width: currentState.new_group.real_size.width,
-            height: currentState.new_group.real_size.height
-        };
-        new_group.computed_size = {
-            width: currentState.new_group.computed_size.width,
-            height: currentState.new_group.computed_size.height
-        };
+		};
+		new_group.real_position = clone(currentState.new_group.real_position);
+        new_group.computed_position = clone(currentState.new_group.computed_position);
+        new_group.real_size = clone(currentState.new_group.real_size);
+        new_group.computed_size = clone(currentState.new_group.computed_size);
         
         this.groups.push(new_group);
         this.removeAllActiveComponents();
@@ -2475,7 +2444,7 @@ var Sheet = {
         var group_temp_id_arr = [];
         var iLength = currentState.old_groups.length;
         for (var i = 0; i < iLength; i++) {
-            var old_group = currentState.old_groups[i];
+            var old_group = clone(currentState.old_groups[i]);
             group_temp_id_arr.push(old_group.temp_id);
             var group = {
                 temp_id: old_group.temp_id,
@@ -2543,7 +2512,8 @@ var Sheet = {
     },
     setActiveGroup: function(group) {
         group = clone(group);
-        this.active_groups.push(group);
+		this.active_groups.push(group);
+		this.activeComponentChanged();
     },
     isInGroup: function(temp_id) {
         var iLength = this.groups.length;
@@ -3011,7 +2981,7 @@ var History = {
     },
     do_undo: function(context, tempContext) {
         if (this.pointer > -1) {
-            var currentState = this.stack[this.pointer];
+            var currentState = clone(this.stack[this.pointer]);
             switch (currentState.type) {
                 case "add_component":
                     Sheet.deleteComponentsFromHistory(currentState);
@@ -3028,7 +2998,17 @@ var History = {
                 case "create_group":
                     Sheet.ungroupFromHistoryUndo(currentState);
                     break;
-            }
+			}
+			
+			for (var i = 0; i < this.stack.length; i++) {
+				var currentState = this.stack[i];
+				if (currentState.type == "add_component") {
+					var component = currentState.components[0];
+					var computed_position = component.component.computed_position;
+					console.log(computed_position.left + ", " + computed_position.top);
+					break;
+				}
+			}
 
             this.pointer--;
             this.stackValueChanged();
@@ -3038,7 +3018,7 @@ var History = {
     do_redo: function(context, tempContext) {
         if (this.pointer + 1 < this.stack.length) {
             this.pointer++;
-            var currentState = this.stack[this.pointer];
+            var currentState = clone(this.stack[this.pointer]);
             switch (currentState.type) {
                 case "add_component":
                     Sheet.addComponentsFromHistory(currentState);
@@ -3055,7 +3035,17 @@ var History = {
                 case "create_group":
                     Sheet.createGroupFromHistoryRedo(currentState);
                     break;
-            }
+			}
+			
+			for (var i = 0; i < this.stack.length; i++) {
+				var currentState = this.stack[i];
+				if (currentState.type == "add_component") {
+					var component = currentState.components[0];
+					var computed_position = component.component.computed_position;
+					console.log(component.temp_id + " : " + computed_position.left + ", " + computed_position.top);
+					break;
+				}
+			}
 
             this.stackValueChanged();
             Sheet.draw(context);
