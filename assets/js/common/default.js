@@ -1351,24 +1351,24 @@ var Sheet = {
 		this.components.push(component);
 		this.removeAllActiveComponents();
 		this.setActiveComponent(this.temp_id);
-        this.temp_id++;
+		this.temp_id++;
 
         History.addToStack({
             type: "add_component",
             components: [{
                 componentIndex: this.components.length - 1,
-                component: component
+                component: clone(component)
             }],
         });
     },
     addComponentsFromHistory: function(currentState) {
         var components = currentState.components;
-        var iLength = components.length;
+		var iLength = components.length;
         this.removeAllActiveComponents();
         for (var i = 0; i < iLength; i++) {
             this.components.splice(components[i].componentIndex, 0, components[i].component);
 			this.setActiveComponent(components[i].component.temp_id);
-			console.log(components[i].component.temp_id + " : " + components[i].component.computed_position.left + ", " + components[i].component.computed_position.top);
+			var index = components[i].componentIndex;
         }
 	},
 	addComponentsAndGroupsFromHistory: function(currentState) {
@@ -3005,7 +3005,6 @@ var History = {
 				if (currentState.type == "add_component") {
 					var component = currentState.components[0];
 					var computed_position = component.component.computed_position;
-					console.log(computed_position.left + ", " + computed_position.top);
 					break;
 				}
 			}
@@ -3042,7 +3041,6 @@ var History = {
 				if (currentState.type == "add_component") {
 					var component = currentState.components[0];
 					var computed_position = component.component.computed_position;
-					console.log(component.temp_id + " : " + computed_position.left + ", " + computed_position.top);
 					break;
 				}
 			}
