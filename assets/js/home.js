@@ -3,7 +3,7 @@ var contextMenuContainer, header;
 var draggableComponent, draggableComponentId = "-1";
 var isDraggingFromToolbar = false;
 var mouseDown = false, mouseDrag = false, mouseResize = false;
-var dotsHit = "";
+var dotsHit = {value: "", type: ""};
 var keyPressed = {
 	"ctrl": false,
 	"shift": false
@@ -236,7 +236,7 @@ function e_mousedown_sheetTemp(e) {
     if (e.which == 1) {
         var coor = translateMouseCoorToComputedCoor(e);
         dotsHit = isHittingDots(coor);
-        if (dotsHit == "") {
+        if (dotsHit.value == "") {
             var component = Sheet.isHittingComponent(coor.x, coor.y);
             if (component != null) {
                 Sheet.isHittingComponentOnMouseDown = true;
@@ -269,7 +269,7 @@ function e_mousedown_sheetTemp(e) {
                 x: e.pageX,
                 y: e.pageY
             };
-            SheetTemp.dotsHit = dotsHit;
+            SheetTemp.dotsHit = dotsHit.value;
             var iLength = Sheet.active_components.length;
             for (var i = 0; i < iLength; i++) {
                 SheetTemp.addComponent(Sheet.active_components[i]);
@@ -295,8 +295,7 @@ function e_mousemove_document(e) {
 			"top": e.pageY + "px",
 			"left": e.pageX + "px"
 		});
-	}
-	else if (dotsHit != "") {
+	} else if (dotsHit.value != "") {
 		SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY}, keyPressed.shift);
 		SheetTemp.draw(sheetTempContext);
 		mouseResize = true;
@@ -341,7 +340,7 @@ function e_mouseup_document(e) {
         mouseDown = false;
         mouseDrag = false;
         mouseResize = false;
-        dotsHit = "";
+        dotsHit = {value: "", type: ""};
     }
 }
 
@@ -509,12 +508,12 @@ function hideComponentEdit() {
 function mousemoveIsHoveringDots(e) {
 	var coor = translateMouseCoorToComputedCoor(e);
 	var found = isHittingDots(coor);
-	$(sheetTempCanvas).attr("cursor-resize", found);
+	$(sheetTempCanvas).attr("cursor-resize", found.value);
 }
 
 function isHittingDots(coor) {
 	var iLength = Sheet.active_components.length;
-	var found = "";
+	var found = "", type = "";
 	for (var i = 0; i < iLength; i++) {
 		var component = Sheet.active_components[i];
 
@@ -526,33 +525,90 @@ function isHittingDots(coor) {
 		var bottom = component.computed_position.bottom;
 
 		if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
-			found = "top-left";
+            found = "top-left";
+            type = "component";
 			break;
 		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
-			found = "top-center";
+            found = "top-center";
+            type = "component";
 			break;
 		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
-			found = "top-right";
+            found = "top-right";
+            type = "component";
 			break;
 		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
-			found = "middle-left";
+            found = "middle-left";
+            type = "component";
 			break;
 		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
-			found = "middle-right";
+            found = "middle-right";
+            type = "component";
 			break;
 		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
-			found = "bottom-left";
+            found = "bottom-left";
+            type = "component";
 			break;
 		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
-			found = "bottom-center";
+            found = "bottom-center";
+            type = "component";
 			break;
 		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
-			found = "bottom-right";
+            found = "bottom-right";
+            type = "component";
 			break;
 		}
-	}
+    }
+    
+    iLength = Sheet.active_groups.length;
+    for (var i = 0; i < iLength; i++) {
+		var group = Sheet.active_groups[i];
 
-	return found;
+		var left = group.computed_position.left;
+		var center = left + group.computed_size.width / 2;
+		var right = group.computed_position.right;
+		var top = group.computed_position.top;
+		var middle = top + group.computed_size.height / 2;
+		var bottom = group.computed_position.bottom;
+
+		if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+            found = "top-left";
+            type = "group";
+			break;
+		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+            found = "top-center";
+            type = "group";
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= top - 5 && coor.y <= top + 5) {
+            found = "top-right";
+            type = "group";
+			break;
+		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
+            found = "middle-left";
+            type = "group";
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= middle - 5 && coor.y <= middle + 5) {
+            found = "middle-right";
+            type = "group";
+			break;
+		} else if (coor.x >= left - 5 && coor.x <= left + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+            found = "bottom-left";
+            type = "group";
+			break;
+		} else if (coor.x >= center - 5 && coor.x <= center + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+            found = "bottom-center";
+            type = "group";
+			break;
+		} else if (coor.x >= right - 5 && coor.x <= right + 5 && coor.y >= bottom - 5 && coor.y <= bottom + 5) {
+            found = "bottom-right";
+            type = "group";
+			break;
+		}
+    }
+
+    return {
+        value: found,
+        type: type
+    };
 }
 
 function releaseDragging(e) {

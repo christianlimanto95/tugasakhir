@@ -1997,7 +1997,7 @@ var Sheet = {
 		}
 		
 		var groups_arr = [];
-		iLength = this.active_components.length;
+		iLength = this.active_groups.length;
 		for (var i = 0; i < iLength; i++) {
 			var active_group = this.active_groups[i];
 			var group = this.getGroupByTempId(active_group.temp_id);
@@ -2856,7 +2856,7 @@ var SheetTemp = {
 					this.updateObjectSize_bottomCenter(this.components[i], selisihY);
 				}
 
-				for (var j = 0; j < jlength; j++) {
+				for (var j = 0; j < jLength; j++) {
 					this.updateObjectSize_bottomCenter(this.groups[j], selisihY);
 
 					var kLength = this.groups[j].components.length;
@@ -3082,8 +3082,7 @@ var History = {
     stack: [],
     addToStack: function(data) {
         if (this.pointer + 1 < this.stack.length) {
-            this.stack = [];
-            this.pointer = -1;
+			this.stack.splice(this.pointer + 1, this.stack.length - this.pointer + 1);
         }
         this.stack.push(data);
         this.pointer++;
