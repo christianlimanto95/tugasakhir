@@ -274,6 +274,10 @@ function e_mousedown_sheetTemp(e) {
             for (var i = 0; i < iLength; i++) {
                 SheetTemp.addComponent(Sheet.active_components[i]);
             }
+            iLength = Sheet.active_groups.length;
+            for (var i = 0; i < iLength; i++) {
+                SheetTemp.addGroup(Sheet.active_groups[i]);
+            }
 
             SheetTemp.draw(sheetTempContext);
             Sheet.drawWithoutActiveComponent(sheetContext);
@@ -319,7 +323,7 @@ function e_mouseup_document(e) {
             if (mouseDrag) {
                 Sheet.updateActiveComponentsPosition(SheetTemp.components, SheetTemp.groups);
             } else if (mouseResize) {
-                Sheet.updateActiveComponentsSize(SheetTemp.components);
+                Sheet.updateActiveComponentsSize(SheetTemp.components, SheetTemp.groups);
             } else {
                 if (!keyPressed.ctrl) {
                     Sheet.removeAllActiveComponents();
