@@ -53,6 +53,24 @@
 	text-align: center;
 }
 
+.header-login-container {
+	float: right;
+	margin-top: 10px;
+	margin-right: 50px;
+}
+
+.header-login {
+	margin-right: 10px;
+}
+
+.header-register {
+	background-color: #43A047;
+}
+
+.header-register:hover {
+	background-color: #388E3C;
+}
+
 .left-pane, .right-pane {
 	position: absolute;
 	top: 60px;

@@ -67,6 +67,10 @@
         </div>
         <div class="header-item-name">Delete</div>
     </div>
+    <div class="header-login-container">
+        <div class="btn header-login">Login</div>
+        <a href="<?php echo base_url("register"); ?>" class="btn header-register">Register</a>
+    </div>
 </div>
 <div class="draggable-component"></div>
 <canvas class="draggable-component-canvas"></canvas>

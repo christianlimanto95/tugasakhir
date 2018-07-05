@@ -4,19 +4,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //include general controller supaya bisa extends General_controller
 require_once("application/core/General_controller.php");
 
-class Home extends General_controller {
+class Dashboard extends General_controller {
 	public function __construct() {
 		parent::__construct();
-		$this->load->model("Home_model");
+		$this->load->model("Dashboard_model");
 	}
 	
 	public function index()
 	{
-        parent::load_additional_js("script");
 		$data = array(
-			"title" => "Home"
+			"title" => "Dashboard"
 		);
 		
-		parent::view("home", $data);
+		parent::view("dashboard", $data);
 	}
 }
