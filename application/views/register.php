@@ -18,7 +18,7 @@
             <div class="register-title">Register</div>
             <div class="form-item">
                 <div class="form-label">Name <span class="error error-name"></span></div>
-                <input type="text" class="form-input input-name" maxlength="50" />
+                <input type="text" class="form-input input-name" maxlength="50" autofocus />
             </div>
             <div class="form-item">
                 <div class="form-label">Email <span class="error error-email"></span></div>
@@ -36,6 +36,10 @@
         </div>
     </div>
 </div>
+<script>
+var register_url = "<?php echo base_url("register/do_register"); ?>";
+var dashboard_url = "<?php echo base_url("dashboard"); ?>";
+</script>
 <script src="<?php echo base_url("assets/js/common/jquery-3.2.1.min.js"); ?>" defer></script>
 <script src="<?php echo base_url("assets/js/common/default.js"); ?>" defer></script>
 <script src="<?php echo base_url("assets/js/register.js"); ?>" defer></script>

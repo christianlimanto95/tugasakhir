@@ -15,8 +15,8 @@
     <div class="header-profile">
         <div class="header-profile-image" style="background-image: url(<?php echo base_url("assets/icons/profile.png"); ?>);"></div>
         <div class="profile-menu-container">
-            <a href="#" class="profile-menu">Settings</a>
-            <a href="#" class="profile-menu">Logout</a>
+            <a href="<?php echo base_url("dashboard/settings"); ?>" class="profile-menu">Settings</a>
+            <a href="<?php echo base_url("dashboard/logout"); ?>" class="profile-menu">Logout</a>
         </div>
     </div>
 </div>

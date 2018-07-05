@@ -64,4 +64,12 @@ class General_controller extends CI_Controller
             redirect(base_url());
         }
     }
+
+    function show_404_if_not_ajax() {
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' )) {
+            return true;
+        } else {
+            show_404();
+        }
+    }
 }

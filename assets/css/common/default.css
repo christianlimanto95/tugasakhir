@@ -131,6 +131,67 @@ body {
     }
 }
 
+.notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: inline-block;
+    min-width: 120px;
+    height: 54px;
+    background-color: black;
+    color: white;
+    font-size: 12pt;
+    padding: 17px 25px 0;
+    opacity: 0;
+    display: none;
+    z-index: 502;
+}
+  
+@-webkit-keyframes notification-showing-anim {
+    0% {
+      opacity: 0;
+    }
+  
+    5% {
+      opacity: 1;
+    }
+  
+    95% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+}
+  
+@keyframes notification-showing-anim {
+    0% {
+      opacity: 0;
+    }
+  
+    5% {
+      opacity: 1;
+    }
+  
+    95% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+}
+  
+.notification.showing {
+    display: block;
+    -webkit-animation: 4s linear 0s 1 normal forwards running notification-showing-anim;
+    -moz-animation: 4s linear 0s 1 normal forwards running notification-showing-anim;
+    -ms-animation: 4s linear 0s 1 normal forwards running notification-showing-anim;
+    -o-animation: 4s linear 0s 1 normal forwards running notification-showing-anim;
+    animation: 4s linear 0s 1 normal forwards running notification-showing-anim;
+}
+
 .btn {
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -153,6 +214,13 @@ body {
 
 .btn:hover {
 	background-color: #1976D2;
+}
+
+.btn.disabled, .btn.disabled:hover {
+    background-color: #CCC;
+    color: #777;
+    cursor: default;
+    box-shadow: none;
 }
 
 .error {

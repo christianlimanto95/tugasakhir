@@ -18,5 +18,10 @@ class Dashboard extends General_controller {
 		);
 		
 		parent::dashboardview("dashboard", $data);
-	}
+    }
+    
+    public function logout() {
+        $this->session->unset_userdata("user_id");
+		redirect(base_url("login"));
+    }
 }
