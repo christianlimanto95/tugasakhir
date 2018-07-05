@@ -131,7 +131,7 @@ body {
     }
 }
 
-.btn {
+.btn, .profile-menu-container {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
@@ -157,4 +157,80 @@ body {
 
 .error {
     color: red;
+}
+
+.header-top {
+    width: 100vw;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 10px #999;
+}
+
+.header-profile {
+    float: right;
+    margin-right: 50px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.header-profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.profile-menu-container {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    width: 100px;
+    background-color: white;
+    box-shadow: 0 0 5px #999;
+    padding: 10px 0;
+    display: none;
+}
+
+.header-profile.show-profile-menu .profile-menu-container {
+    display: inline-block;
+}
+
+.profile-menu {
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+.profile-menu:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #6A1B9A;
+}
+
+.header-left-upper {
+    height: 150px;
+}
+
+.header-menu {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 20px 0 20px 20px;
+}
+
+.header-menu:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }

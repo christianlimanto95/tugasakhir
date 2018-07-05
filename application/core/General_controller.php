@@ -39,6 +39,26 @@ class General_controller extends CI_Controller
         $this->load->view('common/footer');
     }
 
+    public function dashboardview($file, $data){
+        $data["additional_css"] = $this->additional_css;
+        $data["additional_js"] = $this->additional_js;
+		$data["page_name"] = $file;
+		
+        $this->load->view('common/dashboardheader', $data);
+        $this->load->view($file, $data);
+        $this->load->view('common/dashboardfooter');
+    }
+
+    public function redirect_if_not_logged_in() {
+        if (!$this->session->userdata('user_id', true)) {
+            redirect(base_url("login"));
+        }
+    }
+    
+    public function is_logged_in() {
+        return $this->session->userdata('user_id', true);
+    }
+
 	public function cek_login() {
         if ($this->session->userdata('isLoggedIn') != 1) {
             redirect(base_url());
