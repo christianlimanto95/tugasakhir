@@ -1,5 +1,14 @@
 <div class="header">
     <div class="header-left"></div>
+    <div class="header-item disabled" data-header-item-name="save">
+        <div class="header-item-image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+        </svg>
+        </div>
+        <div class="header-item-name">Save</div>
+    </div>
     <div class="header-item disabled" data-header-item-name="undo">
         <div class="header-item-image">
         <svg fill="#000000" height="30" viewBox="0 0 24 24" width="30" xmlns="http://www.w3.org/2000/svg">
@@ -249,6 +258,8 @@
     <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="send_to_back">Send to Back</div>
 </div>
 <script>
+var workspace_id = "<?php echo $workspace_id; ?>";
+var save_url = "<?php echo base_url("home/save"); ?>";
 var do_login_url = "<?php echo base_url("login/do_login"); ?>";
 var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";

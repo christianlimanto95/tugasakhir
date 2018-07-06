@@ -133,6 +133,7 @@ $(function() {
                 contextMenuContainer.find(".contextmenu[data-contextmenu='redo']").removeClass("disabled");
             }
         }
+        header.find(".header-item[data-header-item-name='save']").removeClass("disabled");
     };
 
 	$(window).on("resize", function() {
@@ -224,6 +225,10 @@ function initialize() {
 	};
 
 	Sheet.draw(sheetContext);
+}
+
+function save() {
+    
 }
 
 function e_mousedown_componentItem(e) {
@@ -406,10 +411,10 @@ function e_mouseup_document(e) {
 function menuClick(menu) {
     switch (menu) {
         case "undo":
-            History.do_undo(sheetContext, sheetTempContext);
+            History.do_undo(sheetContext);
             break;
         case "redo":
-            History.do_redo(sheetContext, sheetTempContext);
+            History.do_redo(sheetContext);
             break;
         case "copy":
 
@@ -501,12 +506,12 @@ function e_keydown_document(e) {
             break;
         case 90: // Ctrl + Z
             if (keyPressed.ctrl) {
-                History.do_undo(sheetContext, sheetTempContext);
+                History.do_undo(sheetContext);
             }
             break;
         case 89: // Ctrl + Y
             if (keyPressed.ctrl) {
-                History.do_redo(sheetContext, sheetTempContext);
+                History.do_redo(sheetContext);
             }
             break;
 	}

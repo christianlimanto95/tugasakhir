@@ -3094,7 +3094,7 @@ var History = {
             this.onStackValueChanged();
         }
     },
-    do_undo: function(context, tempContext) {
+    do_undo: function(context) {
         if (this.pointer > -1) {
             var currentState = clone(this.stack[this.pointer]);
             switch (currentState.type) {
@@ -3114,22 +3114,13 @@ var History = {
                     Sheet.ungroupFromHistoryUndo(currentState);
                     break;
 			}
-			
-			for (var i = 0; i < this.stack.length; i++) {
-				var currentState = this.stack[i];
-				if (currentState.type == "add_component") {
-					var component = currentState.components[0];
-					var computed_position = component.component.computed_position;
-					break;
-				}
-			}
 
             this.pointer--;
             this.stackValueChanged();
             Sheet.draw(context);
         }
     },
-    do_redo: function(context, tempContext) {
+    do_redo: function(context) {
         if (this.pointer + 1 < this.stack.length) {
             this.pointer++;
             var currentState = clone(this.stack[this.pointer]);
@@ -3149,15 +3140,6 @@ var History = {
                 case "create_group":
                     Sheet.createGroupFromHistoryRedo(currentState);
                     break;
-			}
-			
-			for (var i = 0; i < this.stack.length; i++) {
-				var currentState = this.stack[i];
-				if (currentState.type == "add_component") {
-					var component = currentState.components[0];
-					var computed_position = component.component.computed_position;
-					break;
-				}
 			}
 
             this.stackValueChanged();
