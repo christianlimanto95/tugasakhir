@@ -242,7 +242,7 @@ var Component = {
 */
 // ---------------------------------------------------------------------
 var Group = {
-	id: "-1",
+	temp_id: "-1",
 	components: [],
 	real_size: {
 		width: 0,
@@ -3080,11 +3080,13 @@ var SheetTemp = {
 var History = {
     pointer: -1,
     stack: [],
+    saveStack: [],
     addToStack: function(data) {
         if (this.pointer + 1 < this.stack.length) {
 			this.stack.splice(this.pointer + 1, this.stack.length - this.pointer + 1);
         }
         this.stack.push(data);
+        this.saveStack.push(data);
         this.pointer++;
         this.stackValueChanged();
     },
@@ -3116,6 +3118,7 @@ var History = {
 			}
 
             this.pointer--;
+            this.saveStack.pop();
             this.stackValueChanged();
             Sheet.draw(context);
         }
@@ -3142,6 +3145,7 @@ var History = {
                     break;
 			}
 
+            this.saveStack.push(currentState);
             this.stackValueChanged();
             Sheet.draw(context);
         }

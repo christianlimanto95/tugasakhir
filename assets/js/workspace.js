@@ -228,7 +228,97 @@ function initialize() {
 }
 
 function save() {
-    
+    if (!$(".header-item[data-header-item-name='save']").hasClass("disabled")) {
+        $(".header-item[data-header-item-name='save']").addClass("disabled");
+        showLoader();
+        var progress_history = [];
+        var iLength = History.saveStack.length;
+        for (var i = 0; i < iLength; i++) {
+            var item = History.saveStack[i];
+            switch (item.type) {
+                case "add_component":
+                    var history_item_components = [];
+                    var jLength = item.components.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var item_component = item.components[j].component;
+                        history_item_components.push({
+                            componentIndex: item.components[j].componentIndex,
+                            component: {
+                                id: item_component.id,
+                                temp_id: item_component.temp_id,
+                                real_corner_radius: item_component.real_corner_radius,
+                                font_color: item_component.font_color,
+                                font_family: item_component.font_family,
+                                font_size: item_component.font_size,
+                                font_spacing: item_component.font_spacing,
+                                name: item_component.name,
+                                real_position: item_component.real_position,
+                                real_size: item_component.real_size,
+                                rotation: item_component.rotation
+                            }
+                        });
+                    }
+                    progress_history.push({
+                        type: item.type,
+                        components: history_item_components
+                    });
+                    break;
+            }
+        }
+
+        var current_components = [];
+        iLength = Sheet.components.length;
+        for (var i = 0; i < iLength; i++) {
+            var component = Sheet.components[i];
+            current_components.push({
+                id: component.id,
+                temp_id: component.temp_id,
+                real_corner_radius: component.real_corner_radius,
+                font_color: component.font_color,
+                font_family: component.font_family,
+                font_size: component.font_size,
+                font_spacing: component.font_spacing,
+                name: component.name,
+                real_position: component.real_position,
+                real_size: component.real_size,
+                rotation: component.rotation
+            });
+        }
+
+        var current_groups = [];
+        iLength = Sheet.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = Sheet.groups[i];
+            var group_components = [];
+            var jLength = group.components.length;
+            for (var j = 0; j < jLength; j++) {
+                group_components.push({
+                    temp_id: group.components[j].temp_id
+                });
+            }
+            current_groups.push({
+                temp_id: group.temp_id,
+                real_size: group.real_size,
+                real_position: group.real_position,
+                components: group_components
+            });
+        }
+
+        var progress_current = {
+            components: current_components,
+            groups: current_groups
+        };
+
+        ajaxCall(save_url, {workspace_id: workspace_id, workspace_progress_history: JSON.stringify(progress_history), workspace_progress_current: JSON.stringify(progress_current)}, function(json) {
+            var result = jQuery.parseJSON(json);
+            hideLoader();
+            if (result.status == "success") {
+                showNotification("Saved");
+            } else {
+                showNotification("Failed to save");
+            }
+        });
+    }
 }
 
 function e_mousedown_componentItem(e) {
@@ -410,6 +500,9 @@ function e_mouseup_document(e) {
 
 function menuClick(menu) {
     switch (menu) {
+        case "save":
+            save();
+            break;
         case "undo":
             History.do_undo(sheetContext);
             break;

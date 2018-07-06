@@ -11,3 +11,4 @@
         <circle class="loader-circular-path" cx="50" cy="50" r="30" fill="none" stroke-width="6" stroke-miterlimit="10"/>
     </svg>
 </div>
+<div class="notification"></div>
