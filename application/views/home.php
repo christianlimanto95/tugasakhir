@@ -67,10 +67,31 @@
         </div>
         <div class="header-item-name">Delete</div>
     </div>
+    <?php if (!$is_logged_in) { ?>
     <div class="header-login-container">
         <div class="btn header-login">Login</div>
+        <div class="login-container">
+            <div class="form-item">
+                <div class="form-label">Email</div>
+                <input type="email" class="form-input input-email-login" maxlength="50" />
+            </div>
+            <div class="form-item">
+                <div class="form-label">Password</div>
+                <input type="password" class="form-input input-password-login" maxlength="50" />
+            </div>
+            <div class="btn btn-login">Login</div>
+        </div>
         <a href="<?php echo base_url("register"); ?>" class="btn header-register">Register</a>
     </div>
+    <?php } else { ?>
+        <div class="profile-container">
+            <div class="profile-image" style="background-image: url(<?php echo base_url("assets/icons/profile.png"); ?>);"></div>
+            <div class="profile-menu-container">
+                <a href="<?php echo base_url("dashboard/settings"); ?>" class="profile-menu">Settings</a>
+                <a href="<?php echo base_url("dashboard/logout"); ?>" class="profile-menu">Logout</a>
+            </div>
+        </div>
+    <?php } ?>
 </div>
 <div class="draggable-component"></div>
 <canvas class="draggable-component-canvas"></canvas>
@@ -228,6 +249,7 @@
     <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="send_to_back">Send to Back</div>
 </div>
 <script>
+var do_login_url = "<?php echo base_url("login/do_login"); ?>";
 var componentImage1 = "<?php echo base_url("assets/images/button1.png"); ?>";
 var componentImage2 = "<?php echo base_url("assets/images/button2.png"); ?>";
 var componentImage3 = "<?php echo base_url("assets/images/button3.png"); ?>";

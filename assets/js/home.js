@@ -17,6 +17,65 @@ $(function() {
     sheetTempContext = sheetTempCanvas.getContext("2d");
     contextMenuContainer = $(".contextmenu-container");
     header = $(".header");
+
+    $(".profile-container").on("click", function(e) {
+        if ($(this).hasClass("show-profile-menu")) {
+            $(this).removeClass("show-profile-menu");
+        } else {
+            $(this).addClass("show-profile-menu");
+        }
+        e.stopPropagation();
+    });
+
+    $(".profile-menu-container, .login-container").on("click", function(e) {
+        e.stopPropagation();
+    });
+
+    $(".header-login").on("click", function(e) {
+        if ($(".login-container").hasClass("show")) {
+            $(".login-container").removeClass("show");
+        } else {
+            $(".login-container").addClass("show");
+            $(".input-email-login").select();
+        }
+        e.stopPropagation();
+    });
+
+    $(document).on("click", function() {
+        $(".profile-container").removeClass("show-profile-menu");
+        $(".login-container").removeClass("show");
+    });
+
+    $(".btn-login").on("click", function() {
+        if (!$(this).hasClass("disabled")) {
+            var valid = true;
+            var email = $(".input-email-login").val();
+            var pass = $(".input-password-login").val();
+
+            if (email == "") {
+                valid = false;
+            }
+
+            if (pass == "") {
+                valid = false;
+            }
+
+            if (valid) {
+                var thisButton = $(this);
+                thisButton.addClass("disabled");
+                showLoader();
+                ajaxCall(do_login_url, {user_email: email, user_password: pass}, function(json) {
+                    var result = jQuery.parseJSON(json);
+                    if (result.status == "success") {
+                        document.location.reload();
+                    } else {
+                        hideLoader();
+                        thisButton.removeClass("disabled");
+                    }
+                });
+            }
+        }
+    });
 	
 	initialize();
 

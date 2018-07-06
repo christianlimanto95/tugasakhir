@@ -63,12 +63,68 @@
 	margin-right: 10px;
 }
 
+.login-container {
+    box-shadow: 0 0 10px #777;
+    padding: 20px;
+    position: absolute;
+    background-color: white;
+    right: 155px;
+    top: 60px;
+    display: none;
+}
+
+.login-container.show {
+    display: block;
+}
+
 .header-register {
 	background-color: #43A047;
 }
 
 .header-register:hover {
 	background-color: #388E3C;
+}
+
+.profile-container {
+    float: right;
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.profile-menu-container {
+    position: absolute;
+    right: 50px;
+    top: 60px;
+    width: 100px;
+    background-color: white;
+    box-shadow: 0 0 5px #999;
+    padding: 10px 0;
+    display: none;
+}
+
+.profile-container.show-profile-menu .profile-menu-container {
+    display: inline-block;
+}
+
+.profile-menu {
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+.profile-menu:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .left-pane, .right-pane {

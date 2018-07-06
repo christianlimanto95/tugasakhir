@@ -14,7 +14,8 @@ class Home extends General_controller {
 	{
         parent::load_additional_js("script");
 		$data = array(
-			"title" => "Home"
+            "title" => "Home",
+            "is_logged_in" => parent::is_logged_in()
 		);
 		
 		parent::view("home", $data);
