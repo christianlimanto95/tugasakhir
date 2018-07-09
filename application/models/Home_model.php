@@ -19,4 +19,15 @@ class Home_model extends CI_Model
         $this->db->insert("workspace_progress", $insertData);
         return $this->db->affected_rows();
     }
+
+    public function load_workspace($data) {
+        $query = $this->db->query("
+            SELECT workspace_progress_current
+            FROM workspace_progress
+            WHERE status = 1 AND workspace_id = '" . $data["workspace_id"] . "' AND user_id = '" . $data["user_id"] . "'
+            ORDER BY created_date DESC
+            LIMIT 1
+        ");
+        return $query->result();
+    }
 }

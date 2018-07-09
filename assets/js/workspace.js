@@ -77,7 +77,8 @@ $(function() {
         }
     });
 	
-	initialize();
+    initialize();
+    load();
 
 	$(".sheet-container").on("scroll", function() {
 		Sheet.offset = $(".sheet-canvas").offset();
@@ -194,6 +195,47 @@ $(function() {
     });
 });
 
+function load() {
+    var load_result = $(".load-result").attr("data-value");
+    if (load_result != "") {
+        load_result = jQuery.parseJSON(load_result);
+        var components = load_result.components;
+        var groups = load_result.groups;
+        var temp_id = load_result.temp_id;
+
+        var iLength = components.length;
+        for (var i = 0; i < iLength; i++) {
+            var component = ALL_COMPONENTS.getComponentById(components[i].id);
+            component.real_size = clone(components[i].real_size);
+            component.real_position = clone(components[i].real_position);
+            component.convertRealSizeToComputedSize();
+            component.convertRealPositionToComputedPosition();
+            component.temp_id = components[i].temp_id;
+            component.real_corner_radius = components[i].real_corner_radius;
+            component.font_color = components[i].font_color;
+            component.font_family = components[i].font_family;
+            component.font_size = components[i].font_size;
+            component.name = components[i].name;
+            component.rotation = components[i].rotation;
+            Sheet.components.push(component);
+        }
+
+        iLength = groups.length;
+        for (var i = 0; i < iLength; i++) {
+            var group = new Group();
+            group.temp_id = groups[i].temp_id;
+            group.real_size = clone(groups[i].real_size);
+            group.real_position = clone(groups[i].real_position);
+            group.convertRealPositionToComputedPosition();
+            group.convertRealSizeToComputedSize();
+            Sheet.groups.add(group);
+        }
+
+        Sheet.temp_id = temp_id;
+        Sheet.draw(sheetContext);
+    }
+}
+
 function initialize() {
 	Sheet.offset = $(".sheet-canvas").offset();
 	SheetTemp.offset = $(sheetTempCanvas).offset();
@@ -300,7 +342,8 @@ function save() {
 
         var progress_current = {
             components: current_components,
-            groups: current_groups
+            groups: current_groups,
+            temp_id: Sheet.temp_id
         };
 
         ajaxCall(save_url, {workspace_id: workspace_id, workspace_progress_history: JSON.stringify(progress_history), workspace_progress_current: JSON.stringify(progress_current)}, function(json) {
@@ -308,6 +351,7 @@ function save() {
             hideLoader();
             if (result.status == "success") {
                 showNotification("Saved");
+                History.saveStack = [];
             } else {
                 showNotification("Failed to save");
             }

@@ -18,11 +18,20 @@ class Home extends General_controller {
     public function workspace() {
         $workspace_id = $this->uri->segment(2);
         $is_logged_in = parent::is_logged_in();
+        $data = array(
+            "workspace_id" => $workspace_id,
+            "user_id" => $is_logged_in
+        );
+        $detail = $this->Home_model->load_workspace($data);
+        if (sizeof($detail) > 0) {
+            $detail = $detail[0]->workspace_progress_current;
+        }
         parent::load_additional_js("script");
 		$data = array(
             "title" => "Home",
             "is_logged_in" => $is_logged_in,
-            "workspace_id" => $workspace_id
+            "workspace_id" => $workspace_id,
+            "detail" => $detail
 		);
 		
 		parent::view("workspace", $data);

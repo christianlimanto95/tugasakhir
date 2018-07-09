@@ -191,7 +191,13 @@ var Component = {
 		this.real_position.top = y - Sheet.selisihOffset.top;
 		this.real_position.right = x + this.real_size.width - Sheet.selisihOffset.left;
 		this.real_position.bottom = y + this.real_size.height - Sheet.selisihOffset.top;
-	},
+    },
+    convertRealPositionToComputedPosition: function() {
+        this.computed_position = clone(this.real_position);
+    },
+    convertRealSizeToComputedSize: function() {
+        this.computed_size = clone(this.real_size);
+    },
 	rotation: 0,
 	default_size: {
 		width: 0,
@@ -263,7 +269,13 @@ var Group = {
 		left: 0,
 		right: 0,
 		bottom: 0
-	}
+    },
+    convertRealSizeToComputedSize: function() {
+        this.computed_size = clone(this.real_size);
+    },
+    convertRealPositionToComputedPosition: function() {
+        this.computed_position = clone(this.real_position);
+    }
 };
 
 

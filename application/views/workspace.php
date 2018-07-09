@@ -257,6 +257,7 @@
     <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="move_backward">Move Backward</div>
     <div class="contextmenu" data-target="component" data-type="single-selection" data-contextmenu="send_to_back">Send to Back</div>
 </div>
+<div class="load-result" data-value='<?php echo $detail; ?>'></div>
 <script>
 var workspace_id = "<?php echo $workspace_id; ?>";
 var save_url = "<?php echo base_url("home/save"); ?>";
