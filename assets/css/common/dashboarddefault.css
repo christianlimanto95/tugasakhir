@@ -234,3 +234,9 @@ body {
 .header-menu:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
+
+.container {
+    margin-top: 70px;
+    margin-left: 250px;
+    padding: 25px;
+}

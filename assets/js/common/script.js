@@ -1520,47 +1520,16 @@ var Sheet = {
 		for (var i = 0; i < iLength; i++) {
 			var component = this.getComponentByTempId(this.active_components[i].temp_id);
 
-			this.active_components[i].real_position = {
-				top: tempComponents[i].real_position.top,
-				left: tempComponents[i].real_position.left,
-				right: tempComponents[i].real_position.right,
-				bottom: tempComponents[i].real_position.bottom
-			};
-
-			this.active_components[i].computed_position = {
-				top: tempComponents[i].computed_position.top,
-				left: tempComponents[i].computed_position.left,
-				right: tempComponents[i].computed_position.right,
-				bottom: tempComponents[i].computed_position.bottom
-			};
-
-			var old_real_position = {
-                top: component.real_position.top,
-                left: component.real_position.left,
-                right: component.real_position.right,
-                bottom: component.real_position.bottom
-            };
-            var old_computed_position = {
-                top: component.computed_position.top,
-                left: component.computed_position.left,
-                right: component.computed_position.right,
-                bottom: component.computed_position.bottom
-			};
-			
-			var real_position = {
-                top: this.active_components[i].real_position.top,
-                left: this.active_components[i].real_position.left,
-                right: this.active_components[i].real_position.right,
-                bottom: this.active_components[i].real_position.bottom
-            };
-            var computed_position = {
-                top: this.active_components[i].computed_position.top,
-                left: this.active_components[i].computed_position.left,
-                right: this.active_components[i].computed_position.right,
-                bottom: this.active_components[i].computed_position.bottom
-			};
+            this.active_components[i].real_position = clone(tempComponents[i].real_position);
+            this.active_components[i].computed_position = clone(tempComponents[i].computed_position);
+            
+            var old_real_position = clone(component.real_position);
+            var old_computed_position = clone(component.computed_position);
+			var real_position = clone(this.active_components[i].real_position);
+			var computed_position = clone(this.active_components[i].computed_position);
 			
 			components_arr.push({
+                id: component.id,
                 temp_id: component.temp_id,
                 old_real_position: old_real_position,
                 old_computed_position: old_computed_position,
@@ -1576,49 +1545,18 @@ var Sheet = {
 			var group_components_arr = [];
             var jLength = tempGroups[i].components.length;
             for (var j = 0; j < jLength; j++) {
-                this.active_groups[i].components[j].real_position = {
-                    top: tempGroups[i].components[j].real_position.top,
-                    left: tempGroups[i].components[j].real_position.left,
-                    right: tempGroups[i].components[j].real_position.right,
-                    bottom: tempGroups[i].components[j].real_position.bottom
-                };
-
-                this.active_groups[i].components[j].computed_position = {
-                    top: tempGroups[i].components[j].computed_position.top,
-                    left: tempGroups[i].components[j].computed_position.left,
-                    right: tempGroups[i].components[j].computed_position.right,
-                    bottom: tempGroups[i].components[j].computed_position.bottom
-				};
+                this.active_groups[i].components[j].real_position = clone(tempGroups[i].components[j].real_position);
+                this.active_groups[i].components[j].computed_position = clone(tempGroups[i].components[j].computed_position);
 
 				var component = this.getComponentByTempId(this.active_groups[i].components[j].temp_id);
-				
-				var old_real_position = {
-					top: component.real_position.top,
-					left: component.real_position.left,
-					right: component.real_position.right,
-					bottom: component.real_position.bottom
-				};
-				var old_computed_position = {
-					top: component.computed_position.top,
-					left: component.computed_position.left,
-					right: component.computed_position.right,
-					bottom: component.computed_position.bottom
-				};
-
-				var real_position = {
-					top: this.active_groups[i].components[j].real_position.top,
-					left: this.active_groups[i].components[j].real_position.left,
-					right: this.active_groups[i].components[j].real_position.right,
-					bottom: this.active_groups[i].components[j].real_position.bottom
-				};
-				var computed_position = {
-					top: this.active_groups[i].components[j].computed_position.top,
-					left: this.active_groups[i].components[j].computed_position.left,
-					right: this.active_groups[i].components[j].computed_position.right,
-					bottom: this.active_groups[i].components[j].computed_position.bottom
-				};
+                
+                var old_real_position = clone(component.real_position);
+				var old_computed_position = clone(component.computed_position);
+				var real_position = clone(this.active_groups[i].components[j].real_position);
+                var computed_position = clone(this.active_groups[i].components[j].computed_position);
 
 				group_components_arr.push({
+                    id: component.id,
 					temp_id: component.temp_id,
 					old_real_position: old_real_position,
 					old_computed_position: old_computed_position,
@@ -1627,46 +1565,15 @@ var Sheet = {
 				});
             }
 
-			this.active_groups[i].real_position = {
-				top: tempGroups[i].real_position.top,
-				left: tempGroups[i].real_position.left,
-				right: tempGroups[i].real_position.right,
-				bottom: tempGroups[i].real_position.bottom
-			};
-
-			this.active_groups[i].computed_position = {
-				top: tempGroups[i].computed_position.top,
-				left: tempGroups[i].computed_position.left,
-				right: tempGroups[i].computed_position.right,
-				bottom: tempGroups[i].computed_position.bottom
-			};
+            this.active_groups[i].real_position = clone(tempGroups[i].real_position);
+            this.active_groups[i].computed_position = clone(tempGroups[i].computed_position);
 			
-			var group = this.getGroupByTempId(this.active_groups[i].temp_id);
-			var old_real_position = {
-				top: group.real_position.top,
-				left: group.real_position.left,
-				right: group.real_position.right,
-				bottom: group.real_position.bottom
-			};
-			var old_computed_position = {
-				top: group.computed_position.top,
-				left: group.computed_position.left,
-				right: group.computed_position.right,
-				bottom: group.computed_position.bottom
-			};
-
-			var real_position = {
-				top: this.active_groups[i].real_position.top,
-				left: this.active_groups[i].real_position.left,
-				right: this.active_groups[i].real_position.right,
-				bottom: this.active_groups[i].real_position.bottom
-			};
-			var computed_position = {
-				top: this.active_groups[i].computed_position.top,
-				left: this.active_groups[i].computed_position.left,
-				right: this.active_groups[i].computed_position.right,
-				bottom: this.active_groups[i].computed_position.bottom
-			};
+            var group = this.getGroupByTempId(this.active_groups[i].temp_id);
+            
+            var old_real_position = clone(group.real_position);
+			var old_computed_position = clone(group.computed_position);
+			var real_position = clone(this.active_groups[i].real_position);
+            var computed_position = clone(this.active_groups[i].computed_position);
 
 			groups_arr.push({
 				temp_id: group.temp_id,

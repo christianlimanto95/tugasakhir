@@ -13,8 +13,11 @@ class Dashboard extends General_controller {
 	
 	public function index()
 	{
+        $user_id = parent::is_logged_in();
+        $workspace = $this->Dashboard_model->get_workspace($user_id);
 		$data = array(
-			"title" => "Dashboard"
+            "title" => "Dashboard",
+            "workspace" => $workspace
 		);
 		
 		parent::dashboardview("dashboard", $data);

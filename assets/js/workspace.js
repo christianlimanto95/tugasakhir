@@ -242,26 +242,20 @@ function save() {
                     for (var j = 0; j < jLength; j++) {
                         var item_component = item.components[j].component;
                         history_item_components.push({
-                            componentIndex: item.components[j].componentIndex,
-                            component: {
-                                id: item_component.id,
-                                temp_id: item_component.temp_id,
-                                real_corner_radius: item_component.real_corner_radius,
-                                font_color: item_component.font_color,
-                                font_family: item_component.font_family,
-                                font_size: item_component.font_size,
-                                font_spacing: item_component.font_spacing,
-                                name: item_component.name,
-                                real_position: item_component.real_position,
-                                real_size: item_component.real_size,
-                                rotation: item_component.rotation
-                            }
+                            id: item_component.id
                         });
                     }
                     progress_history.push({
                         type: item.type,
                         components: history_item_components
                     });
+                    break;
+                case "move_component_or_group":
+                    var history_item_components = [];
+                    var jLength = item.components.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var component = item.components[j];
+                    }
                     break;
             }
         }
