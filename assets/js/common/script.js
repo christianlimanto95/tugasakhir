@@ -193,7 +193,12 @@ var Component = {
 		this.real_position.bottom = y + this.real_size.height - Sheet.selisihOffset.top;
     },
     convertRealPositionToComputedPosition: function() {
-        this.computed_position = clone(this.real_position);
+        this.computed_position = {
+            left: this.real_position.left + Sheet.selisihOffset.left,
+            top: this.real_position.top + Sheet.selisihOffset.top,
+            right: this.real_position.right + Sheet.selisihOffset.left,
+            bottom: this.real_position.bottom + Sheet.selisihOffset.top
+        };
     },
     convertRealSizeToComputedSize: function() {
         this.computed_size = clone(this.real_size);
@@ -249,7 +254,8 @@ var Component = {
 // ---------------------------------------------------------------------
 var Group = {
 	temp_id: "-1",
-	components: [],
+    components: [],
+    name: "",
 	real_size: {
 		width: 0,
 		height: 0
@@ -308,8 +314,8 @@ Button1.draw = function(context) {
 
 var Button2 = Object.create(Component);
 Button2.id = "2";
-Button2.name = "Multiline Button 1";
-Button2.real_name = "Multiline Button 1";
+Button2.name = "Multiline Button";
+Button2.real_name = "Multiline Button";
 Button2.text = "Multiline\nButton";
 Button2.multiline = true;
 Button2.image = componentImage2;
@@ -1359,7 +1365,16 @@ var Sheet = {
     group_temp_id: 1,
 	components: [],
 	addComponent: function(component) {
-		component.temp_id = this.temp_id;
+        component.temp_id = this.temp_id;
+        var id = component.id;
+        var ctr = 1;
+        var iLength = this.components.length;
+        for (var i = 0; i < iLength; i++) {
+            if (this.components[i].id == id) {
+                ctr++;
+            }
+        }
+        component.name = component.real_name + " " + ctr;
 		this.components.push(component);
 		this.removeAllActiveComponents();
 		this.setActiveComponent(this.temp_id);
@@ -2276,10 +2291,11 @@ var Sheet = {
         temp_computed_size.height = temp_computed_position.bottom - temp_computed_position.top;
         temp_real_size.width = temp_real_position.right - temp_real_position.left;
         temp_real_size.height = temp_real_position.bottom - temp_real_position.top;
-
+        
         var group = {
             temp_id: this.group_temp_id,
             components: groupComponents,
+            name: "Group " + this.group_temp_id,
             computed_position: temp_computed_position,
             real_position: temp_real_position,
             computed_size: temp_computed_size,
@@ -2631,7 +2647,7 @@ var SheetTemp = {
 	dotsHit: "",
 	components: [],
 	addComponent: function(component) {
-		component = clone(component);
+        component = clone(component);
 		this.components.push(component);
 	},
 	updateComponentsPosition: function(currentMousePosition) {

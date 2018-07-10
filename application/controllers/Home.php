@@ -25,6 +25,8 @@ class Home extends General_controller {
         $detail = $this->Home_model->load_workspace($data);
         if (sizeof($detail) > 0) {
             $detail = $detail[0]->workspace_progress_current;
+        } else {
+            $detail = "";
         }
         parent::load_additional_js("script");
 		$data = array(

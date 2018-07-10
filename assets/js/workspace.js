@@ -284,7 +284,8 @@ function save() {
                     for (var j = 0; j < jLength; j++) {
                         var item_component = item.components[j].component;
                         history_item_components.push({
-                            id: item_component.id
+                            id: item_component.id,
+                            name: item_component.name
                         });
                     }
                     progress_history.push({
@@ -297,6 +298,12 @@ function save() {
                     var jLength = item.components.length;
                     for (var j = 0; j < jLength; j++) {
                         var component = item.components[j];
+                        history_item_components.push({
+                            id: component.id,
+                            name: component.name,
+                            old_real_position: clone(component.old_real_position),
+                            real_position: clone(component.real_position)
+                        });
                     }
                     break;
             }
