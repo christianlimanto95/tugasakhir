@@ -3,7 +3,23 @@
     margin-bottom: 30px;
 }
 
-.last-updated {
+.workspace-name {
+    float: left;
+    width: 150px;
+}
+
+.workspace-menu-container {
+    clear: both;
+    margin-top: 10px;
+}
+
+.workspace-menu {
     display: inline-block;
-    margin-left: 50px;
+    margin-left: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.workspace-menu:nth-child(1) {
+    margin-left: 0;
 }

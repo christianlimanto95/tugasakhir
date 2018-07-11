@@ -26,4 +26,14 @@ class Dashboard_model extends CI_Model
         ");
         return $query->result();
     }
+
+    public function get_workspace_progress($data) {
+        $query = $this->db->query("
+            SELECT wp.workspace_progress_id, wp.workspace_progress_history, u.user_name
+            FROM workspace_progress wp, user u
+            WHERE wp.workspace_id = '" . $data["workspace_id"] . "' AND wp.user_id = u.user_id
+            ORDER BY wp.created_date ASC
+        ");
+        return $query->result();
+    }
 }

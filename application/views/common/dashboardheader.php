@@ -12,6 +12,7 @@
     </svg>
 </div>
 <div class="header-top">
+    <div class="header-subtitle"><?php echo $subtitle; ?></div>
     <div class="header-profile">
         <div class="header-profile-image" style="background-image: url(<?php echo base_url("assets/icons/profile.png"); ?>);"></div>
         <div class="profile-menu-container">

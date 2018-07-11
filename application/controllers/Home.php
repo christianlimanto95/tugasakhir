@@ -63,4 +63,8 @@ class Home extends General_controller {
             ));
         }
     }
+
+    public function preview() {
+        $workspace_id = $this->uri->segment(2);
+    }
 }

@@ -17,6 +17,7 @@ class Dashboard extends General_controller {
         $workspace = $this->Dashboard_model->get_workspace($user_id);
 		$data = array(
             "title" => "Dashboard",
+            "subtitle" => "Workspace",
             "workspace" => $workspace
 		);
 		
@@ -38,6 +39,13 @@ class Dashboard extends General_controller {
             "last_updated" => $last_updated,
             "last_updated_name" => $last_updated_name
         ));
+    }
+
+    public function workspace_history() {
+        $workspace_id = $this->uri->segment(3);
+        $user_id = parent::is_logged_in();
+
+        
     }
     
     public function logout() {

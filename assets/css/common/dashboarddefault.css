@@ -224,6 +224,13 @@ body {
     height: 150px;
 }
 
+.header-subtitle {
+    margin-left: 270px;
+    margin-top: 15px;
+    font-size: 24pt;
+    float: left;
+}
+
 .header-menu {
     display: block;
     text-decoration: none;
