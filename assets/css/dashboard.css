@@ -2,3 +2,8 @@
     font-size: 18pt;
     margin-bottom: 30px;
 }
+
+.last-updated {
+    display: inline-block;
+    margin-left: 50px;
+}

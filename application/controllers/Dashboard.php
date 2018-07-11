@@ -22,6 +22,23 @@ class Dashboard extends General_controller {
 		
 		parent::dashboardview("dashboard", $data);
     }
+
+    public function get_workspace_last_updated() {
+        parent::show_404_if_not_ajax();
+        $workspace_id = $this->input->post("workspace_id", true);
+        $result = $this->Dashboard_model->get_workspace_last_updated($workspace_id);
+        $last_updated = "";
+        $last_updated_name = "";
+        if (sizeof($last_updated) > 0) {
+            $last_updated = $result[0]->modified_date;
+            $last_updated_name = $result[0]->user_name;
+        }
+        echo json_encode(array(
+            "status" => "success",
+            "last_updated" => $last_updated,
+            "last_updated_name" => $last_updated_name
+        ));
+    }
     
     public function logout() {
         $this->session->unset_userdata("user_id");
