@@ -44,8 +44,24 @@ class Dashboard extends General_controller {
     public function workspace_history() {
         $workspace_id = $this->uri->segment(3);
         $user_id = parent::is_logged_in();
+        $data = array(
+            "workspace_id" => $workspace_id,
+            "user_id" => $user_id
+        );
+        $result = $this->Dashboard_model->get_workspace_progress($data);
+        if ($result["status"] == "success") {
 
-        
+        } else {
+
+        }
+
+        $data = array(
+            "title" => $result["workspace_name"] . " History",
+            "subtitle" => "Workspace > " . $result["workspace_name"] . " History",
+            "data" => $result["data"]
+		);
+		
+		parent::dashboardview("dashboard_workspace_history", $data);
     }
     
     public function logout() {

@@ -1,0 +1,64 @@
+.history-date {
+    display: inline-block;
+    width: 450px;
+    box-shadow: 0 0 5px #AAA;
+    border: 1px solid #CCC;
+    margin-bottom: 20px;
+}
+
+.history-date:nth-child(odd) {
+    margin-right: 20px;
+}
+
+.history-date-header {
+    padding: 20px 15px;
+    background-color: #DDD;
+    overflow-y: auto;
+    font-size: 14pt;
+}
+
+.history-date-text {
+    float: left;
+    font-size: 14pt;
+}
+
+.by {
+    float: right;
+}
+
+.history-item-container, .button-container {
+    padding: 15px;
+}
+
+.history-item {
+    margin-bottom: 15px;
+}
+
+.history-item:nth-last-child(1) {
+    margin-bottom: 0;
+}
+
+.button-container {
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.button-container .btn {
+    display: block;
+    float: right;
+    margin-right: 10px;
+    letter-spacing: 1px;
+    font-size: 10pt;
+}
+
+.button-container .btn:nth-child(1) {
+    margin-right: 0;
+}
+
+.btn-delete {
+    background-color: #B00020;
+}
+
+.btn-delete:hover {
+    background-color: rgb(150, 1, 28);
+}
