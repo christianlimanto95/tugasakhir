@@ -1,52 +1,46 @@
 <div class="section">
+    <a href="<?php echo base_url("dashboard"); ?>" class="btn btn-back-to-workspace">< Back to Workspace</a>
     <div class="history-container">
-        <div class="history-date">
-            <div class="history-date-header">
-                <div class="history-date-text">2017-05-02</div>
-                <div class="by">by qwe</div>
-            </div>
-            <div class="history-item-container">
-                <div class="history-item">Button 1 added</div>
-                <div class="history-item">Button 1 moved</div>
-                <div class="history-item">Multiline Button 1 added</div>
-                <div class="history-item">Button 1 deleted</div>
-            </div>
-            <div class="button-container">
-                <div class="btn btn-delete">DELETE</div>
-                <div class="btn btn-jump">JUMP TO THIS</div>
-            </div>
-        </div>
-        <div class="history-date">
-            <div class="history-date-header">
-                <div class="history-date-text">2017-05-02</div>
-                <div class="by">by qwe</div>
-            </div>
-            <div class="history-item-container">
-                <div class="history-item">Button 1 added</div>
-                <div class="history-item">Button 1 moved</div>
-                <div class="history-item">Multiline Button 1 added</div>
-                <div class="history-item">Button 1 deleted</div>
-            </div>
-            <div class="button-container">
-                <div class="btn btn-delete">DELETE</div>
-                <div class="btn btn-jump">JUMP TO THIS</div>
-            </div>
-        </div>
     <?php
-    /*$iLength = sizeof($data);
+    $iLength = sizeof($data);
     $current_date = "";
     for ($i = 0; $i < $iLength; $i++) {
-        $date = explode(" ", $data[$i]->created_date)[0];
-        if ($current_date != $date) {
-            $current_date = $date;
-            if ($i > 0) {
-                echo "</div>";
+        $datetime = explode(" ", $data[$i]->created_date);
+        $date = $datetime[0];
+        $time = $datetime[1];
+        echo "<div class='history-date'>";
+        echo "<div class='history-date-header'>";
+        echo "<div class='history-date-text'>" . $date . " " . $time . "</div>";
+        echo "<div class='by'>by " . $data[$i]->user_name . "</div>";
+        echo "</div>";
+        echo "<div class='history-item-container'>";
+        $item_array = json_decode($data[$i]->workspace_progress_history);
+        $jLength = sizeof($item_array);
+        for ($j = 0; $j < $jLength; $j++) {
+            $item = $item_array[$j];
+            $action = "";
+            switch ($item_array[$j]->type) {
+                case "add_component":
+                    $names = "";
+                    $kLength = sizeof($item->components);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->components[$k]->name;
+                        $names .= $name;
+                    }
+                    echo "<div class='history-item'>" . $names . " added</div>";
+                    break;
             }
-
-            echo "<div class='history-date'>";
-            echo "<div class='history-date-text'>" . $date . "</div>";
         }
-    }*/
+        echo "</div>";
+        echo "<div class='button-container'>";
+        echo "<div class='btn btn-jump'>JUMP TO THIS</div>";
+        echo "<div class='btn btn-preview'>PREVIEW</div>";
+        echo "</div>";
+        echo "</div>";
+    }
     ?>
     </div>
 </div>

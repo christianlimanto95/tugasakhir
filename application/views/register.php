@@ -16,6 +16,7 @@
     <div class="register-right">
         <div class="register-form-container">
             <div class="register-title">Register</div>
+            <a class="login-redirect" href="<?php echo base_url("login"); ?>">Already have an account? Login here</a>
             <div class="form-item">
                 <div class="form-label">Name <span class="error error-name"></span></div>
                 <input type="text" class="form-input input-name" maxlength="50" autofocus />

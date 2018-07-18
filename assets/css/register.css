@@ -29,7 +29,12 @@
 .register-title {
 	font-size: 24pt;
 	font-weight: bold;
-	margin-bottom: 50px;
+	margin-bottom: 10px;
+}
+
+.login-redirect {
+    display: inline-block;
+    margin-bottom: 50px;
 }
 
 .form-item {

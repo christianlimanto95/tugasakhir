@@ -1,5 +1,10 @@
+.history-container {
+    margin-top: 50px;
+}
+
 .history-date {
     display: inline-block;
+    vertical-align: top;
     width: 450px;
     box-shadow: 0 0 5px #AAA;
     border: 1px solid #CCC;
@@ -55,10 +60,10 @@
     margin-right: 0;
 }
 
-.btn-delete {
-    background-color: #B00020;
+.btn-preview {
+    background-color: #43A047;
 }
 
-.btn-delete:hover {
-    background-color: rgb(150, 1, 28);
+.btn-preview:hover {
+    background-color: #388E3C;
 }

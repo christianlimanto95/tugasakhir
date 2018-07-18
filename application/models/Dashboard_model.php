@@ -39,10 +39,10 @@ class Dashboard_model extends CI_Model
         if (sizeof($result) > 0) {
             $workspace_name = $result[0]->workspace_name;
             $query = $this->db->query("
-                SELECT wp.workspace_progress_id, wp.workspace_progress_history, w.workspace_name, u.user_name, wp.created_date
+                SELECT wp.workspace_progress_id, wp.workspace_progress_history, wp.workspace_progress_current, w.workspace_name, u.user_name, wp.created_date
                 FROM workspace_progress wp, workspace w, user u
                 WHERE wp.workspace_id = '" . $data["workspace_id"] . "' AND wp.user_id = u.user_id AND wp.workspace_id = w.workspace_id
-                ORDER BY wp.created_date ASC
+                ORDER BY wp.created_date DESC
             ");
             $result = $query->result();
             return array(
