@@ -506,8 +506,8 @@ Checkbox.draw = function(context) {
 
 var CheckboxGroup = Object.create(Component);
 CheckboxGroup.id = "6";
-CheckboxGroup.name = "Checkbox Group 1";
-CheckboxGroup.real_name = "Checkbox Group 1";
+CheckboxGroup.name = "Checkbox Group";
+CheckboxGroup.real_name = "Checkbox Group";
 CheckboxGroup.text = "[]Not selected\n[v]Selected\n[-]Indeterminate\n[]dDisabled\n[v]dDisabled selected\n[-]dDisabled Indeterminate";
 CheckboxGroup.multiline = true;
 CheckboxGroup.image = componentImage6;
@@ -1557,6 +1557,7 @@ var Sheet = {
 			
 			components_arr.push({
                 id: component.id,
+                name: component.name,
                 temp_id: component.temp_id,
                 old_real_position: old_real_position,
                 old_computed_position: old_computed_position,
@@ -1603,6 +1604,7 @@ var Sheet = {
             var computed_position = clone(this.active_groups[i].computed_position);
 
 			groups_arr.push({
+                name: group.name,
 				temp_id: group.temp_id,
 				old_real_position: old_real_position,
 				old_computed_position: old_computed_position,
@@ -1918,6 +1920,8 @@ var Sheet = {
             component.computed_size = clone(active_component.computed_size);
 
             components_arr.push({
+                id: component.id,
+                name: component.name,
                 temp_id: component.temp_id,
                 old_real_position: old_real_position,
                 old_computed_position: old_computed_position,
@@ -1986,6 +1990,7 @@ var Sheet = {
 			group.computed_size = clone(active_group.computed_size);
 
             groups_arr.push({
+                name: group.name,
 				temp_id: group.temp_id,
 				components: group_components_arr,
                 old_real_position: old_real_position,
@@ -2313,18 +2318,15 @@ var Sheet = {
             old_groups: old_groups_arr,
             old_components: old_components_arr,
             new_group: {
+                name: group.name,
                 temp_id: group.temp_id,
                 components: new_group_components,
-                real_position: null,
-                computed_position: null,
-                real_size: null,
-                computed_size: null
+                real_position: clone(group.real_position),
+                computed_position: clone(group.computed_position),
+                real_size: clone(group.real_size),
+                computed_size: clone(group.computed_size)
             }
 		};
-		stackItem.new_group.real_position = clone(group.real_position);
-        stackItem.new_group.computed_position = clone(group.computed_position);
-        stackItem.new_group.real_size = clone(group.real_size);
-        stackItem.new_group.computed_size = clone(group.computed_size);
 
         History.addToStack(stackItem);
     },

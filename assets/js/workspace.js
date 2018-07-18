@@ -288,6 +288,7 @@ function save() {
                             name: item_component.name
                         });
                     }
+
                     progress_history.push({
                         type: item.type,
                         components: history_item_components
@@ -305,6 +306,94 @@ function save() {
                             real_position: clone(component.real_position)
                         });
                     }
+
+                    var history_item_groups = [];
+                    jLength = item.groups.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var group = item.groups[j];
+                        history_item_groups.push({
+                            name: group.name,
+                            old_real_position: clone(group.old_real_position),
+                            real_position: clone(group.real_position)
+                        });
+                    }
+
+                    progress_history.push({
+                        type: item.type,
+                        components: history_item_components,
+                        groups: history_item_groups
+                    });
+
+                    break;
+                case "resize_component_or_group":
+                    var history_item_components = [];
+                    var jLength = item.components.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var component = item.components[j];
+                        history_item_components.push({
+                            id: component.id,
+                            name: component.name,
+                            old_real_position: clone(component.old_real_position),
+                            real_position: clone(component.real_position),
+                            old_real_size: clone(component.old_real_size),
+                            real_size: clone(component.real_size)
+                        });
+                    }
+
+                    var history_item_groups = [];
+                    jLength = item.groups.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var group = item.groups[j];
+                        history_item_groups.push({
+                            name: group.name,
+                            old_real_position: clone(group.old_real_position),
+                            real_position: clone(group.real_position),
+                            old_real_size: clone(group.old_real_size),
+                            real_size: clone(group.real_size)
+                        });
+                    }
+
+                    progress_history.push({
+                        type: item.type,
+                        components: history_item_components,
+                        groups: history_item_groups
+                    });
+
+                    break;
+                case "delete_component_or_group":
+                    var history_item_components = [];
+                    var jLength = item.components.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var item_component = item.components[j].component;
+                        history_item_components.push({
+                            id: item_component.id,
+                            name: item_component.name
+                        });
+                    }
+
+                    var history_item_groups = [];
+                    jLength = item.groups.length;
+                    for (var j = 0; j < jLength; j++) {
+                        var group = item.groups[j].group;
+                        history_item_groups.push({
+                            name: group.name
+                        });
+                    }
+
+                    progress_history.push({
+                        type: item.type,
+                        components: history_item_components,
+                        groups: history_item_groups
+                    });
+
+                    break;
+                case "create_group":
+                    progress_history.push({
+                        type: item.type,
+                        group: {
+                            name: item.new_group.name
+                        }
+                    });
                     break;
             }
         }
@@ -494,18 +583,22 @@ function e_mousemove_document(e) {
 			"top": e.pageY + "px",
 			"left": e.pageX + "px"
 		});
-	} else if (dotsHit.value != "") {
-		SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY}, keyPressed.shift);
-		SheetTemp.draw(sheetTempContext);
-		mouseResize = true;
 	} else {
-		if (Sheet.isHittingComponentOnMouseDown) {
-			SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
-			SheetTemp.draw(sheetTempContext);
-			mouseDrag = true;
-		} else {
-			mousemoveIsHoveringDots(e);
-		}
+        if (SheetTemp.mousePosition.x != e.pageX || SheetTemp.mousePosition.y != e.pageY) {
+            if (dotsHit.value != "") {
+                SheetTemp.updateComponentsSize({x: e.pageX, y: e.pageY}, keyPressed.shift);
+                SheetTemp.draw(sheetTempContext);
+                mouseResize = true;
+            } else {
+                if (Sheet.isHittingComponentOnMouseDown) {
+                    SheetTemp.updateComponentsPosition({x: e.pageX, y: e.pageY});
+                    SheetTemp.draw(sheetTempContext);
+                    mouseDrag = true;
+                } else {
+                    mousemoveIsHoveringDots(e);
+                }
+            }
+        }
 	}
 }
 

@@ -32,6 +32,46 @@
                     }
                     echo "<div class='history-item'>" . $names . " added</div>";
                     break;
+                case "move_component_or_group":
+                    $names = "";
+                    $kLength = sizeof($item->components);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->components[$k]->name;
+                        $names .= $name;
+                    }
+                    echo "<div class='history-item'>" . $names . " moved</div>";
+                    break;
+                case "resize_component_or_group":
+                    $names = "";
+                    $kLength = sizeof($item->components);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->components[$k]->name;
+                        $names .= $name;
+                    }
+                    echo "<div class='history-item'>" . $names . " resized</div>";
+                    break;
+                case "delete_component_or_group":
+                    $names = "";
+                    $kLength = sizeof($item->components);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->components[$k]->name;
+                        $names .= $name;
+                    }
+                    echo "<div class='history-item'>" . $names . " deleted</div>";
+                    break;
+                case "create_group":
+                    $name = $item->group->name;
+                    echo "<div class='history-item'>" . $name . " created</div>";
+                    break;
             }
         }
         echo "</div>";
