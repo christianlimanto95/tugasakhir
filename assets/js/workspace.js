@@ -403,6 +403,14 @@ function save() {
                         }
                     });
                     break;
+                case "ungroup":
+                    progress_history.push({
+                        type: item.type,
+                        group: {
+                            name: item.old_group.name
+                        }
+                    });
+                    break;
             }
         }
 

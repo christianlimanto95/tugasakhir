@@ -90,6 +90,10 @@
                     $name = $item->group->name;
                     echo "<div class='history-item'>" . $name . " created</div>";
                     break;
+                case "ungroup":
+                    $name = $item->group->name;
+                    echo "<div class='history-item'>Ungroup of " . $name . "</div>";
+                    break;
             }
         }
         echo "</div>";

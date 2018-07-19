@@ -2335,6 +2335,11 @@ var Sheet = {
 
         History.addToStack(stackItem);
     },
+    createGroupFromUngroup: function(currentState) {
+        this.groups.push(currentState.old_group);
+        this.removeAllActiveComponents();
+        this.setActiveGroup(currentState.old_group);
+    },
     createGroupFromHistoryRedo: function(currentState) {
         var group_components = [];
         var iLength = currentState.old_components.length;
@@ -2388,7 +2393,26 @@ var Sheet = {
                 break;
             }
         }
-	},
+    },
+    ungroupFromHistoryRedo: function(currentState) {
+        var temp_id = currentState.old_group.temp_id;
+        var iLength = this.groups.length;
+        for (var i = 0; i < iLength; i++) {
+            if (this.groups[i].temp_id == temp_id) {
+                this.groups.splice(i, 1);
+                break;
+            }
+        }
+
+        var temp_id_arr = [];
+        iLength = currentState.components.length;
+        for (var i = 0; i < iLength; i++) {
+            temp_id_arr.push(currentState.components[i].temp_id);
+        }
+
+        this.removeAllActiveComponents();
+        this.setActiveComponents(temp_id_arr);
+    },
 	deleteGroup: function() {
 
 	},
@@ -2453,11 +2477,13 @@ var Sheet = {
     ungroupActiveGroup: function() {
         var iLength = this.active_groups.length;
         var components = [];
+        var group = null;
         for (var i = 0; i < iLength; i++) {
             var temp_id = this.active_groups[i].temp_id;
             var jLength = this.groups.length;
             for (var j = 0; j < jLength; j++) {
                 if (this.groups[j].temp_id == temp_id) {
+                    group = clone(this.groups[j]);
                     components = this.groups[j].components;
                     this.groups.splice(j, 1);
                     break;
@@ -2471,7 +2497,7 @@ var Sheet = {
             this.setActiveComponent(components[i].temp_id);
         }
 
-        history.addToStack({
+        History.addToStack({
             type: "ungroup",
             old_group: clone(group),
             components: clone(group.components)
@@ -3063,6 +3089,9 @@ var History = {
                 case "create_group":
                     Sheet.ungroupFromHistoryUndo(currentState);
                     break;
+                case "ungroup":
+                    Sheet.createGroupFromUngroup(currentState);
+                    break;
 			}
 
             this.pointer--;
@@ -3090,6 +3119,9 @@ var History = {
                     break;
                 case "create_group":
                     Sheet.createGroupFromHistoryRedo(currentState);
+                    break;
+                case "ungroup":
+                    Sheet.ungroupFromHistoryRedo(currentState);
                     break;
 			}
 

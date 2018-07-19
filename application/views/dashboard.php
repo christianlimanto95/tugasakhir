@@ -7,7 +7,7 @@
         echo "<div class='workspace-item' data-id='" . $workspace[$i]->workspace_id . "'><div class='workspace-name'>" . $workspace[$i]->workspace_name . "</div>";
         echo "<div class='last-updated'></div>";
         echo "<div class='workspace-menu-container'>";
-        echo "<a class='btn workspace-menu' href='" . base_url("workspace/" . $workspace[$i]->workspace_id) . "'>Edit</a>";
+        echo "<a class='btn workspace-menu' target='_blank' href='" . base_url("workspace/" . $workspace[$i]->workspace_id) . "'>Edit</a>";
         echo "<a class='btn workspace-menu workspace-preview'>Preview</a>";
         echo "<a href='" . base_url("dashboard/workspace_history/" . $workspace[$i]->workspace_id) . "' class='btn workspace-menu workspace-history'>View History</a>";
         echo "</div>";
