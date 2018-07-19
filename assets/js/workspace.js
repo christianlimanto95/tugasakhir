@@ -222,13 +222,21 @@ function load() {
 
         iLength = groups.length;
         for (var i = 0; i < iLength; i++) {
-            var group = new Group();
+            var group = Object.create(Group);
+            group.name = groups[i].name;
             group.temp_id = groups[i].temp_id;
             group.real_size = clone(groups[i].real_size);
             group.real_position = clone(groups[i].real_position);
             group.convertRealPositionToComputedPosition();
             group.convertRealSizeToComputedSize();
-            Sheet.groups.add(group);
+            var group_components = [];
+            var jLength = groups[i].components.length;
+            for (var j = 0; j < jLength; j++) {
+                var component = Sheet.getComponentByTempId(groups[i].components[j].temp_id);
+                group_components.push(component);
+            }
+            group.components = group_components;
+            Sheet.groups.push(group);
         }
 
         Sheet.temp_id = temp_id;
@@ -429,6 +437,7 @@ function save() {
                 });
             }
             current_groups.push({
+                name: group.name,
                 temp_id: group.temp_id,
                 real_size: group.real_size,
                 real_position: group.real_position,
@@ -743,6 +752,13 @@ function e_keydown_document(e) {
         case 89: // Ctrl + Y
             if (keyPressed.ctrl) {
                 History.do_redo(sheetContext);
+            }
+            break;
+        case 83: // Ctrl + S
+            if (keyPressed.ctrl) {
+                e.preventDefault();
+                e.stopPropagation();
+                save();
             }
             break;
 	}

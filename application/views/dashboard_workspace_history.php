@@ -42,6 +42,15 @@
                         $name = $item->components[$k]->name;
                         $names .= $name;
                     }
+
+                    $kLength = sizeof($item->groups);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->groups[$k]->name;
+                        $names .= $name;
+                    }
                     echo "<div class='history-item'>" . $names . " moved</div>";
                     break;
                 case "resize_component_or_group":
@@ -52,6 +61,15 @@
                             $names .= ", ";
                         }
                         $name = $item->components[$k]->name;
+                        $names .= $name;
+                    }
+
+                    $kLength = sizeof($item->groups);
+                    for ($k = 0; $k < $kLength; $k++) {
+                        if ($names != "") {
+                            $names .= ", ";
+                        }
+                        $name = $item->groups[$k]->name;
                         $names .= $name;
                     }
                     echo "<div class='history-item'>" . $names . " resized</div>";

@@ -280,7 +280,12 @@ var Group = {
         this.computed_size = clone(this.real_size);
     },
     convertRealPositionToComputedPosition: function() {
-        this.computed_position = clone(this.real_position);
+        this.computed_position = {
+            left: this.real_position.left + Sheet.selisihOffset.left,
+            top: this.real_position.top + Sheet.selisihOffset.top,
+            right: this.real_position.right + Sheet.selisihOffset.left,
+            bottom: this.real_position.bottom + Sheet.selisihOffset.top
+        };
     }
 };
 
@@ -1004,8 +1009,8 @@ RadioButton.draw = function(context) {
 
 var RadioButtonGroup = Object.create(Component);
 RadioButtonGroup.id = "16";
-RadioButtonGroup.name = "Radiobutton Group 1";
-RadioButtonGroup.real_name = "Radiobutton Group 1";
+RadioButtonGroup.name = "Radiobutton Group";
+RadioButtonGroup.real_name = "Radiobutton Group";
 RadioButtonGroup.text = "()Unchecked\n(*)Checked\n()dUnchecked Disabled\n(*)dChecked Disabled";
 RadioButtonGroup.multiline = true;
 RadioButtonGroup.image = componentImage16;
@@ -1385,7 +1390,7 @@ var Sheet = {
             components: [{
                 componentIndex: this.components.length - 1,
                 component: clone(component)
-            }],
+            }]
         });
     },
     addComponentsFromHistory: function(currentState) {
@@ -2465,6 +2470,12 @@ var Sheet = {
         for (var i = 0; i < iLength; i++) {
             this.setActiveComponent(components[i].temp_id);
         }
+
+        history.addToStack({
+            type: "ungroup",
+            old_group: clone(group),
+            components: clone(group.components)
+        });
     },
     setActiveGroup: function(group) {
         group = clone(group);

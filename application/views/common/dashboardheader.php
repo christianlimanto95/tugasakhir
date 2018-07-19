@@ -24,7 +24,7 @@
 <div class="header-left">
     <div class="header-left-upper"></div>
     <div class="header-left-body">
-        <a href="#" class="header-menu">Workspace</a>
+        <a href="<?php echo base_url("dashboard"); ?>" class="header-menu">Workspace</a>
         <a href="#" class="header-menu">Menu 1</a>
         <a href="#" class="header-menu">Menu 2</a>
     </div>
