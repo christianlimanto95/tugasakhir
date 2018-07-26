@@ -222,6 +222,7 @@ var Component = {
 	font_size: 11,
 	default_font_spacing: 1.2,
     font_spacing: 1.2,
+    border_opacity: 1,
     border_color: "#000000",
     default_border_radius: 0,
     border_radius: 0,
@@ -249,6 +250,7 @@ var Component = {
 		this.font_size = font_size;
     },
     drawComponentBorder: function(context) {
+        context.globalAlpha = this.border_opacity;
         context.strokeStyle = this.border_color;
         context.lineWidth = this.border_width;
     
@@ -263,6 +265,8 @@ var Component = {
         context.lineTo(this.computed_position.left, this.computed_position.top + this.border_radius);
         context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.border_radius, this.computed_position.top, this.border_radius);
         context.stroke();
+
+        context.globalAlpha = 1;
     },
     draw: function() {
 
@@ -442,8 +446,11 @@ Button4.default_size = {
 };
 Button4.real_size = clone(Button4.default_size);
 Button4.computed_size = clone(Button4.default_size);
+Button4.border_opacity = 0;
 Button4.draw = function(context) {
-	context.strokeStyle = "#000000";
+    this.drawComponentBorder(context);
+
+	context.strokeStyle = this.font_color;
 	context.lineWidth = 2;
 	var arrowRightBorder = this.computed_size.width / 9;
 	var arrowTopBorder = this.computed_size.height / 3;
@@ -480,8 +487,10 @@ Checkbox.default_size = {
 };
 Checkbox.real_size = clone(Checkbox.default_size);
 Checkbox.computed_size = clone(Checkbox.default_size);
+Checkbox.border_opacity = 0;
 Checkbox.draw = function(context) {
-	context.strokeStyle = "#000000";
+    this.drawComponentBorder(context);
+	context.strokeStyle = this.font_color;
 	context.lineWidth = 1;
 
 	var kotakHeight = this.font_size / this.default_font_size * 15;
@@ -550,8 +559,10 @@ CheckboxGroup.default_size = {
 };
 CheckboxGroup.real_size = clone(CheckboxGroup.default_size);
 CheckboxGroup.computed_size = clone(CheckboxGroup.default_size);
+CheckboxGroup.border_opacity = 0;
 CheckboxGroup.draw = function(context) {
-	context.strokeStyle = "#000000";
+    this.drawComponentBorder(context);
+	context.strokeStyle = this.font_color;
 	context.lineWidth = 1;
 
 	var kotakHeight = this.font_size / this.default_font_size * 15;
@@ -662,12 +673,12 @@ Combobox.default_size = {
 Combobox.real_size = clone(Combobox.default_size);
 Combobox.computed_size = clone(Combobox.default_size);
 Combobox.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+    this.drawComponentBorder(context);
+    
 	context.fillStyle = "#FFFFFF";
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
 
+    context.strokeStyle = this.border_color;
 	var kotakWidth = this.computed_size.width - 30;
 	var kotakRight = this.computed_position.left + kotakWidth;
 	var kotakCenterX = this.computed_position.left + kotakWidth / 2;
@@ -706,7 +717,7 @@ Accordion.default_size = {
 Accordion.real_size = clone(Accordion.default_size);
 Accordion.computed_size = clone(Accordion.default_size);
 Accordion.draw = function(context) {
-	context.strokeStyle = "#000000";
+	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
 
 	context.fillStyle = "#FFFFFF";

@@ -806,13 +806,19 @@ function showTextSection() {
     var element = "";
     for (var i = 0; i < iLength; i++) {
         element += "<div class='right-pane-section custom-properties'>";
+        element += "<div class='right-pane-section-title'>" + custom_properties[i].group + "</div>";
         element += "<div class='right-pane-section-content'>";
 
         var jLength = custom_properties[i].item.length;
         for (var j = 0; j < jLength; j++) {
             element += "<div class='form-item'>";
             element += "<div class='form-label'>" + custom_properties[i].item[j].label + "</div>";
-            element += "<div class='form-input input-color' style='background-color: red;'></div>";
+            switch (custom_properties[i].item[j].value_type) {
+                case "color":
+                    element += "<div class='form-input input-color' style='background-color: " + custom_properties[i].item[j].value + ";'></div>";
+                    break;
+            }
+            
             element += "</div>";
         }
         

@@ -232,7 +232,8 @@
 	background-color: red;
 	width: 100px;
 	height: 27px;
-	border-radius: 3px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .sheet-container {
