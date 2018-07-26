@@ -221,12 +221,19 @@ var Component = {
 	default_font_size: 11,
 	font_size: 11,
 	default_font_spacing: 1.2,
-	font_spacing: 1.2,
+    font_spacing: 1.2,
+    border_color: "#000000",
+    default_border_radius: 0,
+    border_radius: 0,
+    border_width: 1,
+    default_background_color: "#FFFFFF",
+    background_color: "#FFFFFF",
 	default_font_color: "#000000",
 	font_color: "#000000",
 	has_text: true,
 	text: "",
-	multiline: false,
+    multiline: false,
+    custom_properties: [],
 	children: [],
 	change_text: function(text) {
 		this.text = text;
@@ -240,7 +247,23 @@ var Component = {
 	},
 	change_font_size: function(font_size) {
 		this.font_size = font_size;
-	},
+    },
+    drawComponentBorder: function(context) {
+        context.strokeStyle = this.border_color;
+        context.lineWidth = this.border_width;
+    
+        context.beginPath();
+        context.moveTo(this.computed_position.left + this.border_radius, this.computed_position.top);
+        context.lineTo(this.computed_position.right - this.border_radius, this.computed_position.top);
+        context.arcTo(this.computed_position.right, this.computed_position.top, this.computed_position.right, this.computed_position.top + this.border_radius, this.border_radius);
+        context.lineTo(this.computed_position.right, this.computed_position.bottom - this.border_radius);
+        context.arcTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right - this.border_radius, this.computed_position.bottom, this.border_radius);
+        context.lineTo(this.computed_position.left + this.border_radius, this.computed_position.bottom);
+        context.arcTo(this.computed_position.left, this.computed_position.bottom, this.computed_position.left, this.computed_position.bottom - this.border_radius, this.border_radius);
+        context.lineTo(this.computed_position.left, this.computed_position.top + this.border_radius);
+        context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.border_radius, this.computed_position.top, this.border_radius);
+        context.stroke();
+    },
     draw: function() {
 
 	}
@@ -289,7 +312,6 @@ var Group = {
     }
 };
 
-
 var Button1 = Object.create(Component);
 Button1.id = "1";
 Button1.name = "Button 1";
@@ -303,10 +325,9 @@ Button1.default_size = {
 Button1.real_size = clone(Button1.default_size);
 Button1.computed_size = clone(Button1.default_size);
 Button1.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
-	context.fillStyle = "#FFFFFF";
+    this.drawComponentBorder(context);
+    
+	context.fillStyle = this.background_color;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
 
 	context.fillStyle = this.font_color;
@@ -330,23 +351,11 @@ Button2.default_size = {
 };
 Button2.real_size = clone(Button2.default_size);
 Button2.computed_size = clone(Button2.default_size);
-Button2.real_corner_radius = 11;
-Button2.computed_corner_radius = 11;
+Button2.default_border_radius = 11;
+Button2.border_radius = 11;
 Button2.font_size = 9;
 Button2.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.beginPath();
-	context.moveTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.top);
-	context.lineTo(this.computed_position.right - this.computed_corner_radius, this.computed_position.top);
-	context.arcTo(this.computed_position.right, this.computed_position.top, this.computed_position.right, this.computed_position.top + this.computed_corner_radius, this.computed_corner_radius);
-	context.lineTo(this.computed_position.right, this.computed_position.bottom - this.computed_corner_radius);
-	context.arcTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right - this.computed_corner_radius, this.computed_position.bottom, this.computed_corner_radius);
-	context.lineTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.bottom);
-	context.arcTo(this.computed_position.left, this.computed_position.bottom, this.computed_position.left, this.computed_position.bottom - this.computed_corner_radius, this.computed_corner_radius);
-	context.lineTo(this.computed_position.left, this.computed_position.top + this.computed_corner_radius);
-	context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.computed_corner_radius, this.computed_position.top, this.computed_corner_radius);
-	context.stroke();
+	this.drawComponentBorder(context);
 
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
@@ -374,13 +383,27 @@ Button3.default_size = {
 Button3.real_size = clone(Button3.default_size);
 Button3.computed_size = clone(Button3.default_size);
 Button3.text = "One, Two, Three";
+Button3.custom_properties = [
+    {
+        group: "Button Color",
+        item: [
+            {
+                label: "Normal",
+                value: "#FFFFFF",
+                value_type: "color"
+            },
+            {
+                label: "Highlighted",
+                value: "#FFFFFF",
+                value_type: "color"
+            }
+        ]
+    }
+],
 Button3.draw = function(context) {
 	var items = this.text.split(",");
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	this.drawComponentBorder(context);
 	
-	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "center";
 	context.textBaseline = "middle";
@@ -390,9 +413,13 @@ Button3.draw = function(context) {
 	context.beginPath();
 	var centerY = this.computed_position.top + this.computed_size.height / 2;
 	for (var i = 0; i < iLength; i++) {
-		var lineOffset = this.computed_position.left + eachButtonWidth * i;
+        var lineOffset = this.computed_position.left + eachButtonWidth * i;
+        context.fillStyle = this.custom_properties[0].item[0].value;
+        context.fillRect(lineOffset, this.computed_position.top, eachButtonWidth, this.computed_size.height);
+
 		var centerX = lineOffset + eachButtonWidth / 2;
-		var text = items[i].trim();
+        var text = items[i].trim();
+        context.fillStyle = this.font_color;
 		context.fillText(text, centerX, centerY);
 
 		if (i > 0) {

@@ -621,26 +621,26 @@ function e_mousemove_document(e) {
 
 function e_mouseup_document(e) {
     if (e.which == 1) {
-        Sheet.isHittingComponentOnMouseDown = false;
         if (isDraggingFromToolbar) {
             releaseDragging(e);
         } else if ($(e.target).closest(".sheet-temp").length == 1) {
-            var coor = translateMouseCoorToComputedCoor(e);
-            var component = Sheet.isHittingComponent(coor.x, coor.y);
             
             if (mouseDrag) {
                 Sheet.updateActiveComponentsPosition(SheetTemp.components, SheetTemp.groups);
             } else if (mouseResize) {
                 Sheet.updateActiveComponentsSize(SheetTemp.components, SheetTemp.groups);
             } else {
-                if (!keyPressed.ctrl) {
+                if (!keyPressed.ctrl && !Sheet.isHittingComponentOnMouseDown) {
+                    //var coor = translateMouseCoorToComputedCoor(e);
+                    //var component = Sheet.isHittingComponent(coor.x, coor.y);
                     Sheet.removeAllActiveComponents();
-                    if (component != null) {
-                        Sheet.setActiveComponent(component.temp_id);
-                    }
+                    //if (component != null) {
+                        //Sheet.setActiveComponent(component.temp_id);
+                    //}
                 }
             }
 
+            Sheet.isHittingComponentOnMouseDown = false;
             SheetTemp.removeAllComponents();
             SheetTemp.draw(sheetTempContext);
             Sheet.draw(sheetContext);
@@ -801,12 +801,35 @@ function showTextSection() {
         $(".form-item-value").addClass("hide");
     }
 
+    var custom_properties = active_component.custom_properties;
+    var iLength = custom_properties.length;
+    var element = "";
+    for (var i = 0; i < iLength; i++) {
+        element += "<div class='right-pane-section custom-properties'>";
+        element += "<div class='right-pane-section-content'>";
+
+        var jLength = custom_properties[i].item.length;
+        for (var j = 0; j < jLength; j++) {
+            element += "<div class='form-item'>";
+            element += "<div class='form-label'>" + custom_properties[i].item[j].label + "</div>";
+            element += "<div class='form-input input-color' style='background-color: red;'></div>";
+            element += "</div>";
+        }
+        
+        element += "</div>";
+        element += "</div>";
+    }
+    if (iLength > 0) {
+        $(".right-pane").append(element);
+    }
+
     $(".form-input-font-family").val(active_component.font_family);
     $(".form-input-font-size").val(active_component.font_size);
 }
 
 function hideTextSection() {
-	$(".right-pane-section-text").addClass("hide");
+    $(".right-pane-section-text").addClass("hide");
+    $(".custom-properties").remove();
 }
 
 function hideComponentEdit() {

@@ -161,11 +161,12 @@
 .right-pane {
 	right: 0;
 	width: 250px;
-	border-left: 1px solid #CCC;
+    border-left: 1px solid #CCC;
+    overflow: auto;
 }
 
 .right-pane-section.hide {
-	visibility: hidden;
+	display: none;
 }
 
 .right-pane-section-title {
