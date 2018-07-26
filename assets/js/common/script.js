@@ -639,7 +639,7 @@ CircleButton.default_size = {
 CircleButton.real_size = clone(CircleButton.default_size);
 CircleButton.computed_size = clone(CircleButton.default_size);
 CircleButton.draw = function(context) {
-	context.strokeStyle = "#000000";
+	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
 	var center = this.getCenterPosition();
 	
@@ -675,7 +675,7 @@ Combobox.computed_size = clone(Combobox.default_size);
 Combobox.draw = function(context) {
     this.drawComponentBorder(context);
     
-	context.fillStyle = "#FFFFFF";
+	context.fillStyle = this.background_color;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
 
     context.strokeStyle = this.border_color;
@@ -720,7 +720,7 @@ Accordion.draw = function(context) {
 	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
 
-	context.fillStyle = "#FFFFFF";
+	context.fillStyle = this.background_color;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 
 	context.beginPath();
@@ -783,13 +783,13 @@ ColorPicker.default_size = {
 };
 ColorPicker.real_size = clone(ColorPicker.default_size);
 ColorPicker.computed_size = clone(ColorPicker.default_size);
+ColorPicker.border_width = 4;
+ColorPicker.background_color = "#5555FF";
 ColorPicker.draw = function(context) {
-	context.fillStyle = "#5555FF";
+	context.fillStyle = this.background_color;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
 
-	context.strokeStyle = "#000000";
-	context.lineWidth = 4;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	this.drawComponentBorder(context);
 };
 
 var DateChooser = Object.create(Component);
@@ -805,13 +805,13 @@ DateChooser.default_size = {
 DateChooser.real_size = clone(DateChooser.default_size);
 DateChooser.computed_size = clone(DateChooser.default_size);
 DateChooser.draw = function(context) {
-	context.strokeStyle = "#000000";
+	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
 
 	var textContainerRight = this.computed_position.right - 40;
 	var textContainerWidth = this.computed_size.width - 40;
 	context.strokeRect(this.computed_position.left, this.computed_position.top, textContainerWidth, this.computed_size.height);
-	context.fillStyle = "#FFFFFF";
+	context.fillStyle = this.background_color;
 	context.fillRect(this.computed_position.left, this.computed_position.top, textContainerWidth, this.computed_size.height)
 
 	context.fillStyle = this.font_color;
@@ -838,9 +838,8 @@ GroupBox.default_size = {
 GroupBox.real_size = clone(GroupBox.default_size);
 GroupBox.computed_size = clone(GroupBox.default_size);
 GroupBox.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+	this.drawComponentBorder(context);
+    
 	context.fillStyle = "#FFFFFF";
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
 
@@ -849,7 +848,7 @@ GroupBox.draw = function(context) {
 	context.textBaseline = "middle";
 	var textWidth = context.measureText(this.text).width;
 	var textLeft = this.computed_position.left + this.computed_size.width / 6;
-	context.fillStyle = "#FFFFFF";
+	context.fillStyle = this.background_color;
 	context.fillRect(textLeft - 7, this.computed_position.top - this.font_size / 2, textWidth + 14, this.font_size);
 	context.fillStyle = this.font_color;
 	context.fillText(this.text, textLeft, this.computed_position.top);
@@ -874,14 +873,75 @@ DatePicker.default_size = {
 };
 DatePicker.real_size = clone(DatePicker.default_size);
 DatePicker.computed_size = clone(DatePicker.default_size);
+DatePicker.custom_properties = [
+    {
+        group: "Header",
+        item: [
+            {
+                label: "Background Color",
+                value: "#DDDDDD",
+                value_type: "color"
+            },
+            {
+                label: "Year Color",
+                value: "#000000",
+                value_type: "color"
+            },
+            {
+                label: "Month & Date Color",
+                value: "#000000",
+                value_type: "color"
+            }
+        ]
+    },
+    {
+        group: "Body",
+        item: [
+            {
+                label: "Background Color",
+                value: "#FFFFFF",
+                value_type: "color"
+            },
+            {
+                label: "Month & Year Color",
+                value: "#000000",
+                value_type: "color"
+            },
+            {
+                label: "Week Color",
+                value: "#000000",
+                value_type: "color"
+            },
+            {
+                label: "Date Color",
+                value: "#000000",
+                value_type: "color"
+            }
+        ]
+    },
+    {
+        group: "Button",
+        item: [
+            {
+                label: "Cancel",
+                value: "#000000",
+                value_type: "color"
+            },
+            {
+                label: "OK",
+                value: "#000000",
+                value_type: "color"
+            }
+        ]
+    }
+],
 DatePicker.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 1;
-	context.strokeRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
-	context.fillStyle = "#FFFFFF";
+    this.drawComponentBorder(context);
+    
+	context.fillStyle = this.custom_properties[1].item[0].value;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height)
 
-	context.fillStyle = "#DDDDDD";
+	context.fillStyle = this.custom_properties[0].item[0].value;
 	context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, 70);
 
 	var dateItem = this.text.split("/");
@@ -901,18 +961,22 @@ DatePicker.draw = function(context) {
 	}
 
 	context.textBaseline = "middle";
-	context.fillStyle = this.font_color;
+	context.fillStyle = this.custom_properties[0].item[1].value;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
-	context.fillText(this.text_year, this.computed_position.left + 10, this.computed_position.top + 20);
+    context.fillText(this.text_year, this.computed_position.left + 10, this.computed_position.top + 20);
+    
+    context.fillStyle = this.custom_properties[0].item[2].value;
 	context.font = this.font_size + 10 + "px " + this.font_family;
 	context.fillText(this.text_month.substr(0, 3) + " " + this.text_day, this.computed_position.left + 10, this.computed_position.top + 40);
 
+    context.fillStyle = this.custom_properties[1].item[1].value;
 	context.font = "bold " +  (this.font_size + 1) + "px " + this.font_family;
 	context.textAlign = "center";
 	var center = this.getCenterPosition();
 	context.fillText(this.text_month + " " + this.text_year, center.x, this.computed_position.top + 90);
 
+    context.fillStyle = this.custom_properties[1].item[2].value;
 	context.font = this.font_size + "px " + this.font_family;
 	var horizontalMargin = (this.computed_size.width - 30) / 6;
 	var firstLeft = this.computed_position.left + 15;
@@ -934,6 +998,7 @@ DatePicker.draw = function(context) {
 		dates.splice(0, 0, "");
 	}
 
+    context.fillStyle = this.custom_properties[1].item[3].value;
 	var line = 1;
 	var col = 0;
 	var verticalMargin = (this.computed_size.height - 200) / 5;
@@ -949,7 +1014,9 @@ DatePicker.draw = function(context) {
 		col++;
 	}
 
-	context.fillText("CANCEL", this.computed_position.right - 80, this.computed_position.bottom - 20);
+    context.fillStyle = this.custom_properties[2].item[0].value;
+    context.fillText("CANCEL", this.computed_position.right - 80, this.computed_position.bottom - 20);
+    context.fillStyle = this.custom_properties[2].item[1].value;
 	context.fillText("OK", this.computed_position.right - 30, this.computed_position.bottom - 20);
 };
 
@@ -966,7 +1033,7 @@ HelpButton.default_size = {
 HelpButton.real_size = clone(HelpButton.default_size);
 HelpButton.computed_size = clone(HelpButton.default_size);
 HelpButton.draw = function(context) {
-	context.strokeStyle = "#000000";
+	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
 	var center = this.getCenterPosition();
 	
@@ -999,7 +1066,10 @@ RadioButton.default_size = {
 };
 RadioButton.real_size = clone(RadioButton.default_size);
 RadioButton.computed_size = clone(RadioButton.default_size);
+RadioButton.border_opacity = 0;
 RadioButton.draw = function(context) {
+    this.drawComponentBorder(context);
+
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 
@@ -1059,7 +1129,10 @@ RadioButtonGroup.default_size = {
 };
 RadioButtonGroup.real_size = clone(RadioButtonGroup.default_size);
 RadioButtonGroup.computed_size = clone(RadioButtonGroup.default_size);
+RadioButtonGroup.border_opacity = 0;
 RadioButtonGroup.draw = function(context) {
+    this.drawComponentBorder(context);
+
 	context.strokeStyle = "#000000";
 	context.lineWidth = 1;
 
@@ -1126,22 +1199,11 @@ Icon.default_size = {
 };
 Icon.real_size = clone(Icon.default_size);
 Icon.computed_size = clone(Icon.default_size);
-Icon.real_corner_radius = 11;
-Icon.computed_corner_radius = 11;
+Icon.default_border_radius = 11;
+Icon.border_radius = 11;
+Icon.border_width = 2;
 Icon.draw = function(context) {
-	context.strokeStyle = "#000000";
-	context.lineWidth = 2;
-	context.beginPath();
-	context.moveTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.top);
-	context.lineTo(this.computed_position.right - this.computed_corner_radius, this.computed_position.top);
-	context.arcTo(this.computed_position.right, this.computed_position.top, this.computed_position.right, this.computed_position.top + this.computed_corner_radius, this.computed_corner_radius);
-	context.lineTo(this.computed_position.right, this.computed_position.bottom - this.computed_corner_radius);
-	context.arcTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right - this.computed_corner_radius, this.computed_position.bottom, this.computed_corner_radius);
-	context.lineTo(this.computed_position.left + this.computed_corner_radius, this.computed_position.bottom);
-	context.arcTo(this.computed_position.left, this.computed_position.bottom, this.computed_position.left, this.computed_position.bottom - this.computed_corner_radius, this.computed_corner_radius);
-	context.lineTo(this.computed_position.left, this.computed_position.top + this.computed_corner_radius);
-	context.arcTo(this.computed_position.left, this.computed_position.top, this.computed_position.left + this.computed_corner_radius, this.computed_position.top, this.computed_corner_radius);
-	context.stroke();
+	this.drawComponentBorder(context);
 };
 
 var SingleLineText = Object.create(Component);
@@ -1156,8 +1218,10 @@ SingleLineText.default_size = {
 };
 SingleLineText.real_size = clone(SingleLineText.default_size);
 SingleLineText.computed_size = clone(SingleLineText.default_size);
+SingleLineText.border_opacity = 0;
 SingleLineText.draw = function(context) {
-	
+    this.drawComponentBorder(context);
+    
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
@@ -1178,7 +1242,10 @@ MultiLineText.default_size = {
 };
 MultiLineText.real_size = clone(MultiLineText.default_size);
 MultiLineText.computed_size = clone(MultiLineText.default_size);
+MultiLineText.border_opacity = 0;
 MultiLineText.draw = function(context) {
+    this.drawComponentBorder(context);
+
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
@@ -1217,7 +1284,10 @@ Link.default_size = {
 };
 Link.real_size = clone(Link.default_size);
 Link.computed_size = clone(Link.default_size);
+Link.border_opacity = 0;
 Link.draw = function(context) {
+    this.drawComponentBorder(context);
+
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
@@ -1249,7 +1319,32 @@ LinkBar.default_size = {
 };
 LinkBar.real_size = clone(LinkBar.default_size);
 LinkBar.computed_size = clone(LinkBar.default_size);
+LinkBar.border_opacity = 0;
+LinkBar.custom_properties = [
+    {
+        group: "Divider",
+        item: [
+            {
+                label: "Color",
+                value: "#000000",
+                value_type: "color"
+            },
+            {
+                label: "Distance",
+                value: 10,
+                value_type: "number"
+            },
+            {
+                label: "Width",
+                value: 1,
+                value_type: "number"
+            }
+        ]
+    }
+];
 LinkBar.draw = function(context) {
+    this.drawComponentBorder(context);
+
 	context.fillStyle = this.font_color;
 	context.font = this.font_size + "px " + this.font_family;
 	context.textAlign = "left";
@@ -1257,13 +1352,15 @@ LinkBar.draw = function(context) {
 	var center = this.getCenterPosition();
 
 	var texts = this.text.split(",");
-	var iLength = texts.length;
-	var left = this.computed_position.left + 10;
+    var iLength = texts.length;
+    var distance = this.custom_properties[0].item[1].value;
+	var left = this.computed_position.left + distance;
 	var underlineTop = center.y + this.font_size / 1.4;
 
 	var lineTop = center.y - this.font_size / 1.5;
 	var lineBottom = center.y + this.font_size / 1.5;
-	context.lineWidth = 1;
+    context.lineWidth = this.custom_properties[0].item[2].value;
+    
 	for (var i = 0; i < iLength; i++) {
 		texts[i] = texts[i].trim();
 		context.fillText(texts[i], left, center.y);
@@ -1278,14 +1375,14 @@ LinkBar.draw = function(context) {
 		context.stroke();
 
 		if (i < iLength - 1) {
-			context.strokeStyle = "#000000";
+			context.strokeStyle = this.custom_properties[0].item[0].value;
 			context.beginPath();
-			context.moveTo(left + textWidth + 10, lineTop);
-			context.lineTo(left+ textWidth + 10, lineBottom);
+			context.moveTo(left + textWidth + distance, lineTop);
+			context.lineTo(left + textWidth + distance, lineBottom);
 			context.stroke();
 		}
 
-		left += textWidth + 20;
+		left += textWidth + distance * 2;
 	}
 };
 

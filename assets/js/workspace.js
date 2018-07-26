@@ -784,10 +784,11 @@ function e_keyup_document(e) {
 }
 
 function showTextSection() {
-    $(".right-pane-section-text").removeClass("hide");
+    $(".right-pane-section-text, .right-pane-section-border").removeClass("hide");
     var active_component = Sheet.active_components[0];
     if (active_component.has_text) {
         $(".form-item-value").removeClass("hide");
+        $(".form-item-text-color .input-color").css("background-color", active_component.font_color);
         if (active_component.multiline) {
             $(".form-input-text").addClass("hide");
             $(".form-input-textarea").removeClass("hide");
@@ -800,6 +801,11 @@ function showTextSection() {
     } else {
         $(".form-item-value").addClass("hide");
     }
+
+    $(".form-input-border-color").css("background-color", active_component.border_color);
+    $(".form-input-border-width").val(active_component.border_width);
+    $(".form-input-border-radius").val(active_component.border_radius);
+    $(".form-input-border-opacity").val(active_component.border_opacity * 100);
 
     var custom_properties = active_component.custom_properties;
     var iLength = custom_properties.length;
@@ -816,6 +822,9 @@ function showTextSection() {
             switch (custom_properties[i].item[j].value_type) {
                 case "color":
                     element += "<div class='form-input input-color' style='background-color: " + custom_properties[i].item[j].value + ";'></div>";
+                    break;
+                case "number":
+                    element += "<input type='number' class='form-input' value='" + custom_properties[i].item[j].value + "' />";
                     break;
             }
             
@@ -834,7 +843,7 @@ function showTextSection() {
 }
 
 function hideTextSection() {
-    $(".right-pane-section-text").addClass("hide");
+    $(".right-pane-section-text, .right-pane-section-border").addClass("hide");
     $(".custom-properties").remove();
 }
 

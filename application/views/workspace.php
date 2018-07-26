@@ -226,9 +226,30 @@
                 <div class="form-label">Size</div>
                 <input type="number" class="form-input form-input-font-size" />
             </div>
-            <div class="form-item inline form-item-color">
+            <div class="form-item inline form-item-color form-item-text-color">
                 <div class="form-label">Color</div>
                 <div class="form-input input-color"></div>
+            </div>
+        </div>
+    </div>
+    <div class="right-pane-section right-pane-section-border hide">
+        <div class="right-pane-section-title">Border</div>
+        <div class="right-pane-section-content">
+            <div class="form-item form-item-border-color">
+                <div class="form-label">Color</div>
+                <div class="form-input input-color form-input-border-color"></div>
+            </div>
+            <div class="form-item form-item-border-width">
+                <div class="form-label">Width</div>
+                <input type="number" class="form-input form-input-border-width" />
+            </div>
+            <div class="form-item form-item-border-radius">
+                <div class="form-label">Radius</div>
+                <input type="number" class="form-input form-input-border-radius" />
+            </div>
+            <div class="form-item form-item-border-opacity">
+                <div class="form-label">Opacity</div>
+                <input type="number" class="form-input form-input-border-opacity" min="0" max="100" />
             </div>
         </div>
     </div>
