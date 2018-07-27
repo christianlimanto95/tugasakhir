@@ -111,6 +111,12 @@ $(function() {
             hideTextSection();
         }
     };
+
+    Sheet.onPropertyChanged = function() {
+        if (Sheet.active_components.length == 1 && Sheet.active_groups.length == 0) {
+            showTextSection();
+        }
+    };
     
     History.onStackValueChanged = function() {
         if (History.pointer >= 0) {
@@ -160,9 +166,8 @@ $(function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-			Sheet.active_components[i].change_text(value);
-		}
-		Sheet.draw(sheetContext);
+            Sheet.updateComponentTextByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+        }
 	});
 
 	$(".form-input-text").on("keypress", function(e) {
@@ -176,18 +181,16 @@ $(function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-			Sheet.active_components[i].change_font_family(value);
+			Sheet.updateComponentFontFamilyByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
 		}
-		Sheet.draw(sheetContext);
 	});
 
 	$(".form-input-font-size").on("input", function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-			Sheet.active_components[i].change_font_size(value);
+			Sheet.updateComponentFontSizeByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
 		}
-		Sheet.draw(sheetContext);
     });
     
     $(".sheet-temp").on("contextmenu", function(e) {
@@ -783,12 +786,27 @@ function e_keyup_document(e) {
 	}
 }
 
+function inputColorOnChange(jspicker) {
+    var value = jspicker.toString();
+    value = "#" + value;
+    var element = jspicker.targetElement;
+
+    switch ($(element).attr("data-type")) {
+        case "text-color":
+            var iLength = Sheet.active_components.length;
+            for (var i = 0; i < iLength; i++) {
+                Sheet.updateComponentFontColorByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+            }
+            break;
+    }
+}
+
 function showTextSection() {
     $(".right-pane-section-text, .right-pane-section-border").removeClass("hide");
     var active_component = Sheet.active_components[0];
     if (active_component.has_text) {
         $(".form-item-value").removeClass("hide");
-        $(".form-item-text-color .input-color").css("background-color", active_component.font_color);
+        $(".form-input-text-color")[0].jscolor.fromString(active_component.font_color);
         if (active_component.multiline) {
             $(".form-input-text").addClass("hide");
             $(".form-input-textarea").removeClass("hide");
@@ -854,11 +872,7 @@ function hideComponentEdit() {
 		var temp_id = editText.attr("data-temp-id");
 		editText.removeClass("show");
 		editText.removeAttr("data-temp-id");
-		Sheet.updateComponentTextByTempId(temp_id, value);
-        Sheet.draw(sheetContext);
-        if (Sheet.active_components.length == 1 && Sheet.active_groups.length == 0) {
-            showTextSection();
-        }
+		Sheet.updateComponentTextByTempId(temp_id, value, sheetContext);
 	}
 }
 

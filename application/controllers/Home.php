@@ -29,6 +29,7 @@ class Home extends General_controller {
             $detail = "";
         }
         parent::load_additional_js("script");
+        parent::load_additional_js("jscolor");
 		$data = array(
             "title" => "Home",
             "is_logged_in" => $is_logged_in,

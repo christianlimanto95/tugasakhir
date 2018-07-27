@@ -241,13 +241,16 @@ var Component = {
 		this.onTextChanged();
 	},
     onTextChanged: function() {
-		
+        
 	},
 	change_font_family: function(font_family) {
 		this.font_family = font_family;
 	},
 	change_font_size: function(font_size) {
 		this.font_size = font_size;
+    },
+    change_font_color: function(font_color) {
+        this.font_color = font_color;
     },
     drawComponentBorder: function(context) {
         context.globalAlpha = this.border_opacity;
@@ -1671,16 +1674,84 @@ var Sheet = {
 		}
 
 		return null;
-	},
-	updateComponentTextByTempId: function(temp_id, text) {
+    },
+    onPropertyChanged: null,
+	updateComponentTextByTempId: function(temp_id, text, context) {
 		var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
 			if (this.components[i].temp_id == temp_id) {
 				this.components[i].change_text(text);
 				break;
 			}
-		}
-	},
+        }
+        
+        iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            this.active_components[i].change_text(text);
+        }
+
+        this.draw(context);
+        if (this.onPropertyChanged != null) {
+            this.onPropertyChanged();
+        }
+    },
+    updateComponentFontFamilyByTempId: function(temp_id, font_family, context) {
+        var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.components[i].temp_id == temp_id) {
+				this.components[i].change_font_family(font_family);
+				break;
+			}
+        }
+        
+        iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            this.active_components[i].change_font_family(font_family);
+        }
+
+        this.draw(context);
+        if (this.onPropertyChanged != null) {
+            this.onPropertyChanged();
+        }
+    },
+    updateComponentFontSizeByTempId: function(temp_id, font_size, context) {
+        var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.components[i].temp_id == temp_id) {
+				this.components[i].change_font_size(font_size);
+				break;
+			}
+        }
+        
+        iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            this.active_components[i].change_font_size(font_size);
+        }
+
+        this.draw(context);
+        if (this.onPropertyChanged != null) {
+            this.onPropertyChanged();
+        }
+    },
+    updateComponentFontColorByTempId: function(temp_id, font_color, context) {
+        var iLength = this.components.length;
+		for (var i = 0; i < iLength; i++) {
+			if (this.components[i].temp_id == temp_id) {
+				this.components[i].change_font_color(font_color);
+				break;
+			}
+        }
+        
+        iLength = this.active_components.length;
+        for (var i = 0; i < iLength; i++) {
+            this.active_components[i].change_font_color(font_color);
+        }
+
+        this.draw(context);
+        if (this.onPropertyChanged != null) {
+            this.onPropertyChanged();
+        }
+    },
 	updateActiveComponentsPosition: function(tempComponents, tempGroups) {
 		var components_arr = [];
 		var iLength = this.active_components.length;

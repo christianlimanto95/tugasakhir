@@ -228,7 +228,7 @@
             </div>
             <div class="form-item inline form-item-color form-item-text-color">
                 <div class="form-label">Color</div>
-                <div class="form-input input-color"></div>
+                <button class="form-input input-color form-input-text-color jscolor {valueElement:null, onFineChange:'inputColorOnChange(this)'}" data-type="text-color"></button>
             </div>
         </div>
     </div>
