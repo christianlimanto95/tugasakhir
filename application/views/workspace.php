@@ -237,7 +237,7 @@
         <div class="right-pane-section-content">
             <div class="form-item form-item-border-color">
                 <div class="form-label">Color</div>
-                <div class="form-input input-color form-input-border-color"></div>
+                <button class="form-input input-color form-input-border-color jscolor {valueElement:null, onFineChange:'inputColorOnChange(this)'}" data-type="border-color"></button>
             </div>
             <div class="form-item form-item-border-width">
                 <div class="form-label">Width</div>

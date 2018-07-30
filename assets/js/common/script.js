@@ -252,6 +252,15 @@ var Component = {
     change_font_color: function(font_color) {
         this.font_color = font_color;
     },
+    change_border_color: function(border_color) {
+        this.border_color = border_color;
+    },
+    change_border_width: function(border_width) {
+        this.border_width = border_width;
+    },
+    change_border_radius: function(border_radius) {
+        this.border_radius = border_radius;
+    },
     drawComponentBorder: function(context) {
         context.globalAlpha = this.border_opacity;
         context.strokeStyle = this.border_color;
@@ -429,6 +438,7 @@ Button3.draw = function(context) {
         context.fillStyle = this.font_color;
 		context.fillText(text, centerX, centerY);
 
+        context.lineWidth = this.border_width;
 		if (i > 0) {
 			context.moveTo(lineOffset, this.computed_position.top);
 			context.lineTo(lineOffset, this.computed_position.bottom);
@@ -1676,75 +1686,18 @@ var Sheet = {
 		return null;
     },
     onPropertyChanged: null,
-	updateComponentTextByTempId: function(temp_id, text, context) {
-		var iLength = this.components.length;
-		for (var i = 0; i < iLength; i++) {
-			if (this.components[i].temp_id == temp_id) {
-				this.components[i].change_text(text);
-				break;
-			}
-        }
-        
-        iLength = this.active_components.length;
-        for (var i = 0; i < iLength; i++) {
-            this.active_components[i].change_text(text);
-        }
-
-        this.draw(context);
-        if (this.onPropertyChanged != null) {
-            this.onPropertyChanged();
-        }
-    },
-    updateComponentFontFamilyByTempId: function(temp_id, font_family, context) {
+    updateComponentPropertyByTempId: function(temp_id, type, value, context) {
         var iLength = this.components.length;
 		for (var i = 0; i < iLength; i++) {
 			if (this.components[i].temp_id == temp_id) {
-				this.components[i].change_font_family(font_family);
+				this.components[i][type](value);
 				break;
 			}
         }
         
         iLength = this.active_components.length;
         for (var i = 0; i < iLength; i++) {
-            this.active_components[i].change_font_family(font_family);
-        }
-
-        this.draw(context);
-        if (this.onPropertyChanged != null) {
-            this.onPropertyChanged();
-        }
-    },
-    updateComponentFontSizeByTempId: function(temp_id, font_size, context) {
-        var iLength = this.components.length;
-		for (var i = 0; i < iLength; i++) {
-			if (this.components[i].temp_id == temp_id) {
-				this.components[i].change_font_size(font_size);
-				break;
-			}
-        }
-        
-        iLength = this.active_components.length;
-        for (var i = 0; i < iLength; i++) {
-            this.active_components[i].change_font_size(font_size);
-        }
-
-        this.draw(context);
-        if (this.onPropertyChanged != null) {
-            this.onPropertyChanged();
-        }
-    },
-    updateComponentFontColorByTempId: function(temp_id, font_color, context) {
-        var iLength = this.components.length;
-		for (var i = 0; i < iLength; i++) {
-			if (this.components[i].temp_id == temp_id) {
-				this.components[i].change_font_color(font_color);
-				break;
-			}
-        }
-        
-        iLength = this.active_components.length;
-        for (var i = 0; i < iLength; i++) {
-            this.active_components[i].change_font_color(font_color);
+            this.active_components[i][type](value);
         }
 
         this.draw(context);

@@ -166,7 +166,7 @@ $(function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-            Sheet.updateComponentTextByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+            Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_text", value, sheetContext);
         }
 	});
 
@@ -181,7 +181,7 @@ $(function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-			Sheet.updateComponentFontFamilyByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+			Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_font_family", value, sheetContext);
 		}
 	});
 
@@ -189,7 +189,29 @@ $(function() {
 		var value = $(this).val();
 		var iLength = Sheet.active_components.length;
 		for (var i = 0; i < iLength; i++) {
-			Sheet.updateComponentFontSizeByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+			Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_font_size", value, sheetContext);
+		}
+    });
+
+    $(".form-input-border-width").on("input", function() {
+        var value = parseInt($(this).val());
+        if (isNaN(value)) {
+            value = 0;
+        }
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_border_width", value, sheetContext);
+		}
+    });
+
+    $(".form-input-border-radius").on("input", function() {
+        var value = parseInt($(this).val());
+        if (isNaN(value)) {
+            value = 0;
+        }
+		var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+			Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_border_radius", value, sheetContext);
 		}
     });
     
@@ -795,7 +817,13 @@ function inputColorOnChange(jspicker) {
         case "text-color":
             var iLength = Sheet.active_components.length;
             for (var i = 0; i < iLength; i++) {
-                Sheet.updateComponentFontColorByTempId(Sheet.active_components[i].temp_id, value, sheetContext);
+                Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_font_color", value, sheetContext);
+            }
+            break;
+        case "border-color":
+            var iLength = Sheet.active_components.length;
+            for (var i = 0; i < iLength; i++) {
+                Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_border_color", value, sheetContext);
             }
             break;
     }
@@ -872,7 +900,7 @@ function hideComponentEdit() {
 		var temp_id = editText.attr("data-temp-id");
 		editText.removeClass("show");
 		editText.removeAttr("data-temp-id");
-		Sheet.updateComponentTextByTempId(temp_id, value, sheetContext);
+		Sheet.updateComponentPropertyByTempId(temp_id, "change_text", value, sheetContext);
 	}
 }
 
