@@ -249,7 +249,7 @@
             </div>
             <div class="form-item form-item-border-opacity">
                 <div class="form-label">Opacity</div>
-                <input type="number" class="form-input form-input-border-opacity" min="0" max="100" />
+                <input type="range" class="form-input form-input-border-opacity" min="0" max="100" />
             </div>
         </div>
     </div>

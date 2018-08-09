@@ -338,6 +338,9 @@ var Component = {
     change_border_radius: function(border_radius) {
         this.border_radius = border_radius;
     },
+    change_border_opacity: function(border_opacity) {
+        this.border_opacity = border_opacity / 100;
+    },
     drawComponentBorder: function(context) {
         context.globalAlpha = this.border_opacity;
         context.strokeStyle = this.border_color;

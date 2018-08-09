@@ -215,6 +215,18 @@ $(function() {
 			Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_border_radius", value, sheetContext);
 		}
     });
+
+    $(".form-input-border-opacity").rangeslider({
+        polyfill: true
+    });
+
+    $(".form-input-border-opacity").on("input", function() {
+        var value = parseInt($(this).val());
+        var iLength = Sheet.active_components.length;
+		for (var i = 0; i < iLength; i++) {
+            Sheet.updateComponentPropertyByTempId(Sheet.active_components[i].temp_id, "change_border_opacity", value, sheetContext);
+		}
+    });
     
     $(".sheet-temp").on("contextmenu", function(e) {
         

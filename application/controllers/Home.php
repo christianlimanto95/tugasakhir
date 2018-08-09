@@ -30,6 +30,7 @@ class Home extends General_controller {
         }
         parent::load_additional_js("script");
         parent::load_additional_js("jscolor");
+        parent::load_additional_js("rangeslider.min");
 		$data = array(
             "title" => "Home",
             "is_logged_in" => $is_logged_in,
