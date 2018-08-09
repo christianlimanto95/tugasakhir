@@ -734,17 +734,27 @@ CircleButton.computed_size = clone(CircleButton.default_size);
 CircleButton.draw = function(context) {
 	context.strokeStyle = this.border_color;
 	context.lineWidth = 1;
-	var center = this.getCenterPosition();
 	
-	context.beginPath();
-	context.moveTo(this.computed_position.left, center.y);
-	context.quadraticCurveTo(this.computed_position.left, this.computed_position.bottom, center.x, this.computed_position.bottom);
-	context.quadraticCurveTo(this.computed_position.right, this.computed_position.bottom, this.computed_position.right, center.y);
-	context.quadraticCurveTo(this.computed_position.right, this.computed_position.top, center.x, this.computed_position.top);
-	context.quadraticCurveTo(this.computed_position.left, this.computed_position.top, this.computed_position.left, center.y);
-	context.stroke();
+    var x1 = this.computed_position.left, y1 = this.computed_position.top, x2 = this.computed_position.right, y2 = this.computed_position.bottom;
+    var radiusX = (x2 - x1) * 0.5,
+        radiusY = (y2 - y1) * 0.5,
+        centerX = x1 + radiusX,
+        centerY = y1 + radiusY,
+        step = 0.01,
+        a = step,
+        pi2 = Math.PI * 2 - step;
+    
+    context.beginPath();
+    context.moveTo(centerX + radiusX * Math.cos(0), centerY + radiusY * Math.sin(0));
 
-	var kotakHeight = this.computed_size.height / 3;
+    for (; a < pi2; a += step) {
+        context.lineTo(centerX + radiusX * Math.cos(a), centerY + radiusY * Math.sin(a));
+    }
+    
+    context.closePath();
+    context.stroke();
+
+	var kotakHeight = this.font_size * 2;
 	var kotakWidth = kotakHeight;
 	var kotakTop = this.computed_position.top + (this.computed_size.height - kotakHeight) / 2;
 	var kotakLeft = this.computed_position.left + (this.computed_size.width - kotakHeight) / 2;
@@ -1554,11 +1564,11 @@ ImageX.default_size = {
 };
 ImageX.real_size = clone(ImageX.default_size);
 ImageX.computed_size = clone(ImageX.default_size);
-ImageX.draw = function(context) {
-    this.drawComponentBorder(context);
-    
+ImageX.draw = function(context) {    
 	context.fillStyle = this.background_color;
     context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+
+    this.drawComponentBorder(context);
     
     context.globalAlpha = this.border_opacity;
     context.strokeStyle = this.border_color;
@@ -1570,6 +1580,25 @@ ImageX.draw = function(context) {
     context.lineTo(this.computed_position.left, this.computed_position.bottom);
     context.stroke();
     context.globalAlpha = 1;
+};
+
+var Rectangle = Object.create(Component);
+Rectangle.id = "24";
+Rectangle.name = "Image";
+Rectangle.real_name = "Image";
+Rectangle.has_text = false;
+Rectangle.image = componentImage24;
+Rectangle.default_size = {
+	width: 150,
+	height: 100
+};
+Rectangle.real_size = clone(Rectangle.default_size);
+Rectangle.computed_size = clone(Rectangle.default_size);
+Rectangle.draw = function(context) {
+    context.fillStyle = this.background_color;
+    context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+
+    this.drawComponentBorder(context);
 };
 
 var ALL_COMPONENTS = {
@@ -1607,6 +1636,7 @@ ALL_COMPONENTS.items.push(Link);
 ALL_COMPONENTS.items.push(LinkBar);
 ALL_COMPONENTS.items.push(Menu);
 ALL_COMPONENTS.items.push(ImageX);
+ALL_COMPONENTS.items.push(Rectangle);
 
 
 // ---------------------------------------------------------------------

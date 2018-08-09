@@ -203,6 +203,10 @@
                 <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/image.png") ?>);" ></div>
                 <div class="component-item-name">Image</div>
             </div>
+            <div class="component-item" data-id="24">
+                <div class="component-item-image" style="background-image: url(<?php echo base_url("assets/images/rectangle.png") ?>);" ></div>
+                <div class="component-item-name">Rectangle</div>
+            </div>
         </div>
     </div>
 </div>
@@ -325,4 +329,5 @@ var componentImage20 = "<?php echo base_url("assets/images/link.png"); ?>";
 var componentImage21 = "<?php echo base_url("assets/images/linkbar.png"); ?>";
 var componentImage22 = "<?php echo base_url("assets/images/menu.png"); ?>";
 var componentImage23 = "<?php echo base_url("assets/images/image.png"); ?>";
+var componentImage24 = "<?php echo base_url("assets/images/rectangle.png"); ?>";
 </script>
