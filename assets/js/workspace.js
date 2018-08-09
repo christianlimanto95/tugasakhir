@@ -862,7 +862,7 @@ function showTextSection() {
             $(".form-input-text").val(active_component.text);
         }
     } else {
-        $(".form-item-value").addClass("hide");
+        $(".right-pane-section-text").addClass("hide");
     }
 
     $(".form-input-border-color").css("background-color", active_component.border_color);
@@ -1031,11 +1031,13 @@ function releaseDragging(e) {
 	draggableComponent.removeClass("dragging");
 	isDraggingFromToolbar = false;
 
-	var component = ALL_COMPONENTS.getComponentById(draggableComponentId);
-	var computedPosition = translateMouseCoorToComputedCoor(e);
-	component.setPosition(computedPosition.x, computedPosition.y);
-	Sheet.addComponent(component);
-	Sheet.draw(sheetContext);
+    if (e.pageX > SheetTemp.offset.left) {
+        var computedPosition = translateMouseCoorToComputedCoor(e);
+        var component = ALL_COMPONENTS.getComponentById(draggableComponentId);
+        component.setPosition(computedPosition.x, computedPosition.y);
+        Sheet.addComponent(component);
+        Sheet.draw(sheetContext);
+    }
 
 	draggableComponentId = "-1";
 }

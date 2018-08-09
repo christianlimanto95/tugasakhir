@@ -1542,6 +1542,36 @@ Menu.draw = function(context) {
 	}
 };
 
+var ImageX = Object.create(Component);
+ImageX.id = "23";
+ImageX.name = "Image";
+ImageX.real_name = "Image";
+ImageX.has_text = false;
+ImageX.image = componentImage23;
+ImageX.default_size = {
+	width: 150,
+	height: 100
+};
+ImageX.real_size = clone(ImageX.default_size);
+ImageX.computed_size = clone(ImageX.default_size);
+ImageX.draw = function(context) {
+    this.drawComponentBorder(context);
+    
+	context.fillStyle = this.background_color;
+    context.fillRect(this.computed_position.left, this.computed_position.top, this.computed_size.width, this.computed_size.height);
+    
+    context.globalAlpha = this.border_opacity;
+    context.strokeStyle = this.border_color;
+    context.lineWidth = this.border_width;
+    context.beginPath();
+    context.moveTo(this.computed_position.left, this.computed_position.top);
+    context.lineTo(this.computed_position.right, this.computed_position.bottom);
+    context.moveTo(this.computed_position.right, this.computed_position.top);
+    context.lineTo(this.computed_position.left, this.computed_position.bottom);
+    context.stroke();
+    context.globalAlpha = 1;
+};
+
 var ALL_COMPONENTS = {
 	items: [],
 	getComponentById: function(id) {
@@ -1576,6 +1606,7 @@ ALL_COMPONENTS.items.push(MultiLineText);
 ALL_COMPONENTS.items.push(Link);
 ALL_COMPONENTS.items.push(LinkBar);
 ALL_COMPONENTS.items.push(Menu);
+ALL_COMPONENTS.items.push(ImageX);
 
 
 // ---------------------------------------------------------------------
