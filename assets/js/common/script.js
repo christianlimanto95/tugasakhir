@@ -13,7 +13,24 @@ var ImageResources = {
 			}
 		}
 		return null;
-	}
+    },
+    length: 15,
+    ctr: 0,
+    add_ctr: function() {
+        this.ctr++;
+        if (this.ctr == this.length) {
+            if (this.all_resources_onfinished) {
+                this.all_resources_onfinished();
+            }
+        }
+    },
+    all_resources_onfinished: null,
+    assign_all_resources_onfinished: function(fun) {
+        this.all_resources_onfinished = fun;
+        if (this.ctr == this.length) {
+            this.all_resources_onfinished();
+        }
+    }
 };
 
 var imageResourceItem = {
@@ -21,8 +38,12 @@ var imageResourceItem = {
 	image: new Image()
 };
 imageResourceItem.image.onload = function() {
-	ImageResources.items.push(imageResourceItem);
-}
+    ImageResources.items.push(imageResourceItem);
+    ImageResources.add_ctr();
+};
+imageResourceItem.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem.image.src = checkboxResImage1;
 
 var imageResourceItem2 = {
@@ -30,8 +51,12 @@ var imageResourceItem2 = {
 	image: new Image()
 };
 imageResourceItem2.image.onload = function() {
-	ImageResources.items.push(imageResourceItem2);
+    ImageResources.items.push(imageResourceItem2);
+    ImageResources.add_ctr();
 }
+imageResourceItem2.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem2.image.src = checkboxResImage2;
 
 var imageResourceItem3 = {
@@ -39,8 +64,12 @@ var imageResourceItem3 = {
 	image: new Image()
 };
 imageResourceItem3.image.onload = function() {
-	ImageResources.items.push(imageResourceItem3);
+    ImageResources.items.push(imageResourceItem3);
+    ImageResources.add_ctr();
 }
+imageResourceItem3.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem3.image.src = checkboxResImage3;
 
 var imageResourceItem4 = {
@@ -48,16 +77,24 @@ var imageResourceItem4 = {
 	image: new Image()
 };
 imageResourceItem4.image.onload = function() {
-	ImageResources.items.push(imageResourceItem4);
+    ImageResources.items.push(imageResourceItem4);
+    ImageResources.add_ctr();
 }
+imageResourceItem4.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem4.image.src = checkboxResImage4;
 
 var imageResourceItem5 = {
 	id: "5",
 	image: new Image()
 };
+imageResourceItem5.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem5.image.onload = function() {
-	ImageResources.items.push(imageResourceItem5);
+    ImageResources.items.push(imageResourceItem5);
+    ImageResources.add_ctr();
 }
 imageResourceItem5.image.src = checkboxResImage5;
 
@@ -66,8 +103,12 @@ var imageResourceItem6 = {
 	image: new Image()
 };
 imageResourceItem6.image.onload = function() {
-	ImageResources.items.push(imageResourceItem6);
+    ImageResources.items.push(imageResourceItem6);
+    ImageResources.add_ctr();
 }
+imageResourceItem6.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem6.image.src = checkboxResImage6;
 
 var imageResourceItem7 = {
@@ -75,8 +116,12 @@ var imageResourceItem7 = {
 	image: new Image()
 };
 imageResourceItem7.image.onload = function() {
-	ImageResources.items.push(imageResourceItem7);
+    ImageResources.items.push(imageResourceItem7);
+    ImageResources.add_ctr();
 }
+imageResourceItem7.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem7.image.src = circleButtonResImage1;
 
 var imageResourceItem8 = {
@@ -84,8 +129,12 @@ var imageResourceItem8 = {
 	image: new Image()
 };
 imageResourceItem8.image.onload = function() {
-	ImageResources.items.push(imageResourceItem8);
+    ImageResources.items.push(imageResourceItem8);
+    ImageResources.add_ctr();
 }
+imageResourceItem8.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem8.image.src = comboboxResImage1;
 
 var imageResourceItem9 = {
@@ -93,8 +142,12 @@ var imageResourceItem9 = {
 	image: new Image()
 };
 imageResourceItem9.image.onload = function() {
-	ImageResources.items.push(imageResourceItem9);
+    ImageResources.items.push(imageResourceItem9);
+    ImageResources.add_ctr();
 }
+imageResourceItem9.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem9.image.src = accordionResImage1;
 
 var imageResourceItem10 = {
@@ -102,8 +155,12 @@ var imageResourceItem10 = {
 	image: new Image()
 };
 imageResourceItem10.image.onload = function() {
-	ImageResources.items.push(imageResourceItem10);
+    ImageResources.items.push(imageResourceItem10);
+    ImageResources.add_ctr();
 }
+imageResourceItem10.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem10.image.src = datepickerResImage1;
 
 var imageResourceItem11 = {
@@ -111,8 +168,12 @@ var imageResourceItem11 = {
 	image: new Image()
 };
 imageResourceItem11.image.onload = function() {
-	ImageResources.items.push(imageResourceItem11);
+    ImageResources.items.push(imageResourceItem11);
+    ImageResources.add_ctr();
 }
+imageResourceItem11.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem11.image.src = helpButtonResImage1;
 
 var imageResourceItem12 = {
@@ -120,8 +181,12 @@ var imageResourceItem12 = {
 	image: new Image()
 };
 imageResourceItem12.image.onload = function() {
-	ImageResources.items.push(imageResourceItem12);
+    ImageResources.items.push(imageResourceItem12);
+    ImageResources.add_ctr();
 }
+imageResourceItem12.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem12.image.src = radiobuttonResImage1;
 
 var imageResourceItem13 = {
@@ -129,8 +194,12 @@ var imageResourceItem13 = {
 	image: new Image()
 };
 imageResourceItem13.image.onload = function() {
-	ImageResources.items.push(imageResourceItem13);
+    ImageResources.items.push(imageResourceItem13);
+    ImageResources.add_ctr();
 }
+imageResourceItem13.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem13.image.src = radiobuttonResImage2;
 
 var imageResourceItem14 = {
@@ -138,8 +207,12 @@ var imageResourceItem14 = {
 	image: new Image()
 };
 imageResourceItem14.image.onload = function() {
-	ImageResources.items.push(imageResourceItem14);
+    ImageResources.items.push(imageResourceItem14);
+    ImageResources.add_ctr();
 }
+imageResourceItem14.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem14.image.src = radiobuttonResImage3;
 
 var imageResourceItem15 = {
@@ -147,8 +220,12 @@ var imageResourceItem15 = {
 	image: new Image()
 };
 imageResourceItem15.image.onload = function() {
-	ImageResources.items.push(imageResourceItem15);
+    ImageResources.items.push(imageResourceItem15);
+    ImageResources.add_ctr();
 }
+imageResourceItem15.image.onerror = function() {
+    ImageResources.add_ctr();
+};
 imageResourceItem15.image.src = radiobuttonResImage4;
 
 

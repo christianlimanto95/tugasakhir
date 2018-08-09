@@ -18,6 +18,10 @@ $(function() {
     contextMenuContainer = $(".contextmenu-container");
     header = $(".header");
 
+    ImageResources.assign_all_resources_onfinished(function() {
+        initialize(true);
+    });
+
     $(".profile-container").on("click", function(e) {
         if ($(this).hasClass("show-profile-menu")) {
             $(this).removeClass("show-profile-menu");
@@ -77,9 +81,6 @@ $(function() {
         }
     });
 	
-    initialize();
-    load();
-
 	$(".sheet-container").on("scroll", function() {
 		Sheet.offset = $(".sheet-canvas").offset();
 	});
@@ -269,7 +270,7 @@ function load() {
     }
 }
 
-function initialize() {
+function initialize(do_load) {
 	Sheet.offset = $(".sheet-canvas").offset();
 	SheetTemp.offset = $(sheetTempCanvas).offset();
 
@@ -299,7 +300,11 @@ function initialize() {
 		left: offset.left - SheetTemp.offset.left
 	};
 
-	Sheet.draw(sheetContext);
+    Sheet.draw(sheetContext);
+    
+    if (do_load) {
+        load();
+    }
 }
 
 function save() {
